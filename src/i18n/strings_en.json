@@ -362,5 +362,42 @@
     "next": "Next",
     "correctPattern": "Correct! +{{points}} points.",
     "revealed": "No points for this one, but now you know it."
+  },
+  "shape": {
+    "toggle": "3D shape",
+    "title": "Shape (VSEPR)",
+    "finishFirst": "Finish the structure to see its shape.",
+    "twoAtoms": "Two atoms: always linear.",
+    "manyCenters": "More than one central atom: the shape around each one is",
+    "centerPattern": "{{atom}}: {{geometry}} ({{notation}})",
+    "notationPattern": "{{notation}}: {{geometry}}",
+    "electronGeometryPattern": "Electron domains: {{geometry}}",
+    "anglesPattern": "Bond angles: {{angles}}",
+    "rotateHelp": "Drag the model, or use the arrow keys, to turn it.",
+    "modelName": "3D shape model",
+    "geometries": {
+      "linear": "linear",
+      "trigonalPlanar": "trigonal planar",
+      "bent": "bent",
+      "tetrahedral": "tetrahedral",
+      "trigonalPyramidal": "trigonal pyramidal",
+      "trigonalBipyramidal": "trigonal bipyramidal",
+      "seesaw": "seesaw",
+      "tShaped": "T-shaped",
+      "octahedral": "octahedral",
+      "squarePyramidal": "square pyramidal",
+      "squarePlanar": "square planar"
+    },
+    "angles": {
+      "a180": "180°",
+      "a120": "120°",
+      "lessThan120": "a little under 120°",
+      "a109": "109.5°",
+      "lessThan109": "a little under 109.5°",
+      "a90And120": "90°, 120° and 180°",
+      "lessThan90And120": "a little under 90° and 120°",
+      "lessThan90": "a little under 90°",
+      "a90": "90° and 180°"
+    }
   }
 }

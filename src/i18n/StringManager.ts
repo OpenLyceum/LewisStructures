@@ -128,6 +128,11 @@ export class StringManager {
     return stringProperties.challenge;
   }
 
+  /** Strings of the VSEPR shape preview. */
+  public getShapeStrings() {
+    return stringProperties.shape;
+  }
+
   /** Accessibility strings for the Build screen. */
   public getBuildA11yStrings() {
     return stringProperties.a11y.build;

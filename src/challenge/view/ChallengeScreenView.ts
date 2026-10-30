@@ -37,12 +37,13 @@ import { LewisStructuresPanel } from "../../common/LewisStructuresPanel.js";
 import { generateStructures } from "../../common/model/generateStructures.js";
 import { OctetPolicy } from "../../common/model/OctetPolicy.js";
 import { getSpecies } from "../../common/model/SpeciesCatalog.js";
-import { HEADING_FONT, pushButton, SMALL_FONT } from "../../common/view/ControlFactory.js";
+import { checkbox, HEADING_FONT, pushButton, SMALL_FONT } from "../../common/view/ControlFactory.js";
 import { describeOutcome } from "../../common/view/describeOutcome.js";
 import { ElectronBudgetNode } from "../../common/view/ElectronBudgetNode.js";
 import { ElementPaletteNode } from "../../common/view/ElementPaletteNode.js";
 import { LewisCanvasNode } from "../../common/view/LewisCanvasNode.js";
 import { SelectionBarNode } from "../../common/view/SelectionBarNode.js";
+import { ShapePreviewNode } from "../../common/view/ShapePreviewNode.js";
 import { StructureNode } from "../../common/view/StructureNode.js";
 import { speciesName } from "../../common/view/speciesLabels.js";
 import { StringManager } from "../../i18n/StringManager.js";
@@ -67,6 +68,7 @@ const BOARD_TOP = STATUS_BAR_HEIGHT + 46;
 const BOARD_LEFT = 118;
 const GAP = 10;
 const PANEL_CONTENT_WIDTH = SIDE_PANEL_WIDTH - 24;
+const SHAPE_TEXT_WIDTH = PANEL_CONTENT_WIDTH;
 const LEVEL_BUTTON_SIZE = 150;
 /** Largest width or height of the drawing on a level button, px. */
 const LEVEL_ICON_SIZE = 100;
@@ -204,6 +206,12 @@ export class ChallengeScreenView extends ScreenView {
     structure.canRedoProperty.link((canRedo) => {
       redoButton.enabled = canRedo;
     });
+    // The shape is a reward for a solved problem, so its checkbox is enabled only then.
+    const shapeCheckbox = checkbox(
+      model.showShapeProperty,
+      StringManager.getInstance().getShapeStrings().toggleStringProperty,
+      110,
+    );
     const toolbar = new HBox({
       spacing: 8,
       children: [
@@ -211,6 +219,7 @@ export class ChallengeScreenView extends ScreenView {
         redoButton,
         pushButton(common.tidyStringProperty, () => drawing.tidy()),
         pushButton(common.clearStringProperty, () => structure.clear()),
+        shapeCheckbox,
       ],
     });
     toolbar.leftTop = canvas.leftBottom.plusXY(0, GAP);
@@ -281,7 +290,22 @@ export class ChallengeScreenView extends ScreenView {
       { minWidth: SIDE_PANEL_WIDTH, align: "left" },
     );
 
-    const rightColumn = new VBox({ align: "left", spacing: GAP, children: [hintsPanel, budgetPanel, checkPanel] });
+    // Once a problem is solved, the shape can take the hints' place.
+    const shapePreview = new ShapePreviewNode(SHAPE_TEXT_WIDTH);
+    Multilink.multilink([model.showShapeProperty, model.solvedProperty, structure.analysisProperty], (show, solved) => {
+      shapeCheckbox.enabled = solved;
+      shapePreview.visible = show && solved;
+      hintsPanel.visible = !shapePreview.visible;
+      if (shapePreview.visible) {
+        shapePreview.update(structure.toData());
+      }
+    });
+
+    const rightColumn = new VBox({
+      align: "left",
+      spacing: GAP,
+      children: [hintsPanel, shapePreview, budgetPanel, checkPanel],
+    });
     rightColumn.rightTop = this.layoutBounds.rightTop.plusXY(-SCREEN_VIEW_MARGIN, TASK_TOP);
 
     const round = new Node({
@@ -392,6 +416,7 @@ export class ChallengeScreenView extends ScreenView {
           toolbar,
           selectionBar,
           hintsPanel,
+          shapePreview,
           budgetPanel,
           checkPanel,
           resetAllButton,

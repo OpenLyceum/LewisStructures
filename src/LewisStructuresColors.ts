@@ -182,6 +182,116 @@ const LewisStructuresColors = {
     default: "#10182e",
     projector: "#ffffff",
   }),
+
+  // ── 3D shape preview ────────────────────────────────────────────────────────────
+
+  /** Bond sticks in the 3D shape preview. */
+  shapeBondColorProperty: new ProfileColorProperty(LewisStructuresNamespace, "shapeBond", {
+    default: "#b0b8c8",
+    projector: "#777777",
+  }),
+
+  /** Background of the 3D shape preview. */
+  shapeBackgroundColorProperty: new ProfileColorProperty(LewisStructuresNamespace, "shapeBackground", {
+    default: "#0b1122",
+    projector: "#f4f6fa",
+  }),
+
+  /** Ball colour of H in the 3D shape preview (CPK/Jmol). */
+  elementHColorProperty: new ProfileColorProperty(LewisStructuresNamespace, "elementH", {
+    default: "#ffffff",
+    projector: "#dddddd",
+  }),
+
+  /** Ball colour of Be in the 3D shape preview (CPK/Jmol). */
+  elementBeColorProperty: new ProfileColorProperty(LewisStructuresNamespace, "elementBe", {
+    default: "#c2ff00",
+    projector: "#7fa800",
+  }),
+
+  /** Ball colour of B in the 3D shape preview (CPK/Jmol). */
+  elementBColorProperty: new ProfileColorProperty(LewisStructuresNamespace, "elementB", {
+    default: "#ffb5b5",
+    projector: "#e08080",
+  }),
+
+  /** Ball colour of C in the 3D shape preview (CPK/Jmol). */
+  elementCColorProperty: new ProfileColorProperty(LewisStructuresNamespace, "elementC", {
+    default: "#909090",
+    projector: "#606060",
+  }),
+
+  /** Ball colour of N in the 3D shape preview (CPK/Jmol). */
+  elementNColorProperty: new ProfileColorProperty(LewisStructuresNamespace, "elementN", {
+    default: "#3050f8",
+    projector: "#3050f8",
+  }),
+
+  /** Ball colour of O in the 3D shape preview (CPK/Jmol). */
+  elementOColorProperty: new ProfileColorProperty(LewisStructuresNamespace, "elementO", {
+    default: "#ff0d0d",
+    projector: "#e00000",
+  }),
+
+  /** Ball colour of F in the 3D shape preview (CPK/Jmol). */
+  elementFColorProperty: new ProfileColorProperty(LewisStructuresNamespace, "elementF", {
+    default: "#90e050",
+    projector: "#5aa82a",
+  }),
+
+  /** Ball colour of Al in the 3D shape preview (CPK/Jmol). */
+  elementAlColorProperty: new ProfileColorProperty(LewisStructuresNamespace, "elementAl", {
+    default: "#bfa6a6",
+    projector: "#9a8080",
+  }),
+
+  /** Ball colour of Si in the 3D shape preview (CPK/Jmol). */
+  elementSiColorProperty: new ProfileColorProperty(LewisStructuresNamespace, "elementSi", {
+    default: "#f0c8a0",
+    projector: "#c8a070",
+  }),
+
+  /** Ball colour of P in the 3D shape preview (CPK/Jmol). */
+  elementPColorProperty: new ProfileColorProperty(LewisStructuresNamespace, "elementP", {
+    default: "#ff8000",
+    projector: "#e07000",
+  }),
+
+  /** Ball colour of S in the 3D shape preview (CPK/Jmol). */
+  elementSColorProperty: new ProfileColorProperty(LewisStructuresNamespace, "elementS", {
+    default: "#ffff30",
+    projector: "#d4c400",
+  }),
+
+  /** Ball colour of Cl in the 3D shape preview (CPK/Jmol). */
+  elementClColorProperty: new ProfileColorProperty(LewisStructuresNamespace, "elementCl", {
+    default: "#1ff01f",
+    projector: "#18b018",
+  }),
+
+  /** Ball colour of Se in the 3D shape preview (CPK/Jmol). */
+  elementSeColorProperty: new ProfileColorProperty(LewisStructuresNamespace, "elementSe", {
+    default: "#ffa100",
+    projector: "#d08000",
+  }),
+
+  /** Ball colour of Br in the 3D shape preview (CPK/Jmol). */
+  elementBrColorProperty: new ProfileColorProperty(LewisStructuresNamespace, "elementBr", {
+    default: "#a62929",
+    projector: "#a62929",
+  }),
+
+  /** Ball colour of I in the 3D shape preview (CPK/Jmol). */
+  elementIColorProperty: new ProfileColorProperty(LewisStructuresNamespace, "elementI", {
+    default: "#940094",
+    projector: "#940094",
+  }),
+
+  /** Ball colour of Xe in the 3D shape preview (CPK/Jmol). */
+  elementXeColorProperty: new ProfileColorProperty(LewisStructuresNamespace, "elementXe", {
+    default: "#429eb0",
+    projector: "#2f7f8f",
+  }),
 };
 
 export default LewisStructuresColors;

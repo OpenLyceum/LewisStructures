@@ -51,6 +51,8 @@ export class ChallengeModel implements TModel {
   /** Points earned on the problem just solved (for the feedback line). */
   public readonly lastPointsProperty = new NumberProperty(0);
   public readonly roundCompleteProperty = new BooleanProperty(false);
+  /** Whether the VSEPR shape inset is shown once a problem is solved. */
+  public readonly showShapeProperty = new BooleanProperty(false);
   public readonly drawing: DrawingModel;
   public readonly policyProperty: TReadOnlyProperty<OctetPolicy>;
   private problems: Species[] = [];
@@ -138,6 +140,7 @@ export class ChallengeModel implements TModel {
 
   public reset(): void {
     this.leaveLevel();
+    this.showShapeProperty.reset();
     for (const best of this.bestScoreProperties) {
       best.reset();
     }

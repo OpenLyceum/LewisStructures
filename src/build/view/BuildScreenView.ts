@@ -20,12 +20,13 @@ import { ScreenView, type ScreenViewOptions } from "scenerystack/sim";
 import { FLAT_RESET_ALL_BUTTON_OPTIONS } from "../../common/LewisStructuresButtonOptions.js";
 import { LewisStructuresPanel } from "../../common/LewisStructuresPanel.js";
 import { ChecklistNode } from "../../common/view/ChecklistNode.js";
-import { pushButton, SMALL_FONT } from "../../common/view/ControlFactory.js";
+import { checkbox, pushButton, SMALL_FONT } from "../../common/view/ControlFactory.js";
 import { describeOutcome } from "../../common/view/describeOutcome.js";
 import { ElectronBudgetNode } from "../../common/view/ElectronBudgetNode.js";
 import { ElementPaletteNode } from "../../common/view/ElementPaletteNode.js";
 import { LewisCanvasNode } from "../../common/view/LewisCanvasNode.js";
 import { SelectionBarNode } from "../../common/view/SelectionBarNode.js";
+import { ShapePreviewNode } from "../../common/view/ShapePreviewNode.js";
 import { SpeciesChooserNode } from "../../common/view/SpeciesChooserNode.js";
 import { StringManager } from "../../i18n/StringManager.js";
 import LewisStructuresColors from "../../LewisStructuresColors.js";
@@ -39,6 +40,8 @@ const BOARD_LEFT = 118;
 const BOARD_TOP = 64;
 const GAP = 10;
 const PANEL_CONTENT_WIDTH = SIDE_PANEL_WIDTH - 24;
+/** Text width in the shape panel. */
+const SHAPE_TEXT_WIDTH = PANEL_CONTENT_WIDTH;
 
 export class BuildScreenView extends ScreenView {
   public constructor(model: BuildModel, preferences: LewisStructuresPreferencesModel, options?: ScreenViewOptions) {
@@ -90,6 +93,7 @@ export class BuildScreenView extends ScreenView {
         redoButton,
         pushButton(strings.tidyStringProperty, () => drawing.tidy()),
         pushButton(strings.clearStringProperty, () => structure.clear()),
+        checkbox(model.showShapeProperty, StringManager.getInstance().getShapeStrings().toggleStringProperty, 110),
       ],
     });
     toolbar.leftTop = canvas.leftBottom.plusXY(0, GAP);
@@ -150,10 +154,21 @@ export class BuildScreenView extends ScreenView {
       { minWidth: SIDE_PANEL_WIDTH, align: "left" },
     );
 
+    // The VSEPR shape takes the checklist's place once the structure is complete (and asked for).
+    const shapePreview = new ShapePreviewNode(SHAPE_TEXT_WIDTH);
+    Multilink.multilink([model.showShapeProperty, structure.analysisProperty], (show, analysis) => {
+      const showShape = show && analysis.complete;
+      shapePreview.visible = showShape;
+      checklistPanel.visible = !showShape;
+      if (showShape) {
+        shapePreview.update(structure.toData());
+      }
+    });
+
     const rightColumn = new VBox({
       align: "left",
       spacing: GAP,
-      children: [budgetPanel, checklistPanel, checkPanel],
+      children: [budgetPanel, checklistPanel, shapePreview, checkPanel],
     });
     rightColumn.rightTop = this.layoutBounds.rightTop.plusXY(-SCREEN_VIEW_MARGIN, TOP);
 
@@ -180,6 +195,7 @@ export class BuildScreenView extends ScreenView {
           selectionBar,
           budgetPanel,
           checklistPanel,
+          shapePreview,
           checkPanel,
           resetAllButton,
         ],

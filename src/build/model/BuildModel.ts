@@ -6,7 +6,7 @@
  * result, so feedback never describes a drawing that has since changed.
  */
 
-import { Property, type TReadOnlyProperty } from "scenerystack/axon";
+import { BooleanProperty, Property, type TReadOnlyProperty } from "scenerystack/axon";
 import type { TModel } from "scenerystack/joist";
 import { type CheckOutcome, checkAgainstSpecies, checkFreeBuild } from "../../common/model/checkStructure.js";
 import { boardBounds, DrawingModel } from "../../common/model/DrawingModel.js";
@@ -24,6 +24,8 @@ export class BuildModel implements TModel {
   public readonly categoryProperty = new Property<CategoryChoice>(INITIAL_CATEGORY);
   public readonly speciesProperty = new Property<Species | null>(firstSpeciesOf(INITIAL_CATEGORY));
   public readonly outcomeProperty = new Property<CheckOutcome | null>(null);
+  /** Whether the VSEPR shape inset is shown on the board. */
+  public readonly showShapeProperty = new BooleanProperty(false);
   public readonly policyProperty: TReadOnlyProperty<OctetPolicy>;
 
   public constructor(policyProperty: TReadOnlyProperty<OctetPolicy>) {
@@ -84,6 +86,7 @@ export class BuildModel implements TModel {
     this.speciesProperty.reset();
     this.drawing.reset(this.speciesProperty.value?.skeleton.charge ?? 0);
     this.outcomeProperty.reset();
+    this.showShapeProperty.reset();
   }
 
   public step(_dt: number): void {
