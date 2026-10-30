@@ -5,43 +5,204 @@
     "resonance": "Resonance",
     "challenge": "Challenge"
   },
+  "elements": {
+    "H": "hydrogen",
+    "Be": "beryllium",
+    "B": "boron",
+    "C": "carbon",
+    "N": "nitrogen",
+    "O": "oxygen",
+    "F": "fluorine",
+    "Al": "aluminum",
+    "Si": "silicon",
+    "P": "phosphorus",
+    "S": "sulfur",
+    "Cl": "chlorine",
+    "Se": "selenium",
+    "Br": "bromine",
+    "I": "iodine",
+    "Xe": "xenon"
+  },
+  "species": {
+    "water": "water",
+    "ammonia": "ammonia",
+    "methane": "methane",
+    "carbonTetrachloride": "carbon tetrachloride",
+    "phosphorusTrichloride": "phosphorus trichloride",
+    "hydrogenSulfide": "hydrogen sulfide",
+    "oxygenDifluoride": "oxygen difluoride",
+    "methanol": "methanol",
+    "hydrazine": "hydrazine",
+    "hydrogenPeroxide": "hydrogen peroxide",
+    "carbonDioxide": "carbon dioxide",
+    "nitrogen": "nitrogen",
+    "carbonMonoxide": "carbon monoxide",
+    "hydrogenCyanide": "hydrogen cyanide",
+    "formaldehyde": "formaldehyde",
+    "ethene": "ethene",
+    "ethyne": "ethyne",
+    "ammonium": "ammonium",
+    "hydronium": "hydronium",
+    "hydroxide": "hydroxide",
+    "hypochlorite": "hypochlorite",
+    "cyanide": "cyanide",
+    "nitrosonium": "nitrosonium",
+    "tetrafluoroborate": "tetrafluoroborate",
+    "ozone": "ozone",
+    "nitrate": "nitrate",
+    "nitrite": "nitrite",
+    "carbonate": "carbonate",
+    "formate": "formate",
+    "nitricAcid": "nitric acid",
+    "sulfurDioxide": "sulfur dioxide",
+    "sulfurTrioxide": "sulfur trioxide",
+    "thiocyanate": "thiocyanate",
+    "cyanate": "cyanate",
+    "azide": "azide",
+    "benzene": "benzene",
+    "sulfurTetrafluoride": "sulfur tetrafluoride",
+    "sulfurHexafluoride": "sulfur hexafluoride",
+    "phosphorusPentachloride": "phosphorus pentachloride",
+    "chlorineTrifluoride": "chlorine trifluoride",
+    "xenonDifluoride": "xenon difluoride",
+    "xenonTetrafluoride": "xenon tetrafluoride",
+    "triiodide": "triiodide",
+    "sulfate": "sulfate",
+    "phosphate": "phosphate",
+    "perchlorate": "perchlorate",
+    "boronTrifluoride": "boron trifluoride",
+    "berylliumChloride": "beryllium chloride",
+    "aluminumChloride": "aluminum chloride",
+    "nitricOxide": "nitric oxide",
+    "nitrogenDioxide": "nitrogen dioxide",
+    "chlorineDioxide": "chlorine dioxide"
+  },
+  "categories": {
+    "freeBuild": "Free build",
+    "simple": "Simple molecules",
+    "multipleBonds": "Multiple bonds",
+    "ions": "Ions",
+    "resonance": "Resonance",
+    "expanded": "Expanded octets",
+    "incomplete": "Incomplete octets",
+    "radicals": "Odd-electron molecules"
+  },
+  "common": {
+    "category": "Category",
+    "species": "Molecule or ion",
+    "charge": "Charge",
+    "speciesPattern": "{{name}}: {{formula}}",
+    "freeBuildTitle": "Free build: draw any molecule or ion",
+    "palette": "Elements",
+    "undo": "Undo",
+    "redo": "Redo",
+    "tidy": "Tidy",
+    "clear": "Clear",
+    "check": "Check",
+    "showAnswer": "Show answer",
+    "skeleton": "Skeleton",
+    "boardHint": "Drag an element onto the board, or click it to add it next to the selected atom (bonded to it). Drag from an atom's blue ring to another atom to bond them. Click a bond to change its order.",
+    "budget": {
+      "title": "Valence electrons",
+      "fromAtomsPattern": "From the atoms: {{count}}",
+      "chargePattern": "Adjust for charge {{charge}}: {{change}}",
+      "totalPattern": "Total: {{count}}",
+      "placedPattern": "Placed: {{count}}",
+      "leftPattern": "Left to place: {{count}}",
+      "overPattern": "Too many placed: {{count}} extra"
+    },
+    "checklist": {
+      "title": "Checklist",
+      "allPlaced": "Every valence electron placed",
+      "connected": "Atoms joined in one structure",
+      "octets": "Every atom satisfied (H: 2, others: 8)",
+      "unpairedNone": "No unpaired electrons (even total)",
+      "unpairedOne": "One unpaired electron (odd total)",
+      "formalChargeSumPattern": "Formal charges add to {{charge}}"
+    },
+    "hints": {
+      "start": "Add atoms to the board to start.",
+      "connect": "Bond every atom into one structure.",
+      "placeRemainingPattern": "Place {{count}} more electrons, as lone pairs on the outer atoms first.",
+      "tooManyPattern": "Remove {{count}} electrons: take off lone pairs or lower a bond order.",
+      "shortPattern": "{{atom}} has only {{count}} electrons. Turn a lone pair on a neighbour into a multiple bond.",
+      "overPattern": "{{atom}} has {{count}} electrons, more than it can hold.",
+      "unpairedPattern": "Use {{expected}} unpaired electrons; you have {{count}}.",
+      "done": "Every rule is met. Press Check to compare with the best structure."
+    },
+    "selection": {
+      "none": "Select an atom or a bond to edit it.",
+      "lonePairs": "Lone pairs",
+      "unpaired": "Unpaired electron",
+      "delete": "Delete",
+      "bondPattern": "Bond {{a}}–{{b}}",
+      "bondOrder": "Bond order",
+      "single": "Single",
+      "double": "Double",
+      "triple": "Triple",
+      "atomSummaryPattern": "{{atom}}: {{electrons}} electrons, formal charge {{charge}}"
+    },
+    "feedback": {
+      "empty": "Draw the structure first.",
+      "wrongAtomsPattern": "The atoms don't match {{formula}}. {{details}}",
+      "needPattern": "Add {{list}}.",
+      "removePattern": "Remove {{list}}.",
+      "incomplete": "Not finished yet: work through the checklist.",
+      "wrongSkeleton": "The electrons are all placed, but the atoms are joined differently from the real molecule.",
+      "centralPattern": "Try {{element}} as the central atom.",
+      "best": "Correct! This is the best Lewis structure.",
+      "bestResonancePattern": "Correct! This is one of {{count}} equivalent resonance structures.",
+      "alternative": "Correct: every atom keeps an octet. Expanding the central atom would give smaller formal charges; both answers are accepted.",
+      "acceptable": "Valid, with the smallest formal charges, but the negative formal charge belongs on the more electronegative atom.",
+      "minor": "A valid Lewis structure, but not the best one: another arrangement has smaller formal charges.",
+      "notBest": "A valid Lewis structure, but its formal charges are much larger than they need to be.",
+      "tooLarge": "This drawing is too large to check."
+    }
+  },
   "a11y": {
     "build": {
       "screenSummary": {
-        "playArea": "La zone de jeu affiche le contenu principal de la simulation.",
-        "controlArea": "La zone de contrôle comporte un bouton Tout réinitialiser qui ramène la simulation à son état initial.",
-        "interactionHint": "Explorez la simulation en interagissant avec ses commandes."
+        "playArea": "The play area has a drawing board where you build a Lewis structure from atoms, bonds, lone pairs and unpaired electrons, with a palette of elements beside it.",
+        "controlArea": "The control area has the molecule chooser, the valence-electron count, a checklist of the rules, Check and Show answer buttons, and Reset All.",
+        "interactionHint": "Choose a molecule, add atoms from the palette, bond them, then add lone pairs until every electron is placed."
       },
-      "currentDetails": "La simulation est dans son état initial.",
+      "currentDetails": "The board is empty.",
       "controls": {
-        "exampleControl": "Contrôle d'exemple"
+        "palette": "Element palette",
+        "board": "Drawing board"
       }
     },
     "resonance": {
       "screenSummary": {
-        "playArea": "La zone de jeu affiche le contenu principal de la simulation.",
-        "controlArea": "La zone de contrôle comporte un bouton Tout réinitialiser qui ramène la simulation à son état initial.",
-        "interactionHint": "Explorez la simulation en interagissant avec ses commandes."
+        "playArea": "The play area shows the main simulation content.",
+        "controlArea": "The control area has a Reset All button that returns the simulation to its starting state.",
+        "interactionHint": "Explore the simulation by interacting with its controls."
       },
-      "currentDetails": "La simulation est dans son état initial.",
+      "currentDetails": "The simulation is in its initial state.",
       "controls": {
-        "exampleControl": "Contrôle d'exemple"
+        "exampleControl": "Example control"
       }
     },
     "challenge": {
       "screenSummary": {
-        "playArea": "La zone de jeu affiche le contenu principal de la simulation.",
-        "controlArea": "La zone de contrôle comporte un bouton Tout réinitialiser qui ramène la simulation à son état initial.",
-        "interactionHint": "Explorez la simulation en interagissant avec ses commandes."
+        "playArea": "The play area shows the main simulation content.",
+        "controlArea": "The control area has a Reset All button that returns the simulation to its starting state.",
+        "interactionHint": "Explore the simulation by interacting with its controls."
       },
-      "currentDetails": "La simulation est dans son état initial.",
+      "currentDetails": "The simulation is in its initial state.",
       "controls": {
-        "exampleControl": "Contrôle d'exemple"
+        "exampleControl": "Example control"
       }
     }
   },
   "preferences": {
     "title": "Simulation",
-    "exampleToggle": "Exemple de bascule"
+    "octetPolicy": "Expanded octets (P, S, Cl and below)",
+    "acceptBoth": "Accept both: smallest formal charges is best, octet answers also correct",
+    "octetFirst": "Octet first: expand only when there is no other way",
+    "minimizeFormalCharge": "Smallest formal charges, even when an octet expands",
+    "octetPolicyNote": "Textbooks disagree on ions such as SO<sub>4</sub><sup>2−</sup>: OpenStax minimises formal charge (two S=O), while the octet view keeps four S–O bonds.",
+    "octetRings": "Show octet rings around atoms",
+    "allFormalCharges": "Show formal charges of zero"
   }
 }

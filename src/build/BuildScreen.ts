@@ -15,6 +15,7 @@ import { Screen } from "scenerystack/sim";
 import type { Tandem } from "scenerystack/tandem";
 import { createBuildIcon } from "../common/LewisStructuresScreenIcons.js";
 import LewisStructuresColors from "../LewisStructuresColors.js";
+import type { LewisStructuresPreferencesModel } from "../preferences/LewisStructuresPreferencesModel.js";
 import { BuildModel } from "./model/BuildModel.js";
 import { BuildKeyboardHelpContent } from "./view/BuildKeyboardHelpContent.js";
 import { BuildScreenView } from "./view/BuildScreenView.js";
@@ -23,13 +24,13 @@ import { BuildScreenView } from "./view/BuildScreenView.js";
 type BuildScreenOptions = ScreenOptions & { tandem: Tandem };
 
 export class BuildScreen extends Screen<BuildModel, BuildScreenView> {
-  public constructor(options: BuildScreenOptions) {
+  public constructor(preferences: LewisStructuresPreferencesModel, options: BuildScreenOptions) {
     super(
       // Model factory — called once when the screen is first shown
-      () => new BuildModel(),
+      () => new BuildModel(preferences.octetPolicyProperty),
       // View factory — receives the model instance
       (model) =>
-        new BuildScreenView(model, {
+        new BuildScreenView(model, preferences, {
           tandem: options.tandem.createTandem("view"),
         }),
       optionize<BuildScreenOptions, EmptySelfOptions, ScreenOptions>()(

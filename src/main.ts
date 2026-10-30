@@ -36,7 +36,7 @@ onReadyToLaunch(() => {
   const simPreferences = new LewisStructuresPreferencesModel(Tandem.ROOT.createTandem("preferences"));
 
   const screens = [
-    new BuildScreen({
+    new BuildScreen(simPreferences, {
       name: stringManager.getScreenNames().buildStringProperty,
       tandem: Tandem.ROOT.createTandem("buildScreen"),
       backgroundColorProperty: LewisStructuresColors.backgroundColorProperty,

@@ -5,13 +5,9 @@
  * sim-specific query parameter is declared and documented. Public-facing
  * parameters (intended for end users / sharing links) must set `public: true`.
  *
- * ── How to add a query parameter ──────────────────────────────────────────────
- * 1. Add an entry below with a `type`, `defaultValue`, and (if user-facing)
- *    `public: true`. Add `isValidValue` to bound numeric ranges.
- * 2. If it should also be user-editable at runtime, surface it as a preference
- *    in LewisStructuresPreferencesModel (initialize that Property from this query parameter).
+ * Each one sets the initial value of a preference in LewisStructuresPreferencesModel.
  *
- * Usage: append e.g. `?exampleToggle=true` to the sim URL.
+ * Usage: append e.g. `?octetPolicy=octetFirst&allFormalCharges` to the sim URL.
  */
 
 import { logGlobal } from "scenerystack/phet-core";
@@ -20,12 +16,25 @@ import LewisStructuresNamespace from "../LewisStructuresNamespace.js";
 
 const lewisStructuresQueryParameters = QueryStringMachine.getAll({
   /**
-   * Example public boolean parameter. Replace with real sim-specific parameters,
-   * or remove if the sim has none.
+   * Which structure counts as best when an octet could expand: acceptBoth (default), octetFirst
+   * or minimizeFormalCharge. See OctetPolicy.ts.
    */
-  exampleToggle: {
-    type: "boolean",
-    defaultValue: false,
+  octetPolicy: {
+    type: "string",
+    defaultValue: "acceptBoth",
+    validValues: ["acceptBoth", "octetFirst", "minimizeFormalCharge"],
+    public: true,
+  },
+
+  /** Show formal-charge badges on every atom, including zeros. */
+  allFormalCharges: {
+    type: "flag",
+    public: true,
+  },
+
+  /** Hide the coloured octet rings around atoms. */
+  hideOctetRings: {
+    type: "flag",
     public: true,
   },
 });
