@@ -79,6 +79,8 @@ export class LewisStructure {
   private nextId = 1;
   private readonly undoStack: Snapshot[] = [];
   private readonly redoStack: Snapshot[] = [];
+  /** Internal charge restoration is part of an existing edit, not a new history entry. */
+  private restoringCharge = false;
 
   public readonly chargeProperty: NumberProperty;
   /** Fired after any change to atoms, bonds, electrons or charge (not on a position change). */
@@ -93,7 +95,13 @@ export class LewisStructure {
   public constructor(charge = 0) {
     this.chargeProperty = new NumberProperty(charge, { numberType: "Integer" });
     this.analysisProperty = new Property(analyzeStructure(this.toData()));
-    this.chargeProperty.lazyLink(() => this.changed());
+    this.chargeProperty.lazyLink((_charge, previousCharge) => {
+      if (!this.restoringCharge) {
+        // The spinner writes the Property directly; save the state before that write.
+        this.recordUndo({ ...this.snapshot(), charge: previousCharge });
+        this.changed();
+      }
+    });
   }
 
   public get atoms(): readonly LewisAtom[] {
@@ -330,9 +338,11 @@ export class LewisStructure {
   }
 
   private setChargeSilently(charge: number): void {
-    if (this.chargeProperty.value !== charge) {
-      // changed() follows, so the charge listener's own changed() is harmless but redundant.
+    this.restoringCharge = true;
+    try {
       this.chargeProperty.value = charge;
+    } finally {
+      this.restoringCharge = false;
     }
   }
 
@@ -383,8 +393,8 @@ export class LewisStructure {
     this.changed();
   }
 
-  private recordUndo(): void {
-    this.undoStack.push(this.snapshot());
+  private recordUndo(snapshot: Snapshot = this.snapshot()): void {
+    this.undoStack.push(snapshot);
     if (this.undoStack.length > MAX_HISTORY) {
       this.undoStack.shift();
     }

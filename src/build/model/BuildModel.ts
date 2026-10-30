@@ -67,8 +67,15 @@ export class BuildModel implements TModel {
       if (species) {
         this.drawing.showData(best.data);
       } else {
-        // Keep the student's own layout in free build.
-        this.drawing.structure.setData(best.data);
+        // Cached answers contain an earlier layout. Keep the current coordinates on this skeleton.
+        this.drawing.structure.setData({
+          ...best.data,
+          atoms: best.data.atoms.map((atom, i) => ({
+            ...atom,
+            x: drawn.atoms[i]?.x ?? atom.x,
+            y: drawn.atoms[i]?.y ?? atom.y,
+          })),
+        });
       }
     }
   }

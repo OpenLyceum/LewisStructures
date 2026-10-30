@@ -92,7 +92,7 @@ export class ResonanceModel implements TModel {
     this.drawing.showData(this.speciesProperty.value.skeleton, false);
   }
 
-  /** Which gallery form the drawing is, if any; selects it. */
+  /** Finds and selects an equivalent gallery form; symmetry can make several forms match. */
   public check(): void {
     const data = this.drawing.structure.toData();
     const species = this.speciesProperty.value;

@@ -27,6 +27,57 @@ function drawWater(structure: LewisStructure, pairs = 2) {
 }
 
 describe("LewisStructure", () => {
+  it("undoes and redoes a charge-only edit with the corresponding electron budget", () => {
+    const structure = new LewisStructure();
+    structure.chargeProperty.value = -1;
+    expect(structure.canUndoProperty.value).toBe(true);
+    expect(structure.analysisProperty.value.totalValence).toBe(1);
+    structure.undo();
+    expect(structure.chargeProperty.value).toBe(0);
+    expect(structure.analysisProperty.value.totalValence).toBeCloseTo(0);
+    expect(structure.canUndoProperty.value).toBe(false);
+    structure.redo();
+    expect(structure.chargeProperty.value).toBe(-1);
+    expect(structure.analysisProperty.value.totalValence).toBe(1);
+    expect(structure.canRedoProperty.value).toBe(false);
+    structure.dispose();
+  });
+
+  it("discards obsolete redo history when charge changes after Undo", () => {
+    const structure = new LewisStructure();
+    const oxygen = structure.addAtom("O", Vector2.ZERO);
+    structure.addLonePair(oxygen);
+    structure.undo();
+    structure.chargeProperty.value = -1;
+    expect(structure.canRedoProperty.value).toBe(false);
+    structure.redo();
+    expect(structure.chargeProperty.value).toBe(-1);
+    expect(oxygen.lonePairs).toBe(0);
+    structure.undo();
+    expect(structure.chargeProperty.value).toBe(0);
+    expect(oxygen.lonePairs).toBe(0);
+    structure.redo();
+    expect(structure.chargeProperty.value).toBe(-1);
+    expect(oxygen.lonePairs).toBe(0);
+    structure.dispose();
+  });
+
+  it("does not add charge-history entries during reset, data replacement, or restoration", () => {
+    const structure = new LewisStructure();
+    structure.reset(-1);
+    expect(structure.canUndoProperty.value).toBe(false);
+    structure.setData(getSpecies("water").skeleton, false);
+    expect(structure.canUndoProperty.value).toBe(false);
+    structure.setData(getSpecies("nitrate").skeleton);
+    structure.undo();
+    expect(structure.toData()).toEqual(getSpecies("water").skeleton);
+    expect(structure.canUndoProperty.value).toBe(false);
+    structure.redo();
+    expect(structure.toData()).toEqual(getSpecies("nitrate").skeleton);
+    expect(structure.canRedoProperty.value).toBe(false);
+    structure.dispose();
+  });
+
   it("updates the analysis after every edit", () => {
     const structure = new LewisStructure();
     const { o } = drawWater(structure, 1);

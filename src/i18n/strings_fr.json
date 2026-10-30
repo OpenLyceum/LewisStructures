@@ -321,8 +321,8 @@
     "lonePairToBondPattern": "un doublet libre de {{atom}} devient une liaison avec {{other}}",
     "bondToLonePairPattern": "un doublet de la liaison {{a}}–{{b}} passe sur {{atom}}",
     "bondToBondPattern": "le doublet π de {{a}}–{{b}} glisse vers {{c}}–{{d}}",
-    "drawHint": "Ajoutez des liaisons et des doublets libres au squelette, puis appuyez sur Vérifier pour voir quelle forme de résonance vous avez dessinée.",
-    "matchPattern": "Vous avez dessiné la forme {{number}} : {{rank}}.",
+    "drawHint": "Ajoutez des liaisons et des doublets libres au squelette, puis appuyez sur Vérifier pour trouver une forme de résonance équivalente dans la galerie.",
+    "matchPattern": "Votre dessin est équivalent à la forme {{number}} : {{rank}}.",
     "other": "Une structure valide, mais aucune des formes montrées : ses charges formelles sont plus grandes.",
     "wrongSkeleton": "Gardez le squelette : les formes de résonance déplacent des électrons, jamais des atomes.",
     "incomplete": "Pas encore terminé : suivez la liste de vérification."

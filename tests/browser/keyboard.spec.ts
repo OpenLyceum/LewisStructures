@@ -123,7 +123,9 @@ test.describe("Resonance screen by keyboard", () => {
     await expect.poll(() => announcements(page)).toContain("Every rule is met.");
     await page.getByRole("button", { name: "Check" }).focus();
     await press(page, ["Enter"]);
-    await expect.poll(() => announcements(page)).toMatch(/You drew form \d: Equivalent major form\./);
+    await expect
+      .poll(() => announcements(page))
+      .toMatch(/Your drawing is equivalent to form \d: Equivalent major form\./);
   });
 });
 

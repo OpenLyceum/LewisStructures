@@ -321,8 +321,8 @@
     "lonePairToBondPattern": "un par solitario de {{atom}} se convierte en un enlace con {{other}}",
     "bondToLonePairPattern": "un par del enlace {{a}}–{{b}} pasa a {{atom}}",
     "bondToBondPattern": "el par π de {{a}}–{{b}} se desplaza a {{c}}–{{d}}",
-    "drawHint": "Añade enlaces y pares solitarios al esqueleto y pulsa Comprobar para ver qué forma de resonancia dibujaste.",
-    "matchPattern": "Dibujaste la forma {{number}}: {{rank}}.",
+    "drawHint": "Añade enlaces y pares solitarios al esqueleto y pulsa Comprobar para encontrar una forma de resonancia equivalente en la galería.",
+    "matchPattern": "Tu dibujo es equivalente a la forma {{number}}: {{rank}}.",
     "other": "Una estructura válida, pero no es ninguna de las formas mostradas: sus cargas formales son mayores.",
     "wrongSkeleton": "Conserva el esqueleto: las formas de resonancia mueven electrones, nunca átomos.",
     "incomplete": "Aún no está terminada: sigue la lista de comprobación."

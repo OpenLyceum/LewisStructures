@@ -321,8 +321,8 @@
     "lonePairToBondPattern": "a lone pair on {{atom}} becomes a bond to {{other}}",
     "bondToLonePairPattern": "a pair from the {{a}}–{{b}} bond moves onto {{atom}}",
     "bondToBondPattern": "the {{a}}–{{b}} π pair shifts to {{c}}–{{d}}",
-    "drawHint": "Add bonds and lone pairs to the skeleton, then press Check to see which resonance form you drew.",
-    "matchPattern": "You drew form {{number}}: {{rank}}.",
+    "drawHint": "Add bonds and lone pairs to the skeleton, then press Check to find an equivalent resonance form in the gallery.",
+    "matchPattern": "Your drawing is equivalent to form {{number}}: {{rank}}.",
     "other": "A valid structure, but not one of the forms shown: its formal charges are larger.",
     "wrongSkeleton": "Keep the skeleton: resonance forms move electrons, never atoms.",
     "incomplete": "Not finished yet: work through the checklist."

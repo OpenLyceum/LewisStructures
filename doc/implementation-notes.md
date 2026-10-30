@@ -26,6 +26,11 @@ Architecture and the decisions behind it. The chemistry is in [`model.md`](model
   no undo step.
 - Undo snapshots keep atom ids, so undo and redo reuse the same `LewisAtom` objects and the nodes
   (and keyboard focus) survive.
+- Direct charge-property edits from the free-build spinner save the previous charge in history and
+  clear Redo. Internal charge writes during reset, replacement, and restoration bypass that listener's
+  history entry; their enclosing operation updates the analysis once.
+- The generator cache includes chemistry but not coordinates. Free-build Show answer combines its
+  cached electron assignment with the current atom positions before replacing the drawing.
 
 ## Keyboard and screen reader
 

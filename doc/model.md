@@ -91,6 +91,8 @@ structure or a policy alternative.
   N–O 4/3, O −2/3).
 - **Gallery**: every best form, then up to two alternatives, acceptable and minor forms each,
   without symmetry copies; at most nine.
+- **Draw one** reports an equivalent gallery form. Symmetry-related drawings can match the same
+  representative, so the feedback describes equivalence rather than identifying a unique card.
 
 ## VSEPR (`vsepr.ts`)
 
