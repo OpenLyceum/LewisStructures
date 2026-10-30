@@ -123,11 +123,12 @@
     "hints": {
       "start": "Add atoms to the board to start.",
       "connect": "Bond every atom into one structure.",
-      "placeRemainingPattern": "Place {{count}} more electrons, as lone pairs on the outer atoms first.",
-      "tooManyPattern": "Remove {{count}} electrons: take off lone pairs or lower a bond order.",
+      "atomsPattern": "The atoms don't match the formula. {{details}}",
+      "placeRemainingPattern": "Electrons still to place: {{count}}. Put them as lone pairs on the outer atoms first.",
+      "tooManyPattern": "Too many electrons placed ({{count}} extra): take off lone pairs or lower a bond order.",
       "shortPattern": "{{atom}} has only {{count}} electrons. Turn a lone pair on a neighbour into a multiple bond.",
       "overPattern": "{{atom}} has {{count}} electrons, more than it can hold.",
-      "unpairedPattern": "Use {{expected}} unpaired electrons; you have {{count}}.",
+      "unpairedPattern": "Unpaired electrons needed: {{expected}}; you have {{count}}.",
       "done": "Every rule is met. Press Check to compare with the best structure."
     },
     "selection": {
@@ -160,13 +161,71 @@
     }
   },
   "a11y": {
+    "board": {
+      "name": "Drawing board",
+      "helpText": "Arrow keys move between atoms. L adds a lone pair, D an unpaired electron, B starts a bond, G moves the atom, Delete removes it. Add atoms with the element palette.",
+      "empty": "The board is empty. Add atoms with the element palette.",
+      "atomPattern": "{{label}}, {{element}}. {{bonds}}. {{electrons}}. {{status}}.",
+      "noBonds": "No bonds",
+      "bondsPattern": "Bonded to {{list}}",
+      "bondItemPattern": "{{atom}} by a {{order}} bond",
+      "single": "single",
+      "double": "double",
+      "triple": "triple",
+      "and": "and",
+      "electronsPattern": "{{lonePairs}}{{unpaired}}, {{count}} electrons, formal charge {{charge}}",
+      "noLonePairs": "no lone pairs",
+      "oneLonePair": "1 lone pair",
+      "lonePairsPattern": "{{count}} lone pairs",
+      "unpairedPart": " and one unpaired electron",
+      "status": {
+        "duet": "Duet complete",
+        "octet": "Octet complete",
+        "incompleteAllowed": "Incomplete octet, allowed for this element",
+        "expanded": "Expanded octet",
+        "radical": "Holds the unpaired electron",
+        "short": "Needs more electrons",
+        "over": "Too many electrons"
+      },
+      "lonePairAddedPattern": "Lone pair added to {{atom}}.",
+      "lonePairRemovedPattern": "Lone pair removed from {{atom}}.",
+      "noLonePairPattern": "{{atom}} has no lone pair to remove.",
+      "lonePairLimitPattern": "{{atom}} cannot hold more lone pairs.",
+      "unpairedAddedPattern": "Unpaired electron added to {{atom}}.",
+      "unpairedRemovedPattern": "Unpaired electron removed from {{atom}}.",
+      "atomAddedPattern": "Added {{atom}}.",
+      "atomAddedBondedPattern": "Added {{atom}}, bonded to {{anchor}}.",
+      "atomDeletedPattern": "Deleted {{atom}}.",
+      "bondModePattern": "Bond from {{atom}}. Choose a partner with the arrow keys, then press Enter, or 1, 2 or 3 for the bond order. Escape cancels.",
+      "noPartner": "There is no other atom to bond to.",
+      "partnerPattern": "Partner {{atom}}, {{bond}}.",
+      "currentBondPattern": "currently a {{order}} bond",
+      "notBonded": "not bonded yet",
+      "bondSetPattern": "{{a}} to {{b}}: {{order}} bond.",
+      "bondRemovedPattern": "Bond between {{a}} and {{b}} removed.",
+      "bondCancelled": "Bond cancelled.",
+      "grabbedPattern": "Moving {{atom}}. Arrow keys move it; Enter drops it.",
+      "droppedPattern": "Dropped {{atom}}.",
+      "edge": "No atom in that direction.",
+      "undone": "Undone.",
+      "redone": "Redone.",
+      "nothingToUndo": "Nothing to undo.",
+      "nothingToRedo": "Nothing to redo.",
+      "leftPattern": "Electrons left to place: {{count}}.",
+      "allPlaced": "All electrons placed.",
+      "overPattern": "Too many electrons: {{count}} extra.",
+      "detailsSpeciesPattern": "Drawing {{name}}, {{formula}}. {{atoms}} {{budget}} {{hint}}",
+      "detailsFreePattern": "Free build, charge {{charge}}. {{atoms}} {{budget}} {{hint}}",
+      "atomCountPattern": "Atoms on the board: {{count}}.",
+      "tilePattern": "Add {{element}}",
+      "tileHelp": "Adds the atom next to the selected atom, bonded to it, or in the middle of an empty board."
+    },
     "build": {
       "screenSummary": {
         "playArea": "The play area has a drawing board where you build a Lewis structure from atoms, bonds, lone pairs and unpaired electrons, with a palette of elements beside it.",
         "controlArea": "The control area has the molecule chooser, the valence-electron count, a checklist of the rules, Check and Show answer buttons, and Reset All.",
         "interactionHint": "Choose a molecule, add atoms from the palette, bond them, then add lone pairs until every electron is placed."
       },
-      "currentDetails": "The board is empty.",
       "controls": {
         "palette": "Element palette",
         "board": "Drawing board"
@@ -204,5 +263,22 @@
     "octetPolicyNote": "Textbooks disagree on ions such as SO<sub>4</sub><sup>2−</sup>: OpenStax minimises formal charge (two S=O), while the octet view keeps four S–O bonds.",
     "octetRings": "Show octet rings around atoms",
     "allFormalCharges": "Show formal charges of zero"
+  },
+  "keyboardHelp": {
+    "boardSection": "Drawing board",
+    "paletteSection": "Element palette",
+    "moveBetweenAtoms": "Move between atoms",
+    "addLonePair": "Add a lone pair",
+    "removeLonePair": "Remove a lone pair",
+    "toggleUnpaired": "Toggle an unpaired electron",
+    "startBond": "Start a bond",
+    "confirm": "Make the bond, or drop the atom",
+    "setBondOrder": "Set the bond order (0 removes)",
+    "cancel": "Stop bonding or moving",
+    "grabAtom": "Pick up the atom to move it",
+    "deleteAtom": "Delete the atom",
+    "undo": "Undo",
+    "redo": "Redo",
+    "addElement": "Add the atom"
   }
 }

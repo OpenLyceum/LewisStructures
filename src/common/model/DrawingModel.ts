@@ -56,7 +56,8 @@ export class DrawingModel {
 
   /**
    * Adds an atom next to `anchor` (default: the selected atom) and bonds it to the anchor with a
-   * single bond; with no anchor, near the middle of the board. Selects and returns the new atom.
+   * single bond; with no anchor, near the middle of the board. The anchor stays selected, so
+   * adding H four times to a selected C builds CH₄; with no anchor the new atom is selected.
    */
   public addAtomNear(element: ElementSymbol, anchor: LewisAtom | null = this.selectedAtomProperty.value): LewisAtom {
     const position = freeSpotNear(
@@ -69,8 +70,10 @@ export class DrawingModel {
     const atom = this.structure.addAtom(element, position);
     if (anchor) {
       this.structure.setBondOrder(anchor, atom, 1);
+      this.selectAtom(anchor);
+    } else {
+      this.selectAtom(atom);
     }
-    this.selectAtom(atom);
     return atom;
   }
 

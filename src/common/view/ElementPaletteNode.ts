@@ -6,14 +6,19 @@
  * board). Dropping an atom back on the palette deletes it (see LewisCanvasNode.setDeleteZone).
  */
 
+import { PatternStringProperty } from "scenerystack/axon";
 import { Vector2 } from "scenerystack/dot";
+import { StringUtils } from "scenerystack/phetcommon";
 import { DragListener, GridBox, Node, Rectangle, Text } from "scenerystack/scenery";
 import { PhetFont } from "scenerystack/scenery-phet";
+import { StringManager } from "../../i18n/StringManager.js";
 import LewisStructuresColors from "../../LewisStructuresColors.js";
 import { CLICK_TOLERANCE } from "../../LewisStructuresConstants.js";
 import type { ElementSymbol } from "../model/ElementData.js";
 import type { LewisAtom } from "../model/LewisStructure.js";
+import { atomBrief, budgetSentence } from "./boardDescriptions.js";
 import type { LewisCanvasNode } from "./LewisCanvasNode.js";
+import { elementName } from "./speciesLabels.js";
 
 /** The palette order: the common Gen Chem elements first. */
 export const PALETTE_ELEMENTS: readonly ElementSymbol[] = [
@@ -52,7 +57,14 @@ export class ElementTileNode extends Node {
       center: background.center,
       maxWidth: TILE_SIZE - 6,
     });
-    super({ children: [background, symbol], cursor: "pointer" });
+    const a11y = StringManager.getInstance().getBoardA11yStrings();
+    super({
+      children: [background, symbol],
+      cursor: "pointer",
+      tagName: "button",
+      accessibleName: new PatternStringProperty(a11y.tilePatternStringProperty, { element: elementName(element) }),
+      accessibleHelpText: a11y.tileHelpStringProperty,
+    });
     this.element = element;
 
     const drawing = canvas.drawing;
@@ -92,6 +104,25 @@ export class ElementTileNode extends Node {
         },
       }),
     );
+
+    // Keyboard and assistive technology: Enter or Space on the focused tile.
+    this.addInputListener({
+      click: () => {
+        const structure = drawing.structure;
+        const anchor = drawing.selectedAtomProperty.value;
+        const atom = drawing.addAtomNear(element);
+        const name = structure.labelOf(atom);
+        const sentence = anchor
+          ? StringUtils.fillIn(a11y.atomAddedBondedPatternStringProperty.value, {
+              atom: name,
+              anchor: structure.labelOf(anchor),
+            })
+          : StringUtils.fillIn(a11y.atomAddedPatternStringProperty.value, { atom: name });
+        const brief = anchor ? atomBrief(structure, anchor) : "";
+        const budget = budgetSentence(structure, canvas.targetProperty.value);
+        this.addAccessibleResponse([sentence, brief, budget].filter((part) => part !== "").join(" "));
+      },
+    });
   }
 }
 

@@ -41,6 +41,8 @@ export type AtomDisplay = {
   /** Directions of the atom's bonds, radians, y up (model convention). */
   readonly bondAngles: readonly number[];
   readonly selected: boolean;
+  /** The keyboard bond partner (drawn with a second dashed ring). */
+  readonly partner: boolean;
   readonly showAllFormalCharges: boolean;
   readonly showOctetRing: boolean;
 };
@@ -53,6 +55,7 @@ export class AtomNode extends Node {
   public readonly bondHandleNode: Circle;
   private readonly octetRing: Circle;
   private readonly selectionRing: Circle;
+  private readonly partnerRing: Circle;
   private readonly electronsPath: Path;
   private readonly badge: Node;
   private readonly badgeCircle: Circle;
@@ -82,6 +85,13 @@ export class AtomNode extends Node {
       visible: false,
       pickable: false,
     });
+    const partnerRing = new Circle(ATOM_RADIUS + 8, {
+      stroke: LewisStructuresColors.accentColorProperty,
+      lineWidth: 2,
+      lineDash: [2, 3],
+      visible: false,
+      pickable: false,
+    });
     const electronsPath = new Path(null, { fill: LewisStructuresColors.electronColorProperty, pickable: false });
     const badgeCircle = new Circle(CHARGE_BADGE_RADIUS);
     const badgeText = new Text("", {
@@ -92,7 +102,7 @@ export class AtomNode extends Node {
     const badge = new Node({ children: [badgeCircle, badgeText], pickable: false, visible: false });
 
     super({
-      children: [bondHandleNode, octetRing, coreNode, selectionRing, electronsPath, badge],
+      children: [bondHandleNode, octetRing, coreNode, selectionRing, partnerRing, electronsPath, badge],
     });
 
     this.atom = atom;
@@ -100,6 +110,7 @@ export class AtomNode extends Node {
     this.bondHandleNode = bondHandleNode;
     this.octetRing = octetRing;
     this.selectionRing = selectionRing;
+    this.partnerRing = partnerRing;
     this.electronsPath = electronsPath;
     this.badge = badge;
     this.badgeCircle = badgeCircle;
@@ -121,6 +132,7 @@ export class AtomNode extends Node {
     const atom = this.atom;
     this.selected = display.selected;
     this.selectionRing.visible = display.selected;
+    this.partnerRing.visible = display.partner;
     this.updateHandle();
 
     // Electrons: lone pairs first, then the unpaired electron, in the widest gaps between bonds.

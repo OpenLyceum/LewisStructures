@@ -18,11 +18,14 @@ import { Shape } from "scenerystack/kite";
 import { ModelViewTransform2 } from "scenerystack/phetcommon";
 import { DragListener, FireListener, Line, Node, Rectangle, RichText, type SceneryEvent } from "scenerystack/scenery";
 import { PhetFont } from "scenerystack/scenery-phet";
+import { StringManager } from "../../i18n/StringManager.js";
 import LewisStructuresColors from "../../LewisStructuresColors.js";
 import { CLICK_TOLERANCE, PANEL_CORNER_RADIUS, PIXELS_PER_BOND } from "../../LewisStructuresConstants.js";
 import type { DrawingModel } from "../model/DrawingModel.js";
 import type { LewisAtom, LewisBond } from "../model/LewisStructure.js";
+import type { StructureData } from "../model/StructureData.js";
 import { AtomNode } from "./AtomNode.js";
+import { BoardKeyboardController } from "./BoardKeyboardController.js";
 import { BondNode } from "./BondNode.js";
 
 /** How close (bond lengths) a drop must be to an atom's centre to bond to it. */
@@ -33,6 +36,8 @@ export type LewisCanvasDisplayOptions = {
   readonly showOctetRingsProperty: TReadOnlyProperty<boolean>;
   /** Text shown in the middle of an empty board. */
   readonly hintStringProperty: TReadOnlyProperty<string>;
+  /** The species being drawn (its formula sets the electron total), or null in free build. */
+  readonly targetProperty: TReadOnlyProperty<StructureData | null>;
 };
 
 export class LewisCanvasNode extends Node {
@@ -45,12 +50,20 @@ export class LewisCanvasNode extends Node {
   private readonly bondLayer = new Node();
   private readonly rubberBand: Line;
   private readonly display: LewisCanvasDisplayOptions;
+  /** The keyboard path through the board; its partner is the other end of a bond in bond mode. */
+  public readonly keyboardController: BoardKeyboardController;
   /** Returns true when a global point is over the delete zone (the element palette). */
   private isOverDeleteZone: (globalPoint: Vector2) => boolean = () => false;
   private readonly disposeLewisCanvasNode: () => void;
 
   public constructor(drawing: DrawingModel, width: number, height: number, display: LewisCanvasDisplayOptions) {
-    super();
+    const a11y = StringManager.getInstance().getBoardA11yStrings();
+    super({
+      tagName: "div",
+      focusable: true,
+      accessibleName: a11y.nameStringProperty,
+      accessibleHelpText: a11y.helpTextStringProperty,
+    });
     this.drawing = drawing;
     this.display = display;
     this.modelViewTransform = ModelViewTransform2.createSinglePointScaleInvertedYMapping(
@@ -87,6 +100,16 @@ export class LewisCanvasNode extends Node {
     this.children = [board, hint, this.bondLayer, this.rubberBand, this.atomLayer];
     this.clipArea = Shape.bounds(new Bounds2(0, 0, width, height));
 
+    // ── Keyboard ────────────────────────────────────────────────────────────
+    const keyboardController = new BoardKeyboardController(drawing, this, display.targetProperty);
+    this.keyboardController = keyboardController;
+    this.addInputListener(keyboardController.listener);
+    const focusListener = {
+      focus: () => keyboardController.onFocus(),
+      blur: () => keyboardController.onBlur(),
+    };
+    this.addInputListener(focusListener);
+
     const structure = drawing.structure;
     const onAdded = (atom: LewisAtom) => this.addAtomNode(atom);
     const onRemoved = (atom: LewisAtom) => this.removeAtomNode(atom);
@@ -107,6 +130,7 @@ export class LewisCanvasNode extends Node {
         drawing.selectedBondProperty,
         display.showAllFormalChargesProperty,
         display.showOctetRingsProperty,
+        keyboardController.partnerProperty,
       ],
       () => this.updateAll(),
     );
@@ -117,10 +141,18 @@ export class LewisCanvasNode extends Node {
       structure.atomRemovedEmitter.removeListener(onRemoved);
       structure.changedEmitter.removeListener(onChanged);
       displayMultilink.dispose();
+      this.removeInputListener(focusListener);
+      this.removeInputListener(keyboardController.listener);
+      keyboardController.dispose();
       for (const atom of [...this.atomNodes.keys()]) {
         this.removeAtomNode(atom);
       }
     };
+  }
+
+  /** The species being drawn, or null in free build. */
+  public get targetProperty(): TReadOnlyProperty<StructureData | null> {
+    return this.display.targetProperty;
   }
 
   /** Sets what counts as the delete zone for dragged atoms (the element palette). */
@@ -299,6 +331,16 @@ export class LewisCanvasNode extends Node {
   // ── Updates ────────────────────────────────────────────────────────────────
 
   private updateAll(): void {
+    // In bond mode, a dashed line joins the selected atom to the chosen partner.
+    const partner = this.keyboardController.partnerProperty.value;
+    const selected = this.drawing.selectedAtomProperty.value;
+    if (partner && selected) {
+      const a = this.modelViewTransform.modelToViewPosition(selected.positionProperty.value);
+      const b = this.modelViewTransform.modelToViewPosition(partner.positionProperty.value);
+      this.rubberBand.setLine(a.x, a.y, b.x, b.y);
+    }
+    this.rubberBand.visible = partner !== null && selected !== null;
+
     for (const atom of this.drawing.structure.atoms) {
       const node = this.atomNodes.get(atom);
       if (node) {
@@ -320,6 +362,7 @@ export class LewisCanvasNode extends Node {
       analysis: this.drawing.structure.analysisOf(atom),
       bondAngles: this.drawing.bondAnglesOf(atom),
       selected: this.drawing.selectedAtomProperty.value === atom,
+      partner: this.keyboardController.partnerProperty.value === atom,
       showAllFormalCharges: this.display.showAllFormalChargesProperty.value,
       showOctetRing: this.display.showOctetRingsProperty.value,
     });

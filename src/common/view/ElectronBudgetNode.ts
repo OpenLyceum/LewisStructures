@@ -16,7 +16,7 @@ import { Path, RichText, VBox } from "scenerystack/scenery";
 import { StringManager } from "../../i18n/StringManager.js";
 import LewisStructuresColors from "../../LewisStructuresColors.js";
 import { ELECTRON_DOT_RADIUS } from "../../LewisStructuresConstants.js";
-import { getElement } from "../model/ElementData.js";
+import { type ElectronBudget, electronBudget } from "../model/electronBudget.js";
 import type { LewisStructure } from "../model/LewisStructure.js";
 import type { StructureData } from "../model/StructureData.js";
 import { CONTROL_FONT, HEADING_FONT } from "./ControlFactory.js";
@@ -26,14 +26,6 @@ import { signedCharge } from "./formatValues.js";
 const TRAY_COLUMNS = 12;
 const TRAY_MAX_ROWS = 3;
 const TRAY_PITCH = 14;
-
-type Budget = {
-  readonly fromAtoms: number;
-  readonly charge: number;
-  readonly total: number;
-  readonly placed: number;
-  readonly left: number;
-};
 
 export class ElectronBudgetNode extends VBox {
   private readonly disposeElectronBudgetNode: () => void;
@@ -50,12 +42,7 @@ export class ElectronBudgetNode extends VBox {
 
     const budgetProperty = new DerivedProperty(
       [structure.analysisProperty, targetProperty, structure.chargeProperty],
-      (analysis, target, charge): Budget => {
-        const atoms = target ? target.atoms : structure.atoms;
-        const fromAtoms = atoms.reduce((sum, atom) => sum + getElement(atom.element).valence, 0);
-        const total = fromAtoms - charge;
-        return { fromAtoms, charge, total, placed: analysis.placed, left: total - analysis.placed };
-      },
+      (_analysis, target) => electronBudget(structure, target),
     );
 
     const line = (textProperty: TReadOnlyProperty<string>) =>
@@ -94,7 +81,7 @@ export class ElectronBudgetNode extends VBox {
     const leftLine = new RichText(texts[4] as TReadOnlyProperty<string>, { font: CONTROL_FONT, maxWidth: width });
     const tray = new Path(null, { fill: LewisStructuresColors.electronColorProperty });
 
-    const update = (budget: Budget) => {
+    const update = (budget: ElectronBudget) => {
       chargeLine.visible = budget.charge !== 0;
       const drawn = structure.atoms.length > 0;
       leftLine.fill =

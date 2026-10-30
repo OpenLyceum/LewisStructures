@@ -108,6 +108,16 @@ export class StringManager {
     return stringProperties.common;
   }
 
+  /** Accessibility strings for the drawing board and palette, shared by every screen. */
+  public getBoardA11yStrings() {
+    return stringProperties.a11y.board;
+  }
+
+  /** Labels in the keyboard-help dialogs. */
+  public getKeyboardHelpStrings() {
+    return stringProperties.keyboardHelp;
+  }
+
   /** Accessibility strings for the Build screen. */
   public getBuildA11yStrings() {
     return stringProperties.a11y.build;

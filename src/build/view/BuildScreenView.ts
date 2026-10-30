@@ -50,7 +50,9 @@ export class BuildScreenView extends ScreenView {
     const listParent = new Node();
 
     // ── Board and palette ─────────────────────────────────────────────────────
+    const targetProperty = new DerivedProperty([model.speciesProperty], (species) => species?.skeleton ?? null);
     const canvas = new LewisCanvasNode(drawing, BOARD_WIDTH, BOARD_HEIGHT, {
+      targetProperty,
       showAllFormalChargesProperty: preferences.showAllFormalChargesProperty,
       showOctetRingsProperty: preferences.showOctetRingsProperty,
       hintStringProperty: strings.boardHintStringProperty,
@@ -59,6 +61,8 @@ export class BuildScreenView extends ScreenView {
 
     const palette = new ElementPaletteNode(canvas);
     const palettePanel = new LewisStructuresPanel(palette, { xMargin: 6, yMargin: 6 });
+    palette.tagName = "div";
+    palette.accessibleHeading = StringManager.getInstance().getBuildA11yStrings().controls.paletteStringProperty;
     palettePanel.leftTop = this.layoutBounds.leftTop.plusXY(SCREEN_VIEW_MARGIN, BOARD_TOP);
     canvas.setDeleteZone((globalPoint) => palettePanel.globalBounds.containsPoint(globalPoint));
 
@@ -94,7 +98,6 @@ export class BuildScreenView extends ScreenView {
     selectionBar.leftTop = toolbar.leftBottom.plusXY(0, GAP);
 
     // ── Right column ──────────────────────────────────────────────────────────
-    const targetProperty = new DerivedProperty([model.speciesProperty], (species) => species?.skeleton ?? null);
     const budgetPanel = new LewisStructuresPanel(
       new ElectronBudgetNode(structure, targetProperty, PANEL_CONTENT_WIDTH),
       {
@@ -102,7 +105,7 @@ export class BuildScreenView extends ScreenView {
         align: "left",
       },
     );
-    const checklistPanel = new LewisStructuresPanel(new ChecklistNode(structure, PANEL_CONTENT_WIDTH), {
+    const checklistPanel = new LewisStructuresPanel(new ChecklistNode(structure, targetProperty, PANEL_CONTENT_WIDTH), {
       minWidth: SIDE_PANEL_WIDTH,
       align: "left",
     });

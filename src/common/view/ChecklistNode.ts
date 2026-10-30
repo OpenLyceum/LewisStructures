@@ -11,20 +11,56 @@ import { HBox, RichText, Text, VBox } from "scenerystack/scenery";
 import { StringManager } from "../../i18n/StringManager.js";
 import LewisStructuresColors from "../../LewisStructuresColors.js";
 import type { StructureAnalysis } from "../model/analyzeStructure.js";
+import { checkAgainstSpecies } from "../model/checkStructure.js";
+import { electronBudget } from "../model/electronBudget.js";
 import type { LewisStructure } from "../model/LewisStructure.js";
+import { OctetPolicy } from "../model/OctetPolicy.js";
 import { OctetStatus } from "../model/OctetStatus.js";
+import type { Species } from "../model/SpeciesCatalog.js";
+import type { StructureData } from "../model/StructureData.js";
 import { CONTROL_FONT, HEADING_FONT, SMALL_FONT } from "./ControlFactory.js";
-import { signedCharge } from "./formatValues.js";
+import { countList, signedCharge } from "./formatValues.js";
 
 const MARK_DONE = "✓";
 const MARK_TODO = "○";
 
-/** The one hint for the first unmet rule, in the order a student works. */
-export function describeHint(structure: LewisStructure, analysis: StructureAnalysis): string {
+/** The atoms still needed for, or extra to, the target's formula; null when they match. */
+function atomMismatch(structure: LewisStructure, target: StructureData | null): string | null {
+  if (!target) {
+    return null;
+  }
+  const outcome = checkAgainstSpecies(structure.toData(), { skeleton: target } as Species, OctetPolicy.ACCEPT_BOTH);
+  if (outcome.kind !== "wrongAtoms") {
+    return null;
+  }
+  const feedback = StringManager.getInstance().getCommonStrings().feedback;
+  const parts: string[] = [];
+  if (outcome.missing.size > 0) {
+    parts.push(StringUtils.fillIn(feedback.needPatternStringProperty.value, { list: countList(outcome.missing) }));
+  }
+  if (outcome.extra.size > 0) {
+    parts.push(StringUtils.fillIn(feedback.removePatternStringProperty.value, { list: countList(outcome.extra) }));
+  }
+  return parts.join(" ");
+}
+
+/**
+ * The one hint for the first unmet rule, in the order a student works. With a target (a catalog
+ * species), the atoms are compared with its formula first.
+ */
+export function describeHint(
+  structure: LewisStructure,
+  analysis: StructureAnalysis,
+  target: StructureData | null,
+): string {
   const hints = StringManager.getInstance().getCommonStrings().hints;
   const atoms = structure.atoms;
   if (atoms.length === 0) {
     return hints.startStringProperty.value;
+  }
+  const mismatch = atomMismatch(structure, target);
+  if (mismatch) {
+    return StringUtils.fillIn(hints.atomsPatternStringProperty.value, { details: mismatch });
   }
   if (!analysis.connected) {
     return hints.connectStringProperty.value;
@@ -62,7 +98,14 @@ export function describeHint(structure: LewisStructure, analysis: StructureAnaly
 export class ChecklistNode extends VBox {
   private readonly disposeChecklistNode: () => void;
 
-  public constructor(structure: LewisStructure, width: number) {
+  /**
+   * @param targetProperty - the species being drawn (its formula sets the electron total), or null
+   */
+  public constructor(
+    structure: LewisStructure,
+    targetProperty: TReadOnlyProperty<StructureData | null>,
+    width: number,
+  ) {
     const common = StringManager.getInstance().getCommonStrings();
     const strings = common.checklist;
     const analysisProperty = structure.analysisProperty;
@@ -97,15 +140,16 @@ export class ChecklistNode extends VBox {
     );
 
     const items = [
-      item(strings.allPlacedStringProperty, (a) => a.remaining === 0),
+      item(strings.allPlacedStringProperty, () => electronBudget(structure, targetProperty.value).left === 0),
       item(strings.connectedStringProperty, (a) => a.connected),
       item(strings.octetsStringProperty, (a) => a.atoms.every((atom) => atom.status.satisfied)),
       item(unpairedLabelProperty, (a) => a.unpairedCount === a.expectedUnpaired),
       item(formalChargeLabelProperty, (a) => a.formalChargeSum === structure.chargeProperty.value),
     ];
 
-    const hintProperty = DerivedProperty.deriveAny([analysisProperty, ...Object.values(common.hints)], () =>
-      describeHint(structure, analysisProperty.value),
+    const hintProperty = DerivedProperty.deriveAny(
+      [analysisProperty, targetProperty, ...Object.values(common.hints)],
+      () => describeHint(structure, analysisProperty.value, targetProperty.value),
     );
     const hint = new RichText(hintProperty, {
       font: SMALL_FONT,
