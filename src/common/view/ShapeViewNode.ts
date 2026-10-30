@@ -115,6 +115,11 @@ export class ShapeViewNode extends Node {
     this.disposeShapeViewNode = () => {
       colorMultilink.dispose();
       keyboardListener.dispose();
+      for (const child of this.scene.children) {
+        child.dispose();
+      }
+      this.scene.dispose();
+      background.dispose();
     };
   }
 

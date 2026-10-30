@@ -90,28 +90,27 @@ export function shapeDescription(data: StructureData): { lines: string[]; center
 export class ShapePreviewNode extends LewisStructuresPanel {
   private readonly view: ShapeViewNode;
   private readonly text: RichText;
+  private readonly title: RichText;
 
   public constructor(width: number) {
     const strings = StringManager.getInstance().getShapeStrings();
     const view = new ShapeViewNode(VIEW_SIZE);
     const text = new RichText("", { font: SMALL_FONT, fill: LewisStructuresColors.textColorProperty, lineWrap: width });
+    const title = new RichText(strings.titleStringProperty, {
+      font: HEADING_FONT,
+      fill: LewisStructuresColors.textColorProperty,
+    });
     super(
       new VBox({
         align: "left",
         spacing: 6,
-        children: [
-          new RichText(strings.titleStringProperty, {
-            font: HEADING_FONT,
-            fill: LewisStructuresColors.textColorProperty,
-          }),
-          view,
-          text,
-        ],
+        children: [title, view, text],
       }),
       { xMargin: 12, yMargin: 10, minWidth: width + 24, align: "left" },
     );
     this.view = view;
     this.text = text;
+    this.title = title;
   }
 
   /** Shows the shape of `data` (or a request to finish it). */
@@ -125,6 +124,8 @@ export class ShapePreviewNode extends LewisStructuresPanel {
 
   public override dispose(): void {
     this.view.dispose();
+    this.title.dispose();
+    this.text.dispose();
     super.dispose();
   }
 }

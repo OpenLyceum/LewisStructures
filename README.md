@@ -2,23 +2,41 @@
 
 [![CI](../../actions/workflows/ci.yml/badge.svg)](../../actions/workflows/ci.yml)
 
-A reusable SceneryStack simulation template for one or N screens, built with
-[SceneryStack](https://scenerystack.org/), Vite 8, TypeScript 7, and Biome 2.
+Lewis structures for introductory (General) chemistry: count valence electrons, place atoms,
+bonds, lone pairs and unpaired electrons on a drawing board, and see formal charges and octets
+checked live. Compare resonance forms with electron-pushing arrows and the hybrid, practise in a
+three-level challenge, and see each finished structure's VSEPR shape in 3D. Built with
+[SceneryStack](https://scenerystack.org/); runs offline as a Progressive Web App.
 
 ## Features
 
-- SceneryStack scaffold with model/view separation (`rename` + `scaffold-screens` for one or N screens)
-- English, Spanish, and French localization via `StringManager`
-- Default and projector color profiles
-- Progressive Web App (installable, offline-capable)
-- Git hooks for Biome pre-commit checks
-- Shared GitHub Actions CI via `OpenLyceum/Baton`
+- **Build.** Choose one of 52 molecules and ions (simple molecules, multiple bonds, ions,
+  resonance, expanded and incomplete octets, odd-electron molecules) or draw anything in free
+  build. Drag elements onto the board, drag between atoms to bond them, click a bond to change its
+  order, and add lone pairs. The valence-electron count, a checklist of the rules, octet rings
+  and formal-charge badges update with every edit. Check compares the drawing with the best
+  structure and names the first thing wrong; Skeleton and Show answer help when stuck. A 3D panel
+  shows the VSEPR shape (AX<sub>n</sub>E<sub>m</sub>, geometry and bond angles).
+- **Resonance.** Fifteen species with more than one reasonable structure (NO<sub>3</sub><sup>−</sup>,
+  O<sub>3</sub>, SCN<sup>−</sup>, benzene, SO<sub>4</sub><sup>2−</sup>…): every equivalent major
+  form, the octet-rule alternative and the minor forms, ranked with the reason. Curved arrows show
+  the electron pairs that turn one form into the next; the hybrid shows fractional bond orders and
+  charges (1⅓, −⅔). Or complete the skeleton yourself and find out which form you drew.
+- **Challenge.** Three levels of five problems: draw each species from scratch. Hints, a point
+  each, give the electron total, the central atom, the skeleton, where the multiple bonds or
+  unusual octets are, and finally the answer.
+- **Answers are generated, not typed in.** Every valid structure on a skeleton is enumerated and
+  ranked by formal charge, so free-build drawings can be checked too. A preference chooses how
+  expanded octets are judged (minimise formal charge as OpenStax does, keep the octet, or accept
+  both).
+- **Accessible:** the board works fully from the keyboard (arrows between atoms, L lone pair,
+  B bond, G move, Delete) with every edit announced; live screen summaries; keyboard-help dialogs.
+- English, French and Spanish; default and projector colour profiles; installable PWA.
 
 ## Quick Start
 
 ```bash
 npm install
-npm run icons    # generate PNG icons from public/icons/icon.svg
 npm start        # dev server → http://localhost:5173
 ```
 
@@ -39,12 +57,8 @@ npm start        # dev server → http://localhost:5173
 | `npm run format` | Auto-format all files |
 | `npm run fix` | Lint + auto-fix |
 | `npm run icons` | Regenerate PNG icons from `public/icons/icon.svg` |
-| `npm run rename` | Sim-level fork/rename (`--id`, `--name`) |
-| `npm run scaffold-screens` | Emit N fleet-named screen packages from `build/` (`--shared-model` optional) |
 | `npm run release` | `check && lint && build && test`, then version patch + push tags |
 | `npm run clean` | Remove `dist/` |
-
-New sims start at `version: "0.0.0"` in `package.json`. Bump only when cutting a release (for example `npm version patch` and a matching git tag). Keep `name` in kebab-case; it is separate from the SceneryStack sim identifier in `src/init.ts`, which reads its `version` from `package.json`.
 
 ## Tech Stack
 

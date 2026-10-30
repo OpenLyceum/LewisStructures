@@ -4,105 +4,76 @@ Sim-specific context for AI assistants. General SceneryStack guidance: [OpenLyce
 
 ## Project
 
-Reusable SceneryStack template (one or N screens) and **canonical accessibility reference** for
-OpenLyceum sims. Prefer `Baton/scripts/create-sim.sh` (or GitHub **Use this template** +
-`npm run rename` + `npm run scaffold-screens`) to fork it. For multi-screen sims, see
-[`doc/multi-screen.md`](doc/multi-screen.md).
+Lewis structures for **introductory (General) chemistry**: valence-electron counting, bonds, lone
+pairs, formal charge, octet exceptions, resonance and VSEPR shape. It follows PeriodicTrends in the
+Gen Chem sequence. Three screens:
+
+| Screen | Folder | Content |
+|---|---|---|
+| Build | `src/build/` | Drawing board + element palette for a catalog species or free build; electron count, checklist, octet rings, formal charges; Check / Skeleton / Show answer; VSEPR shape panel |
+| Resonance | `src/resonance/` | Ranked gallery of forms; one form with curved arrows to the next, the hybrid, or a skeleton to complete and identify |
+| Challenge | `src/challenge/` | vegas levels 1–3, five problems a round, a five-step hint ladder costing a point each |
+
+Chemistry, ranking rules and sources: [`doc/model.md`](doc/model.md). Architecture and design
+decisions: [`doc/implementation-notes.md`](doc/implementation-notes.md).
+
+### Things to know first
+
+- **Skeletons come from the catalog; answers are generated.** `SpeciesCatalog.ts` stores atoms,
+  connectivity and 2D positions only. `generateStructures.ts` enumerates every valid structure and
+  ranks it; `tests/common/generateStructures.test.ts` checks the results against textbook
+  structures. Never hand-enter an answer: fix the ranking or the skeleton instead.
+- **OctetPolicy is the user's choice.** Expanded-octet ions (SO₄²⁻, PO₄³⁻, ClO₄⁻, SO₂, SO₃, ClO₂)
+  have different best structures under ACCEPT_BOTH (default), OCTET_FIRST and
+  MINIMIZE_FORMAL_CHARGE. Every policy agrees where expansion is unavoidable.
+- **Ranking order is Σ|FC|, ΣFC², then ΣFC·χ.** ΣFC² is what makes azide N=N=N; the
+  electronegativity term is what puts SCN⁻'s charge on N. Odd electrons go on the least
+  electronegative non-H atom.
+- **The board is one focus stop.** Keys live in `LewisStructuresHotkeyData`; the unpaired electron
+  is **D** (the help dialog has no U icon) and Undo/Redo rows are drawn by hand (no Ctrl icon).
+- **Atoms are compared by graph isomorphism**, never by index or position (`moleculeGraph.ts`).
+- **Agent shells may default to Node 24**: run `source ~/.nvm/nvm.sh && nvm use 26` before npm or
+  git commit (the pre-commit hook runs npm).
 
 ## Key files
 
 | File | Purpose |
 |---|---|
-| `src/LewisStructuresColors.ts` | All `ProfileColorProperty` instances |
-| `src/LewisStructuresConstants.ts` | Named numeric constants (layout px, physics SI units) |
-| `src/LewisStructuresNamespace.ts` | Namespace for color property names |
-| `src/i18n/StringManager.ts` | Singleton localized string accessor |
-| `src/build/BuildScreen.ts` | Screen wrapper |
-| `src/build/model/BuildModel.ts` | Simulation state and logic |
-| `src/build/view/BuildScreenView.ts` | Visual nodes, layout, `screenSummaryContent` + `pdomOrder` |
-| `src/build/view/BuildScreenSummaryContent.ts` | Accessible screen summary (reference a11y pattern) |
-| `src/build/view/BuildKeyboardHelpContent.ts` | Basic keyboard actions + commented slider/time-control sections |
-| `src/common/LewisStructuresPanel.ts` | Pre-themed `Panel` wrapper (uses `LewisStructuresColors` automatically) |
-| `src/common/LewisStructuresButtonOptions.ts` | Flat button-appearance option bundles + light-control-surface combo-box options |
-| `src/common/LewisStructuresControlOptions.ts` | Shared slider, number-control, and checkbox sizing/theme options |
-| `src/common/TimeModel.ts` | Composable play/pause + elapsed-time model for animated sims |
-| `scripts/generate-icons.ts` | PNG icons from `public/icons/icon.svg` |
-| `scripts/rename-sim.ts` | Sim-level fork/rename (metadata, Colors, Constants, Panel, Button/Control options, Preferences) |
-| `scripts/scaffold-screens.ts` | Emit N screen packages + wire main/strings/icons |
-
-## Common components
-
-### LewisStructuresPanel
-
-Every control panel and info box in the sim should use `LewisStructuresPanel` so that
-default/projector color switching is automatic:
-
-```typescript
-import { LewisStructuresPanel } from "../../common/LewisStructuresPanel.js";
-const panel = new LewisStructuresPanel(content);              // uses LewisStructuresColors defaults
-const panel = new LewisStructuresPanel(content, { xMargin: 20 }); // override any PanelOption
-```
-
-### TimeModel
-
-For simulations with animation, compose `TimeModel` into your screen model:
-
-```typescript
-import { TimeModel } from "../../common/TimeModel.js";
-
-export class MyModel implements TModel {
-  public readonly timer = new TimeModel();   // starts paused; pass true to auto-play
-
-  public step(dt: number): void {
-    this.timer.step(dt);
-    // use this.timer.timeProperty.value for physics
-  }
-  public reset(): void { this.timer.reset(); /* … */ }
-}
-```
-
-Wire the view to `TimeControlNode` from `scenerystack/scenery-phet` binding on
-`model.timer.isPlayingProperty`.
-
-### LewisStructuresButtonOptions
-
-SceneryStack's push/round buttons default to a 3-D/beveled look; every button in the sim
-should be flat instead. Spread these into the relevant options object:
-
-```typescript
-import { FLAT_RESET_ALL_BUTTON_OPTIONS, FLAT_RECTANGULAR_BUTTON_OPTIONS } from "../../common/LewisStructuresButtonOptions.js";
-
-const resetAllButton = new ResetAllButton({ ...FLAT_RESET_ALL_BUTTON_OPTIONS, listener: () => {...} });
-const exampleButton = new RectangularPushButton({ ...FLAT_RECTANGULAR_BUTTON_OPTIONS, content, listener });
-```
-
-`FLAT_PLAY_PAUSE_STEP_BUTTON_OPTIONS` spreads into `TimeControlNode`'s `playPauseStepButtonOptions`;
-`TIME_CONTROL_SPEED_RADIO_OPTIONS` fixes `TimeControlNode`'s speed-radio label color, which
-otherwise defaults to black text on the sim's dark default-mode panels. `LEWIS_STRUCTURES_COMBO_BOX_OPTIONS`
-themes a `ComboBox`'s button/list chrome to the light control surface below; pair item labels
-with `LIGHT_SURFACE_TEXT_FILL` (not `LewisStructuresColors.textColorProperty`, which is for panel-fill text).
-
-`LewisStructuresColors.ts` backs this with a "light control surfaces" section —
-`controlSurfaceColorProperty`, `controlSurfaceDisabledColorProperty`,
-`controlSurfaceTextColorProperty` — identical white/dark-text values in both default and
-projector profiles, so any component that must stay light regardless of theme (combo boxes,
-flat buttons, editable fields) keeps readable contrast automatically.
+| `src/LewisStructuresConstants.ts` | Board sizes, pixels per bond, atom and electron drawing sizes, charge range |
+| `src/LewisStructuresColors.ts` | All `ProfileColorProperty` instances, including octet-ring states, charge badges and CPK colours for the 3D view |
+| `src/common/model/ElementData.ts` | Valence, period, group, electronegativity, radius, octet exceptions for 16 elements |
+| `src/common/model/SpeciesCatalog.ts` | 52 species: formula, charge, category, difficulty, central atom, skeleton |
+| `src/common/model/analyzeStructure.ts` | Electron budget, formal charges, `OctetStatus`, completeness |
+| `src/common/model/generateStructures.ts` | Every valid structure on a skeleton, ranked, grouped by policy |
+| `src/common/model/checkStructure.ts` | Grades a drawing: atoms, completeness, skeleton, rank |
+| `src/common/model/moleculeGraph.ts` | Isomorphism (`sameSkeleton`, `sameStructure`) |
+| `src/common/model/LewisStructure.ts` | Editable drawing with undo/redo that keeps atom ids |
+| `src/common/model/DrawingModel.ts` | Selection, add-near, bond-or-cycle, tidy, show data |
+| `src/common/model/resonance.ts` | Curved arrows between forms, hybrid, gallery |
+| `src/common/model/vsepr.ts` | AXₙEₘ, geometries, ideal directions |
+| `src/common/view/LewisCanvasNode.ts` | The board: atom/bond nodes and pointer editing |
+| `src/common/view/BoardKeyboardController.ts` | The keyboard path and its announcements |
+| `src/common/view/boardDescriptions.ts` | Spoken text for atoms, budget, the whole drawing |
+| `src/common/view/StructureNode.ts` | Static drawings (gallery, resonance view, hybrid, icons) |
+| `src/common/view/ShapeViewNode.ts` / `ShapePreviewNode.ts` | Rotatable 3D VSEPR model and its panel |
+| `src/resonance/view/resonanceDescriptions.ts` | Rank labels, explanations, arrow and hybrid text |
+| `src/challenge/view/challengeHints.ts` | Hint text derived from the species and its answer |
 
 ## Accessibility
 
-This template is the **canonical accessibility reference** for OpenLyceum sims. It ships with
-the three required layers wired up: PDOM names, a `BuildScreenSummaryContent`, and an explicit
-`pdomOrder` + `BuildKeyboardHelpContent`. A11y strings live under the `a11y` key in each locale
-JSON, exposed via `StringManager.getBuildA11yStrings()`. When building a real sim, make
-`currentDetailsContent` a live `DerivedProperty` over model state and add `accessibleName`s to
-every interactive node. Full convention and checklist: [Baton/ACCESSIBILITY.md](https://github.com/OpenLyceum/Baton/blob/main/ACCESSIBILITY.md).
+- The board is a focusable `div` with help text; the selected atom is the cursor. Arrows move
+  between atoms; L / Shift+L, D, B (then arrows, Enter or 0–3), G, Delete, Ctrl+Z / Ctrl+Y edit.
+  Every edit is announced (`addAccessibleResponse`) with the atom's electrons, formal charge,
+  status and the electrons left; "Every rule is met" when complete.
+- Palette tiles are buttons ("Add oxygen") that add the atom bonded to the selected one.
+- Resonance cards are buttons named with the form's rank, multiple bonds and formal charges;
+  Previous/Next announce the form shown. The 3D model is focusable and turns with the arrows.
+- All three screen summaries have a live current-details paragraph.
+- `tests/browser/keyboard.spec.ts` drives every screen by keyboard only.
 
 ## Compliance carve-outs
 
-A clean fork of this template rarely needs compliance carve-outs — root `LewisStructuresConstants.ts`,
-`*Colors.ts`, `*Namespace.ts`, standard screen layout, and full a11y wiring pass Baton's
-compliance check out of the box. Document carve-outs in the forked sim's `AGENTS.md` only when
-you introduce a deliberate deviation (nested constants, hardcoded interaction fills, etc.).
+None.
 
 ### Template-owned files (drift-checked)
 
@@ -132,27 +103,17 @@ open PRs that fight the overrides. Revisit when SceneryStack drops or re-pins th
 
 ## Testing
 
-Fleet-standard Vitest layout (keep when forking):
-
 | Path | Purpose |
 |---|---|
-| `vitest.config.ts` | `happy-dom` environment; `setupFiles: ["./tests/setup.ts"]`; `execArgv: ["--expose-gc"]` |
-| `tests/setup.ts` | Canvas / AudioContext mocks + `init({ name: "…" })` before SceneryStack imports |
-| `tests/TimeModel.test.ts` | Sample model unit tests — replace with real physics tests |
-| `tests/memory-leak.test.ts` | Lists the sim's disposables for `describeDisposalLeaks()` (collected after dispose, repeated cycles; opt-in double dispose) |
-| `tests/helpers/memoryLeak.ts` | Template-owned leak harness: `describeDisposalLeaks`, `forceGC`, `createAndDispose` |
-| `tests/fuzz/fuzz.spec.ts` | Optional Playwright fuzz smoke: pointer `?fuzz` + keyboard `?fuzzBoard` (template-owned; add sim-specific specs as separate files) |
-| `playwright.config.ts` | Chromium project + Vite webServer for `tests/**/*.spec.ts` (template-owned) |
-| `tests/browser/*.spec.ts` | Optional sim-specific Playwright tests (`npx playwright test tests/browser`); `npm run test:fuzz` runs only `tests/fuzz/` |
-
-- Put unit tests only under root `tests/`, mirroring `src/` (never co-locate or use `__tests__/`).
-- Change the `name` passed to `init()` in `tests/setup.ts` to match `package.json` after `npm run rename`.
-- Run `npm test`. CI runs the suite when a `test` script is present.
-- Add every model/view object that adds/removes nodes or links Properties at runtime to the
-  `describeDisposalLeaks([...])` list in `memory-leak.test.ts`; put sim-specific leak scenarios
-  after it using `forceGC()` from `tests/helpers/memoryLeak.ts` (never a local copy).
-- Optional: `npm run test:fuzz` / `test:fuzz:quick` / `test:fuzz:long` (not part of default CI).
-  Duration is 30s by default; override with `npm run test:fuzz -- 90` or `FUZZ_DURATION=90`.
+| `tests/common/generateStructures.test.ts` | Generated answers against textbook structures; policies; every species complete and charge-balanced |
+| `tests/common/analyzeStructure.test.ts` | Budget, octet statuses, graph comparison |
+| `tests/common/LewisStructure.test.ts` | Editing, undo/redo identity, the answer check |
+| `tests/common/resonance.test.ts` | Curved arrows, hybrid, gallery |
+| `tests/common/vsepr.test.ts` | AXₙEₘ classes and ideal angles |
+| `tests/challenge/ChallengeModel.test.ts` | Rounds, hints and scoring |
+| `tests/memory-leak.test.ts` | Disposal of nodes created and removed at runtime |
+| `tests/browser/keyboard.spec.ts` | Keyboard-only Playwright passes (`npx playwright test tests/browser`) |
+| `tests/fuzz/fuzz.spec.ts` | Template-owned pointer + keyboard fuzz |
 
 ## Commands
 
@@ -172,79 +133,7 @@ npm run lint && npm run check && npm run build && npm test
 | `npm run test:fuzz:quick` | 10s fuzz |
 | `npm run test:fuzz:long` | 300s fuzz |
 | `npm run icons` | Regenerate PWA icons; seed missing screenshots, preserve existing ones |
-| `npm run rename` | Sim-level fork/rename (`--id`, `--name`) |
-| `npm run scaffold-screens` | Emit N screens (`--screens Intro,Lab`) |
 | `npm run release` | `check && lint && build && test`, then version patch + push tags |
 
 `src/init.ts` reads `version` from `package.json`, so the patch bump shows up in the About dialog
 without a second edit.
-
-## Customizing a new sim from this template
-
-### Recommended: Baton create-sim
-
-```sh
-Baton/scripts/create-sim.sh --repo Friction --name "Friction" --screens Intro,Lab --shared-model --onboard
-```
-
-### Manual: GitHub template + rename + scaffold
-
-```sh
-npm install
-npm run rename -- --id friction --name "Friction"
-npm run scaffold-screens -- --screens Intro,Lab --shared-model
-# omit --screens for one screen named after the sim; omit --shared-model for independent models
-npm run fix     # required: both scripts reorder imports, which Biome then sorts
-npm run check
-```
-
-`rename` updates package id and metadata, display name, and every sim-level `Sim*`
-(Colors, Constants, Namespace, Panel, ButtonOptions, ControlOptions, Preferences, query parameters).
-`scaffold-screens` owns screen folders (fleet naming: `src/intro/`, not `intro-screen/`).
-After both steps no `Sim*` identifier should remain — `rg -n '\bSim[A-Z_]|\bSIM_[A-Z_]' src` to confirm.
-
-### Manual checklist (if not using the scripts)
-
-1. **Rename** — replace `lewis-structures` / `Lewis Structures` / `Sim` prefix in `init.ts`, `brand.ts`, `package.json` (name, description, keywords, repository.url), Colors/Constants/Namespace/Panel/ButtonOptions/ControlOptions/Preferences
-2. **Screens** — run `scaffold-screens` or mirror `build/` into kebab folders
-3. **Locale** — add `strings_XX.json`, register in `StringManager`, add locale to `init.ts` `availableLocales`
-4. **Icon** — edit `public/icons/icon.svg`, run `npm run icons`; match theme color in `index.html` / `vite.config.ts`.
-   Once `assets/screenshot.png` exists (Baton `generate-screenshots.sh`), `npm run icons -- --screenshots-from-assets`
-   replaces the placeholder PWA screenshots
-5. **Colors** — edit `*Colors.ts` (`default` + `projector` profiles per property), one
-   `new ProfileColorProperty(Namespace, name, { default, projector })` per entry — no local helper
-6. **Description** — write a real one-sentence `package.json` `description`; `index.html` and the
-   PWA manifest read it (`%SIM_DESCRIPTION%`), so there is nothing else to edit
-7. **Placeholders** — delete the `exampleToggle` preference and the `exampleControl` a11y string;
-   delete `src/common/TimeModel.ts` (and `tests/TimeModel.test.ts`) if the sim has no clock
-8. **Verify** — `Baton/scripts/check-template-drift.sh --fix <Sim>` (drops `rename` /
-   `scaffold-screens`, which are template-only) and `COMPLIANCE_STRICT=1 Baton/scripts/check-repo-compliance.sh .`
-
-## Multi-screen sims
-
-Full guide: [`doc/multi-screen.md`](doc/multi-screen.md)
-
-Summary:
-- Prefer `npm run scaffold-screens -- --screens Intro,Lab` (add `--shared-model` for a root model)
-- Or create a screen folder mirroring `src/build/` for each screen (kebab names, no `-screen` suffix)
-- Add screen-name keys to all locale JSON files; nest `a11y` per screen
-- Expose new getters in `StringManager.getScreenNames()` / `get{Screen}A11yStrings()`
-- Shared state: `--shared-model` → `common/model/SharedModel.ts` composed per screen (rename to a domain type)
-- Add `src/common/LewisStructuresScreenIcons.ts` with `create{Screen}Icon()` factories; wire `homeScreenIcon` + `navigationBarIcon` on each Screen
-- Register all screens in the `screens` array in `main.ts`
-
-## Using this template beyond a direct copy
-
-| Approach | When to use |
-|---|---|
-| **`Baton/scripts/create-sim.sh`** | Agents / fleet — create repo, rename, scaffold N screens |
-| **GitHub template** ("Use this template") | Humans starting a sim in the browser |
-| `npm run rename` + `scaffold-screens` | Same, after cloning the template |
-| **npm workspace / monorepo** | Managing a suite of sims with shared tooling |
-| **`Baton/scripts/check-template-drift.sh`** | Keeping forks in sync with template improvements |
-
-See `doc/multi-screen.md` → "Using this template beyond a direct copy" for details.
-
-## PWA
-
-After `npm run build`, the sim is installable offline via Workbox (`dist/manifest.webmanifest`).

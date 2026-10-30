@@ -3,7 +3,7 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
-  "description": "A SceneryStack simulation: Lewis Structures.",
+  "description": "Lewis structures for General Chemistry: count valence electrons, draw bonds and lone pairs with live formal-charge and octet checks, compare resonance forms and their hybrid, practise in a three-level challenge, and see VSEPR shapes in 3D.",
   "license": "AGPL-3.0-or-later",
   "repository": {
     "type": "git",
@@ -14,6 +14,11 @@
     "SceneryStack",
     "interactive",
     "physics",
+    "chemistry",
+    "lewis-structures",
+    "formal-charge",
+    "resonance",
+    "vsepr",
     "education",
     "pwa"
   ],

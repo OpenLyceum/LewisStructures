@@ -52,11 +52,13 @@ export function formDescription(form: ScoredStructure): string {
   const multiple = data.bonds
     .filter((bond) => bond.order > 1)
     .map((bond) =>
-      StringUtils.fillIn(a11y.multipleBondPatternStringProperty.value, {
-        order: capitalize(orderName(bond.order)),
-        a: labels[bond.a],
-        b: labels[bond.b],
-      }),
+      capitalize(
+        StringUtils.fillIn(a11y.multipleBondPatternStringProperty.value, {
+          order: orderName(bond.order),
+          a: labels[bond.a],
+          b: labels[bond.b],
+        }),
+      ),
     );
   const charges = form.formalCharges
     .map((charge, i) =>

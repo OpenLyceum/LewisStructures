@@ -22,7 +22,7 @@ import { CONTROL_FONT, HEADING_FONT, SMALL_FONT } from "./ControlFactory.js";
 import { countList, signedCharge } from "./formatValues.js";
 
 const MARK_DONE = "✓";
-const MARK_TODO = "○";
+const MARK_OPEN = "○";
 
 /** The atoms still needed for, or extra to, the target's formula; null when they match. */
 function atomMismatch(structure: LewisStructure, target: StructureData | null): string | null {
@@ -112,7 +112,7 @@ export class ChecklistNode extends VBox {
 
     const hasAtoms = (analysis: StructureAnalysis) => analysis.atoms.length > 0;
     const item = (labelProperty: TReadOnlyProperty<string>, isDone: (analysis: StructureAnalysis) => boolean) => {
-      const mark = new Text(MARK_TODO, { font: CONTROL_FONT });
+      const mark = new Text(MARK_OPEN, { font: CONTROL_FONT });
       const labelText = new RichText(labelProperty, {
         font: CONTROL_FONT,
         fill: LewisStructuresColors.textColorProperty,
@@ -120,7 +120,7 @@ export class ChecklistNode extends VBox {
       });
       const update = (analysis: StructureAnalysis) => {
         const done = hasAtoms(analysis) && isDone(analysis);
-        mark.string = done ? MARK_DONE : MARK_TODO;
+        mark.string = done ? MARK_DONE : MARK_OPEN;
         mark.fill = done ? LewisStructuresColors.goodColorProperty : LewisStructuresColors.mutedTextColorProperty;
       };
       analysisProperty.link(update);

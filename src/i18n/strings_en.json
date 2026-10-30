@@ -91,9 +91,7 @@
     "category": "Category",
     "species": "Molecule or ion",
     "charge": "Charge",
-    "speciesPattern": "{{name}}: {{formula}}",
     "freeBuildTitle": "Free build: draw any molecule or ion",
-    "palette": "Elements",
     "undo": "Undo",
     "redo": "Redo",
     "tidy": "Tidy",
@@ -227,8 +225,7 @@
         "interactionHint": "Choose a molecule, add atoms from the palette, bond them, then add lone pairs until every electron is placed."
       },
       "controls": {
-        "palette": "Element palette",
-        "board": "Drawing board"
+        "palette": "Element palette"
       }
     },
     "resonance": {
@@ -246,8 +243,7 @@
       "detailsFormPattern": "{{name}}, {{formula}}. Showing form {{number}} of {{count}}, {{rank}}. {{description}} {{arrows}}",
       "detailsHybridPattern": "{{name}}, {{formula}}. Showing the hybrid: {{bonds}}. Average formal charges: {{charges}}.",
       "detailsDrawPattern": "{{name}}, {{formula}}. Drawing a resonance form on the skeleton. {{budget}} {{hint}}",
-      "hybridBondPattern": "{{a}}–{{b}} bond order {{order}}",
-      "formShownPattern": "Form {{number}}, {{rank}}. {{description}}"
+      "hybridBondPattern": "{{a}}–{{b}} bond order {{order}}"
     },
     "challenge": {
       "screenSummary": {
