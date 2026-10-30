@@ -233,14 +233,21 @@
     },
     "resonance": {
       "screenSummary": {
-        "playArea": "The play area shows the main simulation content.",
-        "controlArea": "The control area has a Reset All button that returns the simulation to its starting state.",
-        "interactionHint": "Explore the simulation by interacting with its controls."
+        "playArea": "The play area shows one resonance form of the chosen molecule or ion, its hybrid, or a skeleton to complete, with a gallery of all its resonance forms.",
+        "controlArea": "The control area has the molecule chooser, the view choice, buttons to step through the forms, and Reset All.",
+        "interactionHint": "Choose an ion such as nitrate, step through its forms with Next form, then switch to Hybrid."
       },
-      "currentDetails": "The simulation is in its initial state.",
-      "controls": {
-        "exampleControl": "Example control"
-      }
+      "cardPattern": "Form {{number}}, {{rank}}. {{description}}",
+      "formDescriptionPattern": "{{bonds}}. Formal charges: {{charges}}.",
+      "allSingle": "All single bonds",
+      "multipleBondPattern": "{{order}} bond {{a}}–{{b}}",
+      "noCharges": "none",
+      "chargeItemPattern": "{{atom}} {{charge}}",
+      "detailsFormPattern": "{{name}}, {{formula}}. Showing form {{number}} of {{count}}, {{rank}}. {{description}} {{arrows}}",
+      "detailsHybridPattern": "{{name}}, {{formula}}. Showing the hybrid: {{bonds}}. Average formal charges: {{charges}}.",
+      "detailsDrawPattern": "{{name}}, {{formula}}. Drawing a resonance form on the skeleton. {{budget}} {{hint}}",
+      "hybridBondPattern": "{{a}}–{{b}} bond order {{order}}",
+      "formShownPattern": "Form {{number}}, {{rank}}. {{description}}"
     },
     "challenge": {
       "screenSummary": {
@@ -280,5 +287,46 @@
     "undo": "Undo",
     "redo": "Redo",
     "addElement": "Add the atom"
+  },
+  "resonance": {
+    "species": "Molecule or ion",
+    "forms": "Forms",
+    "hybrid": "Hybrid",
+    "draw": "Draw one",
+    "mode": "View",
+    "previous": "Previous",
+    "next": "Next form",
+    "showArrows": "Arrows to next form",
+    "check": "Check",
+    "startOver": "Start over",
+    "galleryTitle": "Resonance forms",
+    "formPattern": "Form {{number}}",
+    "ranks": {
+      "major": "Best structure",
+      "equivalent": "Equivalent major form",
+      "alternative": "Also accepted (octet rule)",
+      "acceptable": "Minor: charge misplaced",
+      "minor": "Minor: larger charges"
+    },
+    "explanations": {
+      "majorSingle": "The only structure with the smallest formal charges. The other forms contribute little.",
+      "equivalentPattern": "One of {{count}} equivalent forms: they differ only in where the electrons sit, so the real species is an average of all {{count}}, the hybrid.",
+      "alternative": "Every atom keeps an octet, at the cost of larger formal charges. Textbooks that follow the octet rule draw this form.",
+      "acceptable": "Formal charges as small as the best form, but the negative charge is on a less electronegative atom, so this form contributes less.",
+      "minor": "Larger formal charges than the best form: a minor contributor."
+    },
+    "chargeSumPattern": "Sum of |formal charges|: {{sum}}",
+    "hybridPattern": "The hybrid averages the {{count}} equivalent forms: bonds that change between forms get the same fractional order, and the charge is shared.",
+    "hybridSingle": "There is only one best form, so the hybrid is that structure.",
+    "arrowsPattern": "To reach form {{next}}: {{steps}}.",
+    "noArrows": "No electron pair moves between these forms.",
+    "lonePairToBondPattern": "a lone pair on {{atom}} becomes a bond to {{other}}",
+    "bondToLonePairPattern": "a pair from the {{a}}–{{b}} bond moves onto {{atom}}",
+    "bondToBondPattern": "the {{a}}–{{b}} π pair shifts to {{c}}–{{d}}",
+    "drawHint": "Add bonds and lone pairs to the skeleton, then press Check to see which resonance form you drew.",
+    "matchPattern": "You drew form {{number}}: {{rank}}.",
+    "other": "A valid structure, but not one of the forms shown: its formal charges are larger.",
+    "wrongSkeleton": "Keep the skeleton: resonance forms move electrons, never atoms.",
+    "incomplete": "Not finished yet: work through the checklist."
   }
 }

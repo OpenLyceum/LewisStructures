@@ -118,6 +118,11 @@ export class StringManager {
     return stringProperties.keyboardHelp;
   }
 
+  /** Visible strings of the Resonance screen. */
+  public getResonanceStrings() {
+    return stringProperties.resonance;
+  }
+
   /** Accessibility strings for the Build screen. */
   public getBuildA11yStrings() {
     return stringProperties.a11y.build;

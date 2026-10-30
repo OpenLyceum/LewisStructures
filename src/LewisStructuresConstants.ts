@@ -34,6 +34,9 @@ export const SIDE_PANEL_WIDTH = 290;
 export const BOARD_WIDTH = 560;
 export const BOARD_HEIGHT = 420;
 
+/** Width of the Resonance screen's board, px (narrower, to leave room for the gallery). */
+export const RESONANCE_BOARD_WIDTH = 520;
+
 /** Screen pixels per bond length on the drawing board. */
 export const PIXELS_PER_BOND = 72;
 

@@ -16,8 +16,8 @@ async function recordAnnouncements(page: Page): Promise<void> {
     new MutationObserver((mutations) => {
       for (const mutation of mutations) {
         const target = mutation.target;
-        const element = target.nodeType === Node.TEXT_NODE ? target.parentElement : (target as Element);
-        const live = element?.closest("[aria-live]");
+        const element = target.nodeType === Node.TEXT_NODE ? target.parentElement : target;
+        const live = element instanceof Element ? element.closest("[aria-live]") : null;
         const text = live?.textContent?.trim();
         if (text) {
           spoken.push(text);
@@ -91,5 +91,38 @@ test.describe("Drawing board by keyboard", () => {
     await press(page, ["l", "Control+z", "Control+y"]);
     await expect.poll(() => announcements(page)).toContain("Undone.");
     await expect.poll(() => announcements(page)).toContain("Redone.");
+  });
+});
+
+test.describe("Resonance screen by keyboard", () => {
+  test("completes the nitrate skeleton and recognises the resonance form", async ({ page }) => {
+    await recordAnnouncements(page);
+    await page.goto("/?screens=2&ea");
+    await page.getByRole("radio", { name: "Draw one" }).waitFor();
+    await page.getByRole("radio", { name: "Draw one" }).focus();
+    await press(page, ["Space"]);
+    await focusBoard(page);
+    // The cursor starts on N (the skeleton's first atom): make N=O1, then fill each O.
+    await press(page, [
+      "b",
+      "2",
+      "ArrowUp",
+      "l",
+      "l",
+      "ArrowDown",
+      "ArrowLeft",
+      "l",
+      "l",
+      "l",
+      "ArrowRight",
+      "ArrowRight",
+      "l",
+      "l",
+      "l",
+    ]);
+    await expect.poll(() => announcements(page)).toContain("Every rule is met.");
+    await page.getByRole("button", { name: "Check" }).focus();
+    await press(page, ["Enter"]);
+    await expect.poll(() => announcements(page)).toMatch(/You drew form \d: Equivalent major form\./);
   });
 });
