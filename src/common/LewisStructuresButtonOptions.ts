@@ -1,5 +1,5 @@
 /**
- * SimButtonOptions.ts
+ * LewisStructuresButtonOptions.ts
  *
  * Shared flat button appearance for the sim. Rectangular and round push buttons
  * default to SceneryStack's 3-D appearance; pass these options (or spread them
@@ -8,24 +8,24 @@
 
 import type { PlayPauseStepButtonGroupOptions, TimeControlNodeOptions } from "scenerystack/scenery-phet";
 import { ButtonNode, type ComboBoxOptions } from "scenerystack/sun";
-import SimColors from "../SimColors.js";
+import LewisStructuresColors from "../LewisStructuresColors.js";
 
 export const FLAT_BUTTON_APPEARANCE_OPTIONS = {
   buttonAppearanceStrategy: ButtonNode.FlatAppearanceStrategy,
 } as const;
 
 /** Text on flat push buttons and combo-box items (always on a light control surface). */
-export const LIGHT_SURFACE_TEXT_FILL = SimColors.controlSurfaceTextColorProperty;
+export const LIGHT_SURFACE_TEXT_FILL = LewisStructuresColors.controlSurfaceTextColorProperty;
 
 /**
  * Combo-box chrome for panels. Item labels must use {@link LIGHT_SURFACE_TEXT_FILL}, not
- * {@link SimColors.textColorProperty} — that color is for labels on the dark panel fill.
+ * {@link LewisStructuresColors.textColorProperty} — that color is for labels on the dark panel fill.
  */
-export const SIM_COMBO_BOX_OPTIONS = {
-  buttonFill: SimColors.controlSurfaceColorProperty,
-  listFill: SimColors.controlSurfaceColorProperty,
-  buttonStroke: SimColors.panelBorderColorProperty,
-  listStroke: SimColors.panelBorderColorProperty,
+export const LEWIS_STRUCTURES_COMBO_BOX_OPTIONS = {
+  buttonFill: LewisStructuresColors.controlSurfaceColorProperty,
+  listFill: LewisStructuresColors.controlSurfaceColorProperty,
+  buttonStroke: LewisStructuresColors.panelBorderColorProperty,
+  listStroke: LewisStructuresColors.panelBorderColorProperty,
 } satisfies Pick<ComboBoxOptions, "buttonFill" | "listFill" | "buttonStroke" | "listStroke">;
 
 /** Options for RectangularPushButton and NumberControl arrow buttons. */
@@ -38,7 +38,7 @@ export const FLAT_RECTANGULAR_BUTTON_OPTIONS = FLAT_BUTTON_APPEARANCE_OPTIONS;
  */
 export const FLAT_PANEL_PUSH_BUTTON_OPTIONS = {
   ...FLAT_BUTTON_APPEARANCE_OPTIONS,
-  baseColor: SimColors.controlSurfaceColorProperty,
+  baseColor: LewisStructuresColors.controlSurfaceColorProperty,
 } as const;
 
 /** Options for ResetAllButton (extends RoundPushButton). */
@@ -57,6 +57,6 @@ export const FLAT_PLAY_PAUSE_STEP_BUTTON_OPTIONS = {
  */
 export const TIME_CONTROL_SPEED_RADIO_OPTIONS = {
   speedRadioButtonGroupOptions: {
-    labelOptions: { fill: SimColors.textColorProperty },
+    labelOptions: { fill: LewisStructuresColors.textColorProperty },
   },
 } satisfies Pick<TimeControlNodeOptions, "speedRadioButtonGroupOptions">;

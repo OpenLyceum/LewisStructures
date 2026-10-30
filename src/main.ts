@@ -21,24 +21,35 @@ import "./brand.js";
 
 import { onReadyToLaunch, PreferencesModel, Sim } from "scenerystack/sim";
 import { Tandem } from "scenerystack/tandem";
+import { BuildScreen } from "./build/BuildScreen.js";
+import { ChallengeScreen } from "./challenge/ChallengeScreen.js";
 import { StringManager } from "./i18n/StringManager.js";
-import { SimPreferencesModel } from "./preferences/SimPreferencesModel.js";
-import { SimPreferencesNode } from "./preferences/SimPreferencesNode.js";
-import SimColors from "./SimColors.js";
-import { SimScreen } from "./sim-screen/SimScreen.js";
+import LewisStructuresColors from "./LewisStructuresColors.js";
+import { LewisStructuresPreferencesModel } from "./preferences/LewisStructuresPreferencesModel.js";
+import { LewisStructuresPreferencesNode } from "./preferences/LewisStructuresPreferencesNode.js";
+import { ResonanceScreen } from "./resonance/ResonanceScreen.js";
 
 onReadyToLaunch(() => {
   const stringManager = StringManager.getInstance();
 
-  // Simulation-specific preferences; initial values come from simQueryParameters.
-  const simPreferences = new SimPreferencesModel(Tandem.ROOT.createTandem("preferences"));
+  // Simulation-specific preferences; initial values come from lewisStructuresQueryParameters.
+  const simPreferences = new LewisStructuresPreferencesModel(Tandem.ROOT.createTandem("preferences"));
 
   const screens = [
-    new SimScreen({
-      // The screen name Property updates automatically when the locale changes
-      name: stringManager.getScreenNames().simStringProperty,
-      tandem: Tandem.ROOT.createTandem("simScreen"),
-      backgroundColorProperty: SimColors.backgroundColorProperty,
+    new BuildScreen({
+      name: stringManager.getScreenNames().buildStringProperty,
+      tandem: Tandem.ROOT.createTandem("buildScreen"),
+      backgroundColorProperty: LewisStructuresColors.backgroundColorProperty,
+    }),
+    new ResonanceScreen({
+      name: stringManager.getScreenNames().resonanceStringProperty,
+      tandem: Tandem.ROOT.createTandem("resonanceScreen"),
+      backgroundColorProperty: LewisStructuresColors.backgroundColorProperty,
+    }),
+    new ChallengeScreen({
+      name: stringManager.getScreenNames().challengeStringProperty,
+      tandem: Tandem.ROOT.createTandem("challengeScreen"),
+      backgroundColorProperty: LewisStructuresColors.backgroundColorProperty,
     }),
   ];
 
@@ -53,7 +64,7 @@ onReadyToLaunch(() => {
       simulationOptions: {
         customPreferences: [
           {
-            createContent: (tandem: Tandem) => new SimPreferencesNode(simPreferences, tandem),
+            createContent: (tandem: Tandem) => new LewisStructuresPreferencesNode(simPreferences, tandem),
           },
         ],
       },
