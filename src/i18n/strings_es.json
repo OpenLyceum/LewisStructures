@@ -251,14 +251,16 @@
     },
     "challenge": {
       "screenSummary": {
-        "playArea": "The play area shows the main simulation content.",
-        "controlArea": "The control area has a Reset All button that returns the simulation to its starting state.",
-        "interactionHint": "Explore the simulation by interacting with its controls."
+        "playArea": "The play area shows the level choices or, during a round, the problem: a formula to draw on the board with the element palette.",
+        "controlArea": "The control area has the score and level, the Hint, Check and Next buttons, and Reset All.",
+        "interactionHint": "Choose a level, then draw each structure and press Check. Hints cost one point each."
       },
-      "currentDetails": "The simulation is in its initial state.",
-      "controls": {
-        "exampleControl": "Example control"
-      }
+      "levelButtonPattern": "Level {{number}}: {{name}}",
+      "levelButtonHelp": "Starts a round of five problems.",
+      "selectingLevel": "Choosing a level.",
+      "detailsPattern": "Level {{level}}, problem {{number}} of {{count}}, score {{score}}. Draw {{name}}, {{formula}}. Hints used: {{hints}}. {{state}}",
+      "solved": "Solved.",
+      "roundComplete": "Round complete."
     }
   },
   "preferences": {
@@ -328,5 +330,37 @@
     "other": "A valid structure, but not one of the forms shown: its formal charges are larger.",
     "wrongSkeleton": "Keep the skeleton: resonance forms move electrons, never atoms.",
     "incomplete": "Not finished yet: work through the checklist."
+  },
+  "challenge": {
+    "chooseLevel": "Choose your level",
+    "level1": "Single bonds",
+    "level1Description": "Simple molecules and ions",
+    "level2": "Multiple bonds",
+    "level2Description": "Double and triple bonds, resonance",
+    "level3": "Beyond the octet",
+    "level3Description": "Expanded and incomplete octets, radicals",
+    "taskPattern": "Draw the Lewis structure of {{formula}} ({{name}}).",
+    "hint": "Hint",
+    "hintsTitle": "Hints",
+    "noHints": "Stuck? Each hint costs one point; the fifth shows the answer.",
+    "hintsUsedPattern": "Hints used: {{count}} of {{total}}",
+    "hints": {
+      "electronsPattern": "Count the electrons: {{total}} valence electrons ({{fromAtoms}} from the atoms{{chargePart}}).",
+      "chargePartPattern": ", {{change}} for the charge",
+      "centralPattern": "{{element}} is the central atom: the least electronegative atom other than H.",
+      "chain": "There is no single central atom: the atoms form a chain or a ring. H always sits on the outside, with one bond.",
+      "pair": "With only two atoms, they are simply bonded to each other.",
+      "skeleton": "The skeleton is on the board: now add bonds and lone pairs.",
+      "multipleBondPattern": "Make a {{order}} bond between {{a}} and {{b}}.",
+      "expandedPattern": "{{element}} holds {{count}} electrons: an expanded octet.",
+      "incompletePattern": "{{element}} keeps only {{count}} electrons: it is stable with fewer than eight.",
+      "radicalPattern": "The odd electron stays unpaired on {{element}}.",
+      "allSingle": "Every bond is single: place the remaining electrons as lone pairs.",
+      "answer": "Here is the answer. Study it, then press Check to go on."
+    },
+    "check": "Check",
+    "next": "Next",
+    "correctPattern": "Correct! +{{points}} points.",
+    "revealed": "No points for this one, but now you know it."
   }
 }

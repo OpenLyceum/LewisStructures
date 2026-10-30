@@ -46,7 +46,7 @@ onReadyToLaunch(() => {
       tandem: Tandem.ROOT.createTandem("resonanceScreen"),
       backgroundColorProperty: LewisStructuresColors.backgroundColorProperty,
     }),
-    new ChallengeScreen({
+    new ChallengeScreen(simPreferences, {
       name: stringManager.getScreenNames().challengeStringProperty,
       tandem: Tandem.ROOT.createTandem("challengeScreen"),
       backgroundColorProperty: LewisStructuresColors.backgroundColorProperty,

@@ -123,6 +123,11 @@ export class StringManager {
     return stringProperties.resonance;
   }
 
+  /** Visible strings of the Challenge screen. */
+  public getChallengeStrings() {
+    return stringProperties.challenge;
+  }
+
   /** Accessibility strings for the Build screen. */
   public getBuildA11yStrings() {
     return stringProperties.a11y.build;

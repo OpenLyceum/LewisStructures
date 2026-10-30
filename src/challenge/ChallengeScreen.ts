@@ -15,6 +15,7 @@ import { Screen } from "scenerystack/sim";
 import type { Tandem } from "scenerystack/tandem";
 import { createChallengeIcon } from "../common/LewisStructuresScreenIcons.js";
 import LewisStructuresColors from "../LewisStructuresColors.js";
+import type { LewisStructuresPreferencesModel } from "../preferences/LewisStructuresPreferencesModel.js";
 import { ChallengeModel } from "./model/ChallengeModel.js";
 import { ChallengeKeyboardHelpContent } from "./view/ChallengeKeyboardHelpContent.js";
 import { ChallengeScreenView } from "./view/ChallengeScreenView.js";
@@ -23,13 +24,13 @@ import { ChallengeScreenView } from "./view/ChallengeScreenView.js";
 type ChallengeScreenOptions = ScreenOptions & { tandem: Tandem };
 
 export class ChallengeScreen extends Screen<ChallengeModel, ChallengeScreenView> {
-  public constructor(options: ChallengeScreenOptions) {
+  public constructor(preferences: LewisStructuresPreferencesModel, options: ChallengeScreenOptions) {
     super(
       // Model factory — called once when the screen is first shown
-      () => new ChallengeModel(),
+      () => new ChallengeModel(preferences.octetPolicyProperty),
       // View factory — receives the model instance
       (model) =>
-        new ChallengeScreenView(model, {
+        new ChallengeScreenView(model, preferences, {
           tandem: options.tandem.createTandem("view"),
         }),
       optionize<ChallengeScreenOptions, EmptySelfOptions, ScreenOptions>()(

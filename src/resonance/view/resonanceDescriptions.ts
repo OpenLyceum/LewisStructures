@@ -9,21 +9,9 @@ import { StringUtils } from "scenerystack/phetcommon";
 import type { ScoredStructure } from "../../common/model/generateStructures.js";
 import type { FormRank, ResonanceArrow, ResonanceHybrid } from "../../common/model/resonance.js";
 import type { StructureData } from "../../common/model/StructureData.js";
-import { joinList, orderName } from "../../common/view/boardDescriptions.js";
+import { atomLabels, joinList, orderName } from "../../common/view/boardDescriptions.js";
 import { fractionText, signedCharge } from "../../common/view/formatValues.js";
 import { StringManager } from "../../i18n/StringManager.js";
-
-/** "O1", "N", … for each atom of a structure, numbering repeated elements in order. */
-export function atomLabels(data: StructureData): string[] {
-  return data.atoms.map((atom, i) => {
-    const same = data.atoms.filter((other) => other.element === atom.element);
-    if (same.length === 1) {
-      return atom.element;
-    }
-    const index = data.atoms.slice(0, i + 1).filter((other) => other.element === atom.element).length;
-    return `${atom.element}${index}`;
-  });
-}
 
 function capitalize(text: string): string {
   return text.charAt(0).toLocaleUpperCase() + text.slice(1);

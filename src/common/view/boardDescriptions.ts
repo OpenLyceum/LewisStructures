@@ -21,6 +21,18 @@ function boardStrings() {
   return StringManager.getInstance().getBoardA11yStrings();
 }
 
+/** "O1", "N", … for each atom of a structure, numbering repeated elements in order. */
+export function atomLabels(data: StructureData): string[] {
+  return data.atoms.map((atom, i) => {
+    const same = data.atoms.filter((other) => other.element === atom.element);
+    if (same.length === 1) {
+      return atom.element;
+    }
+    const index = data.atoms.slice(0, i + 1).filter((other) => other.element === atom.element).length;
+    return `${atom.element}${index}`;
+  });
+}
+
 /** "single", "double" or "triple". */
 export function orderName(order: number): string {
   const strings = boardStrings();

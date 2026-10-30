@@ -126,3 +126,26 @@ test.describe("Resonance screen by keyboard", () => {
     await expect.poll(() => announcements(page)).toMatch(/You drew form \d: Equivalent major form\./);
   });
 });
+
+test.describe("Challenge screen by keyboard", () => {
+  test("starts level 1, reveals the answer through hints, checks it and moves on", async ({ page }) => {
+    await recordAnnouncements(page);
+    await page.goto("/?screens=3&ea");
+    const level = page.getByRole("button", { name: "Level 1: Single bonds" });
+    await level.waitFor();
+    await level.focus();
+    await press(page, ["Enter"]);
+    const hint = page.getByRole("button", { name: "Hint" });
+    await hint.focus();
+    await press(page, ["Enter"]);
+    await expect.poll(() => announcements(page)).toMatch(/Count the electrons: \d+ valence electrons/);
+    await press(page, ["Enter", "Enter", "Enter", "Enter"]);
+    await expect.poll(() => announcements(page)).toContain("Here is the answer.");
+    await page.getByRole("button", { name: "Check" }).focus();
+    await press(page, ["Enter"]);
+    await expect.poll(() => announcements(page)).toContain("No points for this one");
+    await page.getByRole("button", { name: "Next" }).focus();
+    await press(page, ["Enter"]);
+    await expect.poll(() => announcements(page)).not.toContain("Round complete");
+  });
+});

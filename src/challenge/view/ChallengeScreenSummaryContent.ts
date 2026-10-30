@@ -1,40 +1,62 @@
 /**
  * ChallengeScreenSummaryContent.ts
  *
- * The accessible screen summary read by screen readers (SceneryStack's
- * Interactive Description). It appears at the top of the parallel DOM and gives
- * a non-visual user a way to orient themselves and to re-read the simulation's
- * current state at any time.
- *
- * A summary has four regions (all optional, but provide at least the first
- * three in every sim for consistency across OpenLyceum):
- *   - playAreaContent       — what the play area contains
- *   - controlAreaContent    — what the controls do
- *   - currentDetailsContent — a LIVE paragraph describing current state
- *   - interactionHintContent — a short hint on how to get started
- *
- * ── Making "current details" live ─────────────────────────────────────────────
- * The template has no model state, so currentDetails is a static string. In a
- * real sim, build a DerivedProperty over the relevant model Properties and pass
- * it as `currentDetailsContent` so the paragraph updates as the sim runs.
- * See LunarLander/src/.../LunarLanderScreenSummaryContent.ts for the pattern.
- * If that DerivedProperty (or any Multilink) is owned by a short-lived object,
- * dispose it on teardown — see the commented dispose() stub in ChallengeScreenView.
+ * The accessible screen summary for the Challenge screen. Its current-details paragraph is live:
+ * the level, problem and score, the species to draw, the hints used, and the drawing so far.
  */
+
+import { DerivedProperty } from "scenerystack/axon";
+import { StringUtils } from "scenerystack/phetcommon";
 import { ScreenSummaryContent } from "scenerystack/sim";
+import { budgetSentence } from "../../common/view/boardDescriptions.js";
+import { describeHint } from "../../common/view/ChecklistNode.js";
+import { speciesName } from "../../common/view/speciesLabels.js";
 import { StringManager } from "../../i18n/StringManager.js";
 import type { ChallengeModel } from "../model/ChallengeModel.js";
 
 export class ChallengeScreenSummaryContent extends ScreenSummaryContent {
-  // `model` is unused in the template but kept in the signature so real sims can
-  // derive a live currentDetailsContent from it without changing call sites.
-  public constructor(_model: ChallengeModel) {
+  public constructor(model: ChallengeModel) {
     const a11y = StringManager.getInstance().getChallengeA11yStrings();
+    const structure = model.drawing.structure;
+    const detailsProperty = DerivedProperty.deriveAny(
+      [
+        model.levelProperty,
+        model.speciesProperty,
+        model.challengeNumberProperty,
+        model.scoreProperty,
+        model.hintsUsedProperty,
+        model.solvedProperty,
+        model.roundCompleteProperty,
+        structure.analysisProperty,
+      ],
+      () => {
+        const level = model.levelProperty.value;
+        const species = model.speciesProperty.value;
+        if (level === null || !species) {
+          return a11y.selectingLevelStringProperty.value;
+        }
+        const state = model.roundCompleteProperty.value
+          ? a11y.roundCompleteStringProperty.value
+          : model.solvedProperty.value
+            ? a11y.solvedStringProperty.value
+            : `${budgetSentence(structure, model.hintsUsedProperty.value > 0 ? species.skeleton : null)} ${describeHint(structure, structure.analysisProperty.value, species.skeleton)}`;
+        return StringUtils.fillIn(a11y.detailsPatternStringProperty.value, {
+          level,
+          number: model.challengeNumberProperty.value,
+          count: model.numberOfChallengesProperty.value,
+          score: model.scoreProperty.value,
+          name: speciesName(species).value,
+          formula: species.spokenFormula,
+          hints: model.hintsUsedProperty.value,
+          state,
+        });
+      },
+    );
 
     super({
       playAreaContent: a11y.screenSummary.playAreaStringProperty,
       controlAreaContent: a11y.screenSummary.controlAreaStringProperty,
-      currentDetailsContent: a11y.currentDetailsStringProperty,
+      currentDetailsContent: detailsProperty,
       interactionHintContent: a11y.screenSummary.interactionHintStringProperty,
     });
   }

@@ -12,7 +12,11 @@
 
 import { logGlobal } from "scenerystack/phet-core";
 import { QueryStringMachine } from "scenerystack/query-string-machine";
+import { getGameLevelsSchema } from "scenerystack/vegas";
 import LewisStructuresNamespace from "../LewisStructuresNamespace.js";
+
+/** Levels on the Challenge screen (kept here so the query parameters do not import a screen). */
+export const CHALLENGE_LEVEL_COUNT = 3;
 
 const lewisStructuresQueryParameters = QueryStringMachine.getAll({
   /**
@@ -31,6 +35,12 @@ const lewisStructuresQueryParameters = QueryStringMachine.getAll({
     type: "flag",
     public: true,
   },
+
+  /**
+   * Which Challenge levels to offer, numbered from 1 (the vegas-standard parameter), so a teacher
+   * can link to one level, e.g. `?gameLevels=3`.
+   */
+  gameLevels: getGameLevelsSchema(CHALLENGE_LEVEL_COUNT),
 
   /** Hide the coloured octet rings around atoms. */
   hideOctetRings: {
