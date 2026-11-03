@@ -31,10 +31,17 @@ async function announcements(page: Page): Promise<string> {
   return (await page.evaluate(() => (window as unknown as { spoken: string[] }).spoken)).join("\n");
 }
 
+/** Resolves after two animation frames: scenery has processed queued input and repainted. */
+async function nextFrames(page: Page): Promise<void> {
+  await page.evaluate(
+    () => new Promise<void>((resolve) => requestAnimationFrame(() => requestAnimationFrame(() => resolve()))),
+  );
+}
+
 async function press(page: Page, keys: readonly string[]): Promise<void> {
   for (const key of keys) {
     await page.keyboard.press(key);
-    await page.waitForTimeout(120);
+    await nextFrames(page);
   }
 }
 
@@ -49,7 +56,7 @@ async function addFromPalette(page: Page, elementName: string, times = 1): Promi
 async function focusBoard(page: Page): Promise<void> {
   // The board is the only focusable div in the play area that is not a list item or button.
   await page.locator('div[tabindex="0"].a11y-pdom-element').first().focus();
-  await page.waitForTimeout(120);
+  await nextFrames(page);
 }
 
 test.describe("Drawing board by keyboard", () => {
