@@ -32,8 +32,8 @@ decisions: [`doc/implementation-notes.md`](doc/implementation-notes.md).
 - **The board is one focus stop.** Keys live in `LewisStructuresHotkeyData`; the unpaired electron
   is **D** (the help dialog has no U icon) and Undo/Redo rows are drawn by hand (no Ctrl icon).
 - **Atoms are compared by graph isomorphism**, never by index or position (`moleculeGraph.ts`).
-- **Agent shells may default to Node 24**: run `source ~/.nvm/nvm.sh && nvm use 26` before npm or
-  git commit (the pre-commit hook runs npm).
+- **Node >=26** is required (`engines` / `devEngines`). If `node -v` is older, run
+  `source ~/.nvm/nvm.sh && nvm use 26` before npm or git commit (the pre-commit hook runs npm).
 
 ## Key files
 
