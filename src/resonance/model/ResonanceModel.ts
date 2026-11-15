@@ -25,7 +25,7 @@ import { type GalleryForm, resonanceGallery } from "../../common/model/resonance
 import { getAllSpecies, getSpecies, type Species } from "../../common/model/SpeciesCatalog.js";
 import { BOARD_HEIGHT, PIXELS_PER_BOND, RESONANCE_BOARD_WIDTH } from "../../LewisStructuresConstants.js";
 
-export const RESONANCE_MODES = ["forms", "hybrid", "draw"] as const;
+const RESONANCE_MODES = ["forms", "hybrid", "draw"] as const;
 export type ResonanceMode = (typeof RESONANCE_MODES)[number];
 
 /** The result of checking a drawing against the gallery. */
@@ -38,7 +38,7 @@ export type ResonanceCheck =
 /** Species whose forms are worth comparing: the resonance set plus expanded and odd-electron ions. */
 const EXTRA_SPECIES = ["sulfate", "phosphate", "perchlorate", "nitrogenDioxide"];
 
-export function resonanceSpecies(): Species[] {
+function resonanceSpecies(): Species[] {
   return [...getAllSpecies().filter((species) => species.category === "resonance"), ...EXTRA_SPECIES.map(getSpecies)];
 }
 

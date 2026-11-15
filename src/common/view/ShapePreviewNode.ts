@@ -47,7 +47,7 @@ function anglesName(angles: AngleText): string {
 }
 
 /** The lines describing a structure's shape, for display and for speech. */
-export function shapeDescription(data: StructureData): { lines: string[]; center: VseprCenter | null } {
+function shapeDescription(data: StructureData): { lines: string[]; center: VseprCenter | null } {
   const strings = StringManager.getInstance().getShapeStrings();
   if (data.atoms.length === 0 || !analyzeStructure(data).complete) {
     return { lines: [strings.finishFirstStringProperty.value], center: null };

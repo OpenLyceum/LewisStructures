@@ -19,7 +19,7 @@ export type AtomData = {
   readonly unpaired: number;
 };
 
-export type BondData = {
+type BondData = {
   readonly a: number;
   readonly b: number;
   /** 1, 2 or 3. */

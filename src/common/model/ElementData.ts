@@ -10,7 +10,7 @@
  * single-bond covalent radii from B. Cordero et al., Dalton Trans. 2832 (2008), pm.
  */
 
-export const ELEMENT_SYMBOLS = [
+const ELEMENT_SYMBOLS = [
   "H",
   "Be",
   "B",
@@ -94,10 +94,6 @@ const ELEMENTS: Readonly<Record<ElementSymbol, LewisElement>> = {
 
 export function getElement(symbol: ElementSymbol): LewisElement {
   return ELEMENTS[symbol];
-}
-
-export function isElementSymbol(symbol: string): symbol is ElementSymbol {
-  return (ELEMENT_SYMBOLS as readonly string[]).includes(symbol);
 }
 
 /** Largest total bond order the atom can carry (H 1; an octet 4; an expanded atom 7). */

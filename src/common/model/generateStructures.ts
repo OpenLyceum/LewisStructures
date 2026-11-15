@@ -132,7 +132,7 @@ function score(data: StructureData): ScoredStructure {
  * All valid structures on the skeleton's connectivity. Bond orders and lone pairs in `skeleton` are
  * ignored; positions and the charge are kept.
  */
-export function enumerateStructures(skeleton: StructureData): { structures: ScoredStructure[]; truncated: boolean } {
+function enumerateStructures(skeleton: StructureData): { structures: ScoredStructure[]; truncated: boolean } {
   const atomCount = skeleton.atoms.length;
   const edges = skeleton.bonds.map((bond) => [bond.a, bond.b] as const);
   const neighbors = neighborLists(skeleton);

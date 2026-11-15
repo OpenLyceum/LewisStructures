@@ -21,7 +21,7 @@ import type { LewisCanvasNode } from "./LewisCanvasNode.js";
 import { elementName } from "./speciesLabels.js";
 
 /** The palette order: the common Gen Chem elements first. */
-export const PALETTE_ELEMENTS: readonly ElementSymbol[] = [
+const PALETTE_ELEMENTS: readonly ElementSymbol[] = [
   "H",
   "C",
   "N",

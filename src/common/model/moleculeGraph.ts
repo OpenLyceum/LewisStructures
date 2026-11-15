@@ -144,8 +144,3 @@ export function sameSkeleton(a: StructureData, b: StructureData): boolean {
 export function sameStructure(a: StructureData, b: StructureData): boolean {
   return a.charge === b.charge && findIsomorphism(a, b, FULL_LABELS) !== null;
 }
-
-/** A skeleton-preserving map from the atoms of `a` to those of `b`, or null. */
-export function skeletonMapping(a: StructureData, b: StructureData): number[] | null {
-  return findIsomorphism(a, b, SKELETON_LABELS);
-}

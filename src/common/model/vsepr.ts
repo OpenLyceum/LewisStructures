@@ -14,9 +14,9 @@
 
 import { neighborLists, type StructureData } from "./StructureData.js";
 
-export type ElectronGeometry = "linear" | "trigonalPlanar" | "tetrahedral" | "trigonalBipyramidal" | "octahedral";
+type ElectronGeometry = "linear" | "trigonalPlanar" | "tetrahedral" | "trigonalBipyramidal" | "octahedral";
 
-export type MolecularGeometry =
+type MolecularGeometry =
   | "linear"
   | "trigonalPlanar"
   | "bent"

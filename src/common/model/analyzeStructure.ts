@@ -42,12 +42,7 @@ export type StructureAnalysis = {
 };
 
 /** How an atom holding `electrons` (with `neighborCount` bonds) stands against its element's rules. */
-export function octetStatusFor(
-  data: StructureData,
-  index: number,
-  electrons: number,
-  neighborCount: number,
-): OctetStatus {
+function octetStatusFor(data: StructureData, index: number, electrons: number, neighborCount: number): OctetStatus {
   const atom = data.atoms[index];
   if (!atom) {
     return OctetStatus.SHORT;

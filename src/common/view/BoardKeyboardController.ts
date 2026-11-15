@@ -59,7 +59,7 @@ const HOTKEYS = [
  * The atom nearest `from` in `direction` (within 60° of it), weighting sideways offset so that
  * "up" prefers the atom straight above over a closer one off to the side.
  */
-export function nearestInDirection(
+function nearestInDirection(
   atoms: readonly LewisAtom[],
   from: Vector2,
   direction: Vector2,

@@ -130,7 +130,7 @@ export type GalleryForm = {
 };
 
 /** Most forms shown in the gallery. */
-export const MAX_GALLERY_FORMS = 9;
+const MAX_GALLERY_FORMS = 9;
 
 /**
  * The forms to show for a species: every best form (equivalent forms are the point of resonance),

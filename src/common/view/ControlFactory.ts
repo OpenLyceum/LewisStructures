@@ -6,9 +6,8 @@
  */
 
 import type { PhetioProperty, Property, TReadOnlyProperty } from "scenerystack/axon";
-import type { Range } from "scenerystack/dot";
-import { HBox, Node, RichText, Text, VBox } from "scenerystack/scenery";
-import { NumberControl, PhetFont } from "scenerystack/scenery-phet";
+import { type Node, RichText } from "scenerystack/scenery";
+import { PhetFont } from "scenerystack/scenery-phet";
 import { AquaRadioButtonGroup, Checkbox, ComboBox, type ComboBoxItem, TextPushButton } from "scenerystack/sun";
 import LewisStructuresColors from "../../LewisStructuresColors.js";
 import {
@@ -16,31 +15,15 @@ import {
   LEWIS_STRUCTURES_COMBO_BOX_OPTIONS,
   LIGHT_SURFACE_TEXT_FILL,
 } from "../LewisStructuresButtonOptions.js";
-import {
-  LEWIS_STRUCTURES_CHECKBOX_OPTIONS,
-  LEWIS_STRUCTURES_NUMBER_CONTROL_OPTIONS,
-} from "../LewisStructuresControlOptions.js";
+import { LEWIS_STRUCTURES_CHECKBOX_OPTIONS } from "../LewisStructuresControlOptions.js";
 
 export const CONTROL_FONT = new PhetFont(13);
 export const SMALL_FONT = new PhetFont(12);
 export const HEADING_FONT = new PhetFont({ size: 14, weight: "bold" });
 
-export function heading(text: TReadOnlyProperty<string>, maxWidth: number): Text {
-  return new Text(text, { font: HEADING_FONT, fill: LewisStructuresColors.textColorProperty, maxWidth });
-}
-
 /** A panel label; RichText so labels can carry markup such as Z<sub>eff</sub>. */
 export function label(text: TReadOnlyProperty<string> | string, maxWidth: number): RichText {
   return new RichText(text, { font: CONTROL_FONT, fill: LewisStructuresColors.textColorProperty, maxWidth });
-}
-
-/** A wrapped paragraph of muted explanatory text. */
-export function note(text: TReadOnlyProperty<string>, width: number): RichText {
-  return new RichText(text, {
-    font: SMALL_FONT,
-    fill: LewisStructuresColors.mutedTextColorProperty,
-    lineWrap: width,
-  });
 }
 
 /**
@@ -77,11 +60,6 @@ export function comboBox<T>(
     cornerRadius: 4,
     accessibleName,
   });
-}
-
-/** A label above a control, left-aligned. */
-export function labeled(text: TReadOnlyProperty<string>, control: Node, maxWidth: number): VBox {
-  return new VBox({ align: "left", spacing: 3, children: [label(text, maxWidth), control] });
 }
 
 export function checkbox(
@@ -134,56 +112,4 @@ export function radioGroup<T>(
       accessibleName,
     },
   );
-}
-
-/** Two checkboxes side by side (or one) for compact panels. */
-export function pairRow(left: Node, right: Node | null, columnWidth: number): HBox {
-  return new HBox({
-    spacing: 8,
-    align: "center",
-    children: right ? [sized(left, columnWidth), right] : [left],
-  });
-}
-
-function sized(node: Node, width: number): Node {
-  return new Node({ children: [node], localBounds: node.localBounds.withMaxX(Math.max(node.localBounds.maxX, width)) });
-}
-
-export type NumberControlChoice = {
-  readonly delta: number;
-  readonly decimalPlaces: number;
-  /** Readout pattern with a {{value}} placeholder, e.g. "{{value}} M". */
-  readonly valuePattern?: TReadOnlyProperty<string>;
-  readonly accessibleName?: TReadOnlyProperty<string>;
-  /** Called when a drag or arrow press starts and ends, e.g. to mark a stress on a chart. */
-  readonly startCallback?: () => void;
-  readonly endCallback?: () => void;
-};
-
-/** A themed NumberControl whose keyboard steps match its arrow buttons. */
-export function numberControl(
-  title: TReadOnlyProperty<string>,
-  property: Property<number>,
-  range: Range,
-  choice: NumberControlChoice,
-  maxWidth: number,
-): NumberControl {
-  return new NumberControl(title, property, range, {
-    ...LEWIS_STRUCTURES_NUMBER_CONTROL_OPTIONS,
-    delta: choice.delta,
-    titleNodeOptions: { font: CONTROL_FONT, fill: LewisStructuresColors.textColorProperty, maxWidth: maxWidth - 70 },
-    numberDisplayOptions: {
-      decimalPlaces: choice.decimalPlaces,
-      ...(choice.valuePattern && { valuePattern: choice.valuePattern }),
-    },
-    sliderOptions: {
-      ...LEWIS_STRUCTURES_NUMBER_CONTROL_OPTIONS.sliderOptions,
-      keyboardStep: choice.delta * 10,
-      shiftKeyboardStep: choice.delta,
-      pageKeyboardStep: choice.delta * 50,
-    },
-    accessibleName: choice.accessibleName ?? title,
-    ...(choice.startCallback && { startCallback: choice.startCallback }),
-    ...(choice.endCallback && { endCallback: choice.endCallback }),
-  });
 }
