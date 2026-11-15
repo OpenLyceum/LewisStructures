@@ -24,7 +24,9 @@ import { BOARD_WIDTH, CHALLENGE_BOARD_HEIGHT, PIXELS_PER_BOND } from "../../Lewi
 import { CHALLENGE_LEVEL_COUNT } from "../../preferences/lewisStructuresQueryParameters.js";
 
 export const LEVEL_COUNT = CHALLENGE_LEVEL_COUNT;
+/** @internal Exported for unit tests; not part of the application API. */
 export const PROBLEMS_PER_ROUND = 5;
+/** @internal Exported for unit tests; not part of the application API. */
 export const POINTS_PER_PROBLEM = 4;
 export const PERFECT_SCORE = PROBLEMS_PER_ROUND * POINTS_PER_PROBLEM;
 export const NUMBER_OF_STARS = 3;

@@ -9,6 +9,7 @@
 
 import type { ElementSymbol } from "./ElementData.js";
 
+/** @internal Exported for unit tests; not part of the application API. */
 export type AtomData = {
   readonly element: ElementSymbol;
   /** Position in bond lengths, y up. Cosmetic: no rule depends on it. */
