@@ -1,3 +1,4 @@
+import { LAYOUT_STRUCTURE_SETTINGS } from "../../LewisStructuresConstants.js";
 /**
  * layoutStructure.ts
  *
@@ -42,7 +43,7 @@ export function electronAngles(
       const neighbours = [...bondAngles, ...chosen];
       const score = neighbours.length === 0 ? 0 : Math.min(...neighbours.map((other) => angularDistance(angle, other)));
       // A small margin so a textbook direction wins a near-tie against a diagonal.
-      if (score > bestScore + 1e-3) {
+      if (score > bestScore + LAYOUT_STRUCTURE_SETTINGS.PLACEMENT_SCORE_TOLERANCE) {
         bestScore = score;
         bestIndex = index;
       }
@@ -83,9 +84,11 @@ export function freeSpotNear(
   }
   // Spiral out from the centre.
   for (let ring = 0; ring < 12; ring++) {
-    const steps = Math.max(1, ring * 6);
+    const steps = Math.max(1, ring * LAYOUT_STRUCTURE_SETTINGS.PLACEMENTS_PER_RING);
     for (let k = 0; k < steps; k++) {
-      const point = center.plus(Vector2.createPolar(ring * 0.9, (TWO_PI * k) / steps));
+      const point = center.plus(
+        Vector2.createPolar(ring * LAYOUT_STRUCTURE_SETTINGS.PLACEMENT_RING_SPACING, (TWO_PI * k) / steps),
+      );
       if (isClear(point)) {
         return point;
       }
@@ -108,9 +111,9 @@ export function tidyLayout(
     return [];
   }
   const points = positions.map((p) => p.copy());
-  const ITERATIONS = 300;
-  const SPRING = 0.2;
-  const REPULSION = 0.08;
+  const ITERATIONS: number = LAYOUT_STRUCTURE_SETTINGS.ITERATIONS;
+  const SPRING: number = LAYOUT_STRUCTURE_SETTINGS.SPRING;
+  const REPULSION: number = LAYOUT_STRUCTURE_SETTINGS.REPULSION;
   for (let iteration = 0; iteration < ITERATIONS; iteration++) {
     const forces = points.map(() => new Vector2(0, 0));
     for (let i = 0; i < n; i++) {
@@ -119,10 +122,10 @@ export function tidyLayout(
         const b = points[j] as Vector2;
         let delta = b.minus(a);
         let distance = delta.magnitude;
-        if (distance < 1e-6) {
+        if (distance < LAYOUT_STRUCTURE_SETTINGS.DISTANCE_EPSILON) {
           // Coincident atoms: separate them along a fixed, index-based direction.
           delta = Vector2.createPolar(1, i + j);
-          distance = 1e-3;
+          distance = LAYOUT_STRUCTURE_SETTINGS.COINCIDENT_ATOM_SEPARATION;
         }
         const push = delta.timesScalar(REPULSION / (distance * distance * distance));
         (forces[i] as Vector2).subtract(push);
@@ -133,7 +136,7 @@ export function tidyLayout(
       const a = points[i] as Vector2;
       const b = points[j] as Vector2;
       const delta = b.minus(a);
-      const distance = Math.max(delta.magnitude, 1e-6);
+      const distance = Math.max(delta.magnitude, LAYOUT_STRUCTURE_SETTINGS.DISTANCE_EPSILON);
       const pull = delta.timesScalar((SPRING * (distance - 1)) / distance);
       (forces[i] as Vector2).add(pull);
       (forces[j] as Vector2).subtract(pull);
@@ -143,7 +146,11 @@ export function tidyLayout(
       const force = forces[i] as Vector2;
       const magnitude = force.magnitude;
       // Cap each move so the relaxation stays stable.
-      point.add(magnitude > 0.2 ? force.timesScalar((0.2 / magnitude) * step) : force.timesScalar(step));
+      point.add(
+        magnitude > LAYOUT_STRUCTURE_SETTINGS.MAX_RELAXATION_DISPLACEMENT
+          ? force.timesScalar((LAYOUT_STRUCTURE_SETTINGS.MAX_RELAXATION_DISPLACEMENT / magnitude) * step)
+          : force.timesScalar(step),
+      );
     });
   }
   const centroid = points.reduce((sum, p) => sum.plus(p), new Vector2(0, 0)).timesScalar(1 / n);

@@ -1,3 +1,4 @@
+import { CHALLENGE_SCREEN_VIEW_SETTINGS } from "../../LewisStructuresConstants.js";
 /**
  * ChallengeScreenView.ts
  *
@@ -62,16 +63,16 @@ import { type ChallengeModel, HINTS, LEVEL_COUNT, NUMBER_OF_STARS, PERFECT_SCORE
 import { ChallengeScreenSummaryContent } from "./ChallengeScreenSummaryContent.js";
 import { hintText } from "./challengeHints.js";
 
-const STATUS_BAR_HEIGHT = 50;
+const STATUS_BAR_HEIGHT: number = CHALLENGE_SCREEN_VIEW_SETTINGS.STATUS_BAR_HEIGHT;
 const TASK_TOP = STATUS_BAR_HEIGHT + 8;
 const BOARD_TOP = STATUS_BAR_HEIGHT + 46;
-const BOARD_LEFT = 118;
-const GAP = 10;
+const BOARD_LEFT: number = CHALLENGE_SCREEN_VIEW_SETTINGS.BOARD_LEFT;
+const GAP: number = CHALLENGE_SCREEN_VIEW_SETTINGS.GAP;
 const PANEL_CONTENT_WIDTH = SIDE_PANEL_WIDTH - 24;
 const SHAPE_TEXT_WIDTH = PANEL_CONTENT_WIDTH;
-const LEVEL_BUTTON_SIZE = 150;
+const LEVEL_BUTTON_SIZE: number = CHALLENGE_SCREEN_VIEW_SETTINGS.LEVEL_BUTTON_SIZE;
 /** Largest width or height of the drawing on a level button, px. */
-const LEVEL_ICON_SIZE = 100;
+const LEVEL_ICON_SIZE: number = CHALLENGE_SCREEN_VIEW_SETTINGS.LEVEL_ICON_SIZE;
 /** A representative species drawn on each level's button. */
 const LEVEL_ICON_SPECIES = ["water", "carbonDioxide", "sulfurHexafluoride"];
 
@@ -113,7 +114,7 @@ export class ChallengeScreenView extends ScreenView {
     const levelButtons = new LevelSelectionButtonGroup(items, {
       groupButtonWidth: LEVEL_BUTTON_SIZE,
       groupButtonHeight: LEVEL_BUTTON_SIZE,
-      flowBoxOptions: { spacing: 30 },
+      flowBoxOptions: { spacing: CHALLENGE_SCREEN_VIEW_SETTINGS.LEVEL_BUTTONS_SPACING },
       gameLevels: lewisStructuresQueryParameters.gameLevels,
       tandem: options?.tandem?.createTandem("levelSelectionButtonGroup") ?? Tandem.OPT_OUT,
     });
@@ -121,41 +122,41 @@ export class ChallengeScreenView extends ScreenView {
       children: levelButtons.buttons.map(
         (button, i) =>
           new VBox({
-            spacing: 2,
-            maxWidth: LEVEL_BUTTON_SIZE + 30,
+            spacing: CHALLENGE_SCREEN_VIEW_SETTINGS.CAPTIONS_SPACING,
+            maxWidth: LEVEL_BUTTON_SIZE + CHALLENGE_SCREEN_VIEW_SETTINGS.CAPTIONS_MAX_WIDTH_OFFSET,
             children: [
               new Text(levelNames[i] as (typeof levelNames)[number], {
-                font: new PhetFont({ size: 15, weight: "bold" }),
+                font: new PhetFont({ size: CHALLENGE_SCREEN_VIEW_SETTINGS.CAPTIONS_FONT_SIZE, weight: "bold" }),
                 fill: LewisStructuresColors.textColorProperty,
               }),
               new Text(levelDescriptions[i] as (typeof levelDescriptions)[number], {
-                font: new PhetFont(12),
+                font: new PhetFont(CHALLENGE_SCREEN_VIEW_SETTINGS.CAPTIONS_FONT_SIZE_SEGMENT_2),
                 fill: LewisStructuresColors.textColorProperty,
               }),
             ],
             centerX: button.centerX,
-            top: levelButtons.bottom + 10,
+            top: levelButtons.bottom + CHALLENGE_SCREEN_VIEW_SETTINGS.CAPTIONS_TOP_OFFSET,
           }),
       ),
     });
     const levelSelection = new VBox({
-      spacing: 34,
+      spacing: CHALLENGE_SCREEN_VIEW_SETTINGS.LEVEL_SELECTION_SPACING,
       children: [
         new Text(strings.chooseLevelStringProperty, {
-          font: new PhetFont({ size: 28, weight: "bold" }),
+          font: new PhetFont({ size: CHALLENGE_SCREEN_VIEW_SETTINGS.LEVEL_SELECTION_FONT_SIZE, weight: "bold" }),
           fill: LewisStructuresColors.textColorProperty,
-          maxWidth: 500,
+          maxWidth: CHALLENGE_SCREEN_VIEW_SETTINGS.LEVEL_SELECTION_MAX_WIDTH,
         }),
         new Node({ children: [levelButtons, captions] }),
       ],
-      center: this.layoutBounds.center.plusXY(0, -20),
+      center: this.layoutBounds.center.plusXY(0, CHALLENGE_SCREEN_VIEW_SETTINGS.LEVEL_SELECTION_Y_OFFSET),
     });
 
     // ── Round: status bar and task ────────────────────────────────────────────
     const statusBar = new FiniteStatusBar(this.layoutBounds, this.visibleBoundsProperty, model.scoreProperty, {
       barFill: LewisStructuresColors.panelBackgroundColorProperty,
       barStroke: LewisStructuresColors.panelBorderColorProperty,
-      font: new PhetFont(18),
+      font: new PhetFont(CHALLENGE_SCREEN_VIEW_SETTINGS.STATUS_BAR_FONT_SIZE),
       textFill: LewisStructuresColors.textColorProperty,
       levelNumberProperty: model.levelNumberProperty,
       challengeNumberProperty: model.challengeNumberProperty,
@@ -163,7 +164,7 @@ export class ChallengeScreenView extends ScreenView {
       startOverButtonOptions: {
         ...FLAT_RECTANGULAR_BUTTON_OPTIONS,
         textFill: LIGHT_SURFACE_TEXT_FILL,
-        font: new PhetFont(15),
+        font: new PhetFont(CHALLENGE_SCREEN_VIEW_SETTINGS.STATUS_BAR_FONT_SIZE_SEGMENT_2),
         listener: () => model.leaveLevel(),
       },
     });
@@ -177,9 +178,9 @@ export class ChallengeScreenView extends ScreenView {
         : "";
     });
     const task = new RichText(taskProperty, {
-      font: new PhetFont({ size: 20, weight: "bold" }),
+      font: new PhetFont({ size: CHALLENGE_SCREEN_VIEW_SETTINGS.TASK_FONT_SIZE, weight: "bold" }),
       fill: LewisStructuresColors.textColorProperty,
-      maxWidth: BOARD_WIDTH + 90,
+      maxWidth: BOARD_WIDTH + CHALLENGE_SCREEN_VIEW_SETTINGS.TASK_MAX_WIDTH_OFFSET,
       left: this.layoutBounds.minX + SCREEN_VIEW_MARGIN,
       top: this.layoutBounds.minY + TASK_TOP,
     });
@@ -194,7 +195,10 @@ export class ChallengeScreenView extends ScreenView {
     });
     canvas.translation = this.layoutBounds.leftTop.plusXY(BOARD_LEFT, BOARD_TOP);
     const palette = new ElementPaletteNode(canvas);
-    const palettePanel = new LewisStructuresPanel(palette, { xMargin: 6, yMargin: 6 });
+    const palettePanel = new LewisStructuresPanel(palette, {
+      xMargin: CHALLENGE_SCREEN_VIEW_SETTINGS.PALETTE_PANEL_X_MARGIN,
+      yMargin: CHALLENGE_SCREEN_VIEW_SETTINGS.PALETTE_PANEL_Y_MARGIN,
+    });
     palettePanel.leftTop = this.layoutBounds.leftTop.plusXY(SCREEN_VIEW_MARGIN, BOARD_TOP);
     canvas.setDeleteZone((globalPoint: Vector2) => palettePanel.globalBounds.containsPoint(globalPoint));
 
@@ -210,10 +214,10 @@ export class ChallengeScreenView extends ScreenView {
     const shapeCheckbox = checkbox(
       model.showShapeProperty,
       StringManager.getInstance().getShapeStrings().toggleStringProperty,
-      110,
+      CHALLENGE_SCREEN_VIEW_SETTINGS.SHOW_SHAPE_CHECKBOX_MAX_WIDTH,
     );
     const toolbar = new HBox({
-      spacing: 8,
+      spacing: CHALLENGE_SCREEN_VIEW_SETTINGS.TOOLBAR_SPACING,
       children: [
         undoButton,
         redoButton,
@@ -247,10 +251,10 @@ export class ChallengeScreenView extends ScreenView {
     const hintsPanel = new LewisStructuresPanel(
       new VBox({
         align: "left",
-        spacing: 6,
+        spacing: CHALLENGE_SCREEN_VIEW_SETTINGS.HINTS_PANEL_SPACING,
         children: [
           new HBox({
-            spacing: 10,
+            spacing: CHALLENGE_SCREEN_VIEW_SETTINGS.HINTS_PANEL_ITEM_1_SPACING,
             children: [
               new Text(strings.hintsTitleStringProperty, {
                 font: HEADING_FONT,
@@ -260,7 +264,7 @@ export class ChallengeScreenView extends ScreenView {
               new Text(hintsUsedProperty, {
                 font: SMALL_FONT,
                 fill: LewisStructuresColors.mutedTextColorProperty,
-                maxWidth: 120,
+                maxWidth: CHALLENGE_SCREEN_VIEW_SETTINGS.HINTS_PANEL_MAX_WIDTH,
               }),
             ],
           }),
@@ -284,8 +288,14 @@ export class ChallengeScreenView extends ScreenView {
     const checkPanel = new LewisStructuresPanel(
       new VBox({
         align: "left",
-        spacing: 8,
-        children: [new HBox({ spacing: 8, children: [checkButton, nextButton] }), feedback],
+        spacing: CHALLENGE_SCREEN_VIEW_SETTINGS.CHECK_PANEL_SPACING,
+        children: [
+          new HBox({
+            spacing: CHALLENGE_SCREEN_VIEW_SETTINGS.CHECK_PANEL_SPACING,
+            children: [checkButton, nextButton],
+          }),
+          feedback,
+        ],
       }),
       { minWidth: SIDE_PANEL_WIDTH, align: "left" },
     );
@@ -396,7 +406,7 @@ export class ChallengeScreenView extends ScreenView {
           () => model.leaveLevel(),
           {
             cornerRadius: PANEL_CORNER_RADIUS,
-            buttonFont: new PhetFont(20),
+            buttonFont: new PhetFont(CHALLENGE_SCREEN_VIEW_SETTINGS.LEVEL_COMPLETED_NODE_FONT_SIZE),
             center: this.layoutBounds.center,
             contentMaxWidth: 400,
           },

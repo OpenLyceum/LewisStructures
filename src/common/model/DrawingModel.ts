@@ -1,3 +1,4 @@
+import { DRAWING_MODEL_SETTINGS } from "../../LewisStructuresConstants.js";
 /**
  * DrawingModel.ts
  *
@@ -65,7 +66,7 @@ export class DrawingModel {
       anchor ? this.bondAnglesOf(anchor) : [],
       this.structure.atoms.map((other) => other.positionProperty.value),
       this.bounds.center,
-      (point) => this.bounds.eroded(0.4).containsPoint(point),
+      (point) => this.bounds.eroded(DRAWING_MODEL_SETTINGS.ADD_ATOM_INSET).containsPoint(point),
     );
     const atom = this.structure.addAtom(element, position);
     if (anchor) {
@@ -104,7 +105,9 @@ export class DrawingModel {
       this.bounds.center,
     );
     this.structure.startMove();
-    this.structure.setPositions(positions.map((p) => this.bounds.eroded(0.3).closestPointTo(p)));
+    this.structure.setPositions(
+      positions.map((p) => this.bounds.eroded(DRAWING_MODEL_SETTINGS.TIDY_INSET).closestPointTo(p)),
+    );
   }
 
   /** Replaces the drawing with `data`, centred on the board. */
@@ -136,7 +139,7 @@ export class DrawingModel {
 
   /** The nearest point on the board, a little inside the edge. */
   public clamp(point: Vector2): Vector2 {
-    return this.bounds.eroded(0.25).closestPointTo(point);
+    return this.bounds.eroded(DRAWING_MODEL_SETTINGS.DRAG_INSET).closestPointTo(point);
   }
 
   public dispose(): void {

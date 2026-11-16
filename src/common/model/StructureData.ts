@@ -1,3 +1,4 @@
+import { STRUCTURE_DATA_SETTINGS } from "../../LewisStructuresConstants.js";
 /**
  * StructureData.ts
  *
@@ -33,9 +34,9 @@ export type StructureData = {
   readonly charge: number;
 };
 
-export const MAX_BOND_ORDER = 3;
+export const MAX_BOND_ORDER: number = STRUCTURE_DATA_SETTINGS.MAX_BOND_ORDER;
 /** Four lone pairs is a full octet with no bonds (as in a halide ion). */
-export const MAX_LONE_PAIRS = 4;
+export const MAX_LONE_PAIRS: number = STRUCTURE_DATA_SETTINGS.MAX_LONE_PAIRS;
 
 /** Neighbour indices of each atom. */
 export function neighborLists(data: StructureData): number[][] {

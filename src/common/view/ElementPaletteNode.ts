@@ -1,3 +1,4 @@
+import { ELEMENT_PALETTE_NODE_SETTINGS } from "../../LewisStructuresConstants.js";
 /**
  * ElementPaletteNode.ts
  *
@@ -40,22 +41,30 @@ const PALETTE_ELEMENTS: readonly ElementSymbol[] = [
   "Xe",
 ];
 
-const TILE_SIZE = 38;
-const TILE_FONT = new PhetFont({ size: 17, weight: "bold" });
+const TILE_SIZE: number = ELEMENT_PALETTE_NODE_SETTINGS.TILE_SIZE;
+const TILE_FONT = new PhetFont({ size: ELEMENT_PALETTE_NODE_SETTINGS.TILE_FONT_SIZE, weight: "bold" });
 
 export class ElementTileNode extends Node {
   public readonly element: ElementSymbol;
 
   public constructor(element: ElementSymbol, canvas: LewisCanvasNode) {
-    const background = new Rectangle(0, 0, TILE_SIZE, TILE_SIZE, 5, 5, {
-      fill: LewisStructuresColors.atomDiscColorProperty,
-      stroke: LewisStructuresColors.boardBorderColorProperty,
-    });
+    const background = new Rectangle(
+      0,
+      0,
+      TILE_SIZE,
+      TILE_SIZE,
+      ELEMENT_PALETTE_NODE_SETTINGS.BACKGROUND_CORNER_X,
+      ELEMENT_PALETTE_NODE_SETTINGS.BACKGROUND_CORNER_Y,
+      {
+        fill: LewisStructuresColors.atomDiscColorProperty,
+        stroke: LewisStructuresColors.boardBorderColorProperty,
+      },
+    );
     const symbol = new Text(element, {
       font: TILE_FONT,
       fill: LewisStructuresColors.atomSymbolColorProperty,
       center: background.center,
-      maxWidth: TILE_SIZE - 6,
+      maxWidth: TILE_SIZE - ELEMENT_PALETTE_NODE_SETTINGS.SYMBOL_MAX_WIDTH_OFFSET,
     });
     const a11y = StringManager.getInstance().getBoardA11yStrings();
     super({
@@ -133,8 +142,8 @@ export class ElementPaletteNode extends GridBox {
     const tiles = PALETTE_ELEMENTS.map((element) => new ElementTileNode(element, canvas));
     super({
       autoColumns: 2,
-      xSpacing: 6,
-      ySpacing: 6,
+      xSpacing: ELEMENT_PALETTE_NODE_SETTINGS.CONSTRUCTOR_X_SPACING,
+      ySpacing: ELEMENT_PALETTE_NODE_SETTINGS.CONSTRUCTOR_Y_SPACING,
       children: tiles,
     });
     this.tiles = tiles;

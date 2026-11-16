@@ -1,3 +1,4 @@
+import { LEWIS_STRUCTURES_PANEL_SETTINGS } from "../LewisStructuresConstants.js";
 /**
  * LewisStructuresPanel.ts
  *
@@ -40,8 +41,8 @@ export class LewisStructuresPanel extends Panel {
         fill: LewisStructuresColors.panelBackgroundColorProperty,
         stroke: LewisStructuresColors.panelBorderColorProperty,
         cornerRadius: PANEL_CORNER_RADIUS,
-        xMargin: 12,
-        yMargin: 10,
+        xMargin: LEWIS_STRUCTURES_PANEL_SETTINGS.OPTIONS_X_MARGIN,
+        yMargin: LEWIS_STRUCTURES_PANEL_SETTINGS.OPTIONS_Y_MARGIN,
       },
       providedOptions,
     );

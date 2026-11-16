@@ -1,3 +1,4 @@
+import { LEWIS_STRUCTURE_SETTINGS } from "../../LewisStructuresConstants.js";
 /**
  * LewisStructure.ts
  *
@@ -18,7 +19,7 @@ import type { ElementSymbol } from "./ElementData.js";
 import { MAX_BOND_ORDER, MAX_LONE_PAIRS, type StructureData } from "./StructureData.js";
 
 /** Undo steps kept; older ones are dropped. */
-const MAX_HISTORY = 100;
+const MAX_HISTORY: number = LEWIS_STRUCTURE_SETTINGS.MAX_HISTORY;
 
 export class LewisAtom {
   public readonly id: number;

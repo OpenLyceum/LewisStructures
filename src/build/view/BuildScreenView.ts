@@ -1,3 +1,4 @@
+import { BUILD_SCREEN_VIEW_SETTINGS } from "../../LewisStructuresConstants.js";
 /**
  * BuildScreenView.ts
  *
@@ -35,10 +36,10 @@ import type { LewisStructuresPreferencesModel } from "../../preferences/LewisStr
 import type { BuildModel } from "../model/BuildModel.js";
 import { BuildScreenSummaryContent } from "./BuildScreenSummaryContent.js";
 
-const TOP = 12;
-const BOARD_LEFT = 118;
-const BOARD_TOP = 64;
-const GAP = 10;
+const TOP: number = BUILD_SCREEN_VIEW_SETTINGS.TOP;
+const BOARD_LEFT: number = BUILD_SCREEN_VIEW_SETTINGS.BOARD_LEFT;
+const BOARD_TOP: number = BUILD_SCREEN_VIEW_SETTINGS.BOARD_TOP;
+const GAP: number = BUILD_SCREEN_VIEW_SETTINGS.GAP;
 const PANEL_CONTENT_WIDTH = SIDE_PANEL_WIDTH - 24;
 /** Text width in the shape panel. */
 const SHAPE_TEXT_WIDTH = PANEL_CONTENT_WIDTH;
@@ -63,7 +64,10 @@ export class BuildScreenView extends ScreenView {
     canvas.translation = this.layoutBounds.leftTop.plusXY(BOARD_LEFT, BOARD_TOP);
 
     const palette = new ElementPaletteNode(canvas);
-    const palettePanel = new LewisStructuresPanel(palette, { xMargin: 6, yMargin: 6 });
+    const palettePanel = new LewisStructuresPanel(palette, {
+      xMargin: BUILD_SCREEN_VIEW_SETTINGS.PALETTE_PANEL_X_MARGIN,
+      yMargin: BUILD_SCREEN_VIEW_SETTINGS.PALETTE_PANEL_Y_MARGIN,
+    });
     palette.tagName = "div";
     palette.accessibleHeading = StringManager.getInstance().getBuildA11yStrings().controls.paletteStringProperty;
     palettePanel.leftTop = this.layoutBounds.leftTop.plusXY(SCREEN_VIEW_MARGIN, BOARD_TOP);
@@ -87,13 +91,17 @@ export class BuildScreenView extends ScreenView {
       redoButton.enabled = canRedo;
     });
     const toolbar = new HBox({
-      spacing: 8,
+      spacing: BUILD_SCREEN_VIEW_SETTINGS.TOOLBAR_SPACING,
       children: [
         undoButton,
         redoButton,
         pushButton(strings.tidyStringProperty, () => drawing.tidy()),
         pushButton(strings.clearStringProperty, () => structure.clear()),
-        checkbox(model.showShapeProperty, StringManager.getInstance().getShapeStrings().toggleStringProperty, 110),
+        checkbox(
+          model.showShapeProperty,
+          StringManager.getInstance().getShapeStrings().toggleStringProperty,
+          BUILD_SCREEN_VIEW_SETTINGS.SHOW_SHAPE_CHECKBOX_MAX_WIDTH,
+        ),
       ],
     });
     toolbar.leftTop = canvas.leftBottom.plusXY(0, GAP);
@@ -138,10 +146,10 @@ export class BuildScreenView extends ScreenView {
     const checkPanel = new LewisStructuresPanel(
       new VBox({
         align: "left",
-        spacing: 8,
+        spacing: BUILD_SCREEN_VIEW_SETTINGS.CHECK_PANEL_SPACING,
         children: [
           new HBox({
-            spacing: 8,
+            spacing: BUILD_SCREEN_VIEW_SETTINGS.CHECK_PANEL_SPACING,
             children: [
               pushButton(strings.checkStringProperty, () => model.check()),
               skeletonButton,

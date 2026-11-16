@@ -1,3 +1,4 @@
+import { BOARD_KEYBOARD_CONTROLLER_SETTINGS } from "../../LewisStructuresConstants.js";
 /**
  * BoardKeyboardController.ts
  *
@@ -29,7 +30,7 @@ import { atomBrief, atomDescription, budgetSentence, orderName } from "./boardDe
 import { describeHint } from "./ChecklistNode.js";
 
 /** How far one arrow press moves a grabbed atom, bond lengths. */
-const MOVE_STEP = 0.25;
+const MOVE_STEP: number = BOARD_KEYBOARD_CONTROLLER_SETTINGS.MOVE_STEP;
 
 const DIRECTIONS: Record<string, Vector2> = {
   arrowUp: new Vector2(0, 1),

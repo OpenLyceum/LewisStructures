@@ -1,3 +1,4 @@
+import { CURVED_ARROWS_NODE_SETTINGS } from "../../LewisStructuresConstants.js";
 /**
  * CurvedArrowsNode.ts
  *
@@ -13,9 +14,9 @@ import LewisStructuresColors from "../../LewisStructuresColors.js";
 import type { ArrowEnd, ResonanceArrow } from "../model/resonance.js";
 import type { StructureNode } from "./StructureNode.js";
 
-const HEAD_LENGTH = 9;
-const HEAD_WIDTH = 8;
-const BOW = 0.45;
+const HEAD_LENGTH: number = CURVED_ARROWS_NODE_SETTINGS.HEAD_LENGTH;
+const HEAD_WIDTH: number = CURVED_ARROWS_NODE_SETTINGS.HEAD_WIDTH;
+const BOW: number = CURVED_ARROWS_NODE_SETTINGS.BOW;
 
 export class CurvedArrowsNode extends Node {
   public constructor(structureNode: StructureNode, arrows: readonly ResonanceArrow[]) {
@@ -61,7 +62,7 @@ export class CurvedArrowsNode extends Node {
       this.addChild(
         new Path(new Shape().moveToPoint(start).quadraticCurveToPoint(control, base), {
           stroke: LewisStructuresColors.accentColorProperty,
-          lineWidth: 2.5,
+          lineWidth: CURVED_ARROWS_NODE_SETTINGS.CONSTRUCTOR_LINE_WIDTH,
         }),
       );
       this.addChild(

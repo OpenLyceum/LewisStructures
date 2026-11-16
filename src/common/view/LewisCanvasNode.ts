@@ -1,3 +1,4 @@
+import { LEWIS_CANVAS_NODE_SETTINGS } from "../../LewisStructuresConstants.js";
 /**
  * LewisCanvasNode.ts
  *
@@ -29,7 +30,7 @@ import { BoardKeyboardController } from "./BoardKeyboardController.js";
 import { BondNode } from "./BondNode.js";
 
 /** How close (bond lengths) a drop must be to an atom's centre to bond to it. */
-const DROP_RADIUS = 0.45;
+const DROP_RADIUS: number = LEWIS_CANVAS_NODE_SETTINGS.DROP_RADIUS;
 
 export type LewisCanvasDisplayOptions = {
   readonly showAllFormalChargesProperty: TReadOnlyProperty<boolean>;
@@ -79,9 +80,9 @@ export class LewisCanvasNode extends Node {
     board.addInputListener(new FireListener({ fire: () => drawing.selectAtom(null) }));
 
     const hint = new RichText(display.hintStringProperty, {
-      font: new PhetFont(14),
+      font: new PhetFont(LEWIS_CANVAS_NODE_SETTINGS.HINT_FONT_SIZE),
       fill: LewisStructuresColors.mutedTextColorProperty,
-      lineWrap: width * 0.7,
+      lineWrap: width * LEWIS_CANVAS_NODE_SETTINGS.HINT_LINE_WRAP_FACTOR,
       align: "center",
       pickable: false,
     });
@@ -91,8 +92,8 @@ export class LewisCanvasNode extends Node {
 
     this.rubberBand = new Line(0, 0, 0, 0, {
       stroke: LewisStructuresColors.accentColorProperty,
-      lineWidth: 2,
-      lineDash: [5, 4],
+      lineWidth: LEWIS_CANVAS_NODE_SETTINGS.RUBBER_BAND_LINE_WIDTH,
+      lineDash: [LEWIS_CANVAS_NODE_SETTINGS.CONSTRUCTOR_LINE_DASH_DASH, 4],
       visible: false,
       pickable: false,
     });

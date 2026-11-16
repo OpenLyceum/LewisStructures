@@ -1,3 +1,4 @@
+import { RESONANCE_SCREEN_VIEW_SETTINGS } from "../../LewisStructuresConstants.js";
 /**
  * ResonanceScreenView.ts
  *
@@ -50,15 +51,15 @@ import { FormCardNode } from "./FormCardNode.js";
 import { ResonanceScreenSummaryContent } from "./ResonanceScreenSummaryContent.js";
 import { arrowsDescription, formDescription, rankExplanation, rankLabel } from "./resonanceDescriptions.js";
 
-const TOP = 12;
-const BOARD_TOP = 64;
-const GAP = 10;
-const RIGHT_WIDTH = 444;
-const CARD_COLUMNS = 3;
-const CARD_HEIGHT = 118;
+const TOP: number = RESONANCE_SCREEN_VIEW_SETTINGS.TOP;
+const BOARD_TOP: number = RESONANCE_SCREEN_VIEW_SETTINGS.BOARD_TOP;
+const GAP: number = RESONANCE_SCREEN_VIEW_SETTINGS.GAP;
+const RIGHT_WIDTH: number = RESONANCE_SCREEN_VIEW_SETTINGS.RIGHT_WIDTH;
+const CARD_COLUMNS: number = RESONANCE_SCREEN_VIEW_SETTINGS.CARD_COLUMNS;
+const CARD_HEIGHT: number = RESONANCE_SCREEN_VIEW_SETTINGS.CARD_HEIGHT;
 /** Largest magnification of a form in the large view (arrows need room to be read). */
-const LARGE_SCALE = 1.5;
-const CARD_GAP = 6;
+const LARGE_SCALE: number = RESONANCE_SCREEN_VIEW_SETTINGS.LARGE_SCALE;
+const CARD_GAP: number = RESONANCE_SCREEN_VIEW_SETTINGS.CARD_GAP;
 const EXPLANATION_WIDTH = RIGHT_WIDTH - 24;
 
 export class ResonanceScreenView extends ScreenView {
@@ -79,16 +80,16 @@ export class ResonanceScreenView extends ScreenView {
       })),
       listParent,
       strings.speciesStringProperty,
-      300,
+      RESONANCE_SCREEN_VIEW_SETTINGS.SPECIES_COMBO_BOX_MAX_WIDTH,
     );
     const formula = new RichText("", {
-      font: new PhetFont({ size: 26, weight: "bold" }),
+      font: new PhetFont({ size: RESONANCE_SCREEN_VIEW_SETTINGS.FORMULA_FONT_SIZE, weight: "bold" }),
       fill: LewisStructuresColors.textColorProperty,
     });
     model.speciesProperty.link((species) => {
       formula.string = species.formula;
     });
-    const header = new HBox({ spacing: 14, children: [chooser, formula] });
+    const header = new HBox({ spacing: RESONANCE_SCREEN_VIEW_SETTINGS.HEADER_SPACING, children: [chooser, formula] });
     header.leftTop = this.layoutBounds.leftTop.plusXY(SCREEN_VIEW_MARGIN, TOP);
 
     // ── Large view: a form, the hybrid, or the drawing board ──────────────────
@@ -126,7 +127,7 @@ export class ResonanceScreenView extends ScreenView {
         { value: "draw" as const, label: strings.drawStringProperty },
       ],
       strings.modeStringProperty,
-      110,
+      RESONANCE_SCREEN_VIEW_SETTINGS.MODE_RADIO_GROUP_MAX_WIDTH,
       "horizontal",
     );
     const announcer = new Node({ tagName: "div" });
@@ -148,18 +149,31 @@ export class ResonanceScreenView extends ScreenView {
       model.selectNext(1);
       announceForm();
     });
-    const arrowsCheckbox = checkbox(model.showArrowsProperty, strings.showArrowsStringProperty, 150);
-    const formControls = new HBox({ spacing: 8, children: [previousButton, nextButton, arrowsCheckbox] });
+    const arrowsCheckbox = checkbox(
+      model.showArrowsProperty,
+      strings.showArrowsStringProperty,
+      RESONANCE_SCREEN_VIEW_SETTINGS.SHOW_ARROWS_CHECKBOX_MAX_WIDTH,
+    );
+    const formControls = new HBox({
+      spacing: RESONANCE_SCREEN_VIEW_SETTINGS.FORM_CONTROLS_SPACING,
+      children: [previousButton, nextButton, arrowsCheckbox],
+    });
     const checkButton = pushButton(strings.checkStringProperty, () => model.check());
     const startOverButton = pushButton(strings.startOverStringProperty, () => model.startDrawing());
-    const drawControls = new HBox({ spacing: 8, children: [checkButton, startOverButton] });
-    const controls = new HBox({ spacing: 18, children: [modeGroup, formControls, drawControls] });
+    const drawControls = new HBox({
+      spacing: RESONANCE_SCREEN_VIEW_SETTINGS.DRAW_CONTROLS_SPACING,
+      children: [checkButton, startOverButton],
+    });
+    const controls = new HBox({
+      spacing: RESONANCE_SCREEN_VIEW_SETTINGS.CONTROLS_SPACING,
+      children: [modeGroup, formControls, drawControls],
+    });
     controls.maxWidth = RESONANCE_BOARD_WIDTH;
     controls.leftTop = viewFrame.leftBottom.plusXY(0, GAP);
 
     const selectionBar = new SelectionBarNode(model.drawing, RESONANCE_BOARD_WIDTH);
     selectionBar.leftTop = controls.leftBottom.plusXY(0, GAP);
-    selectionBar.maxWidth = RESONANCE_BOARD_WIDTH + 40;
+    selectionBar.maxWidth = RESONANCE_BOARD_WIDTH + RESONANCE_SCREEN_VIEW_SETTINGS.CONSTRUCTOR_MAX_WIDTH_OFFSET;
 
     // ── Gallery ───────────────────────────────────────────────────────────────
     const cardWidth = (RIGHT_WIDTH - 24 - (CARD_COLUMNS - 1) * CARD_GAP) / CARD_COLUMNS;
@@ -168,7 +182,7 @@ export class ResonanceScreenView extends ScreenView {
     const galleryPanel = new LewisStructuresPanel(
       new VBox({
         align: "left",
-        spacing: 6,
+        spacing: RESONANCE_SCREEN_VIEW_SETTINGS.GALLERY_PANEL_SPACING,
         children: [
           new Text(strings.galleryTitleStringProperty, {
             font: HEADING_FONT,
@@ -205,7 +219,11 @@ export class ResonanceScreenView extends ScreenView {
       lineWrap: EXPLANATION_WIDTH,
     });
     const explanationPanel = new LewisStructuresPanel(
-      new VBox({ align: "left", spacing: 6, children: [explanationTitle, explanationBody] }),
+      new VBox({
+        align: "left",
+        spacing: RESONANCE_SCREEN_VIEW_SETTINGS.EXPLANATION_PANEL_SPACING,
+        children: [explanationTitle, explanationBody],
+      }),
       { minWidth: RIGHT_WIDTH, align: "left" },
     );
     // The gallery grows with the number of forms, so the explanation follows its bottom edge.

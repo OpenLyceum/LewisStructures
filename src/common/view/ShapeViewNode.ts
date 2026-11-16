@@ -1,3 +1,4 @@
+import { SHAPE_VIEW_NODE_SETTINGS } from "../../LewisStructuresConstants.js";
 /**
  * ShapeViewNode.ts
  *
@@ -21,13 +22,13 @@ import { idealDirections, type Vec3, type VseprCenter } from "../model/vsepr.js"
 /** Rotation per arrow-key press, radians. */
 const KEY_STEP = Math.PI / 12;
 /** Rotation per pixel dragged, radians. */
-const DRAG_RATE = 0.012;
+const DRAG_RATE: number = SHAPE_VIEW_NODE_SETTINGS.DRAG_RATE;
 /** Ball radius = BALL_BASE + BALL_PER_PM × covalent radius, as a fraction of the bond length. */
-const BALL_BASE = 0.12;
-const BALL_PER_PM = 0.0013;
-const LOBE_DISTANCE = 0.55;
-const LOBE_LENGTH = 0.5;
-const LOBE_WIDTH = 0.32;
+const BALL_BASE: number = SHAPE_VIEW_NODE_SETTINGS.BALL_BASE;
+const BALL_PER_PM: number = SHAPE_VIEW_NODE_SETTINGS.BALL_PER_PM;
+const LOBE_DISTANCE: number = SHAPE_VIEW_NODE_SETTINGS.LOBE_DISTANCE;
+const LOBE_LENGTH: number = SHAPE_VIEW_NODE_SETTINGS.LOBE_LENGTH;
+const LOBE_WIDTH: number = SHAPE_VIEW_NODE_SETTINGS.LOBE_WIDTH;
 
 const ELEMENT_COLORS: Record<ElementSymbol, (typeof LewisStructuresColors)["elementHColorProperty"]> = {
   H: LewisStructuresColors.elementHColorProperty,
@@ -188,7 +189,7 @@ export class ShapeViewNode extends Node {
         z: end.z / 2 - 0.01,
         node: new Line(a.x, a.y, b.x, b.y, {
           stroke: LewisStructuresColors.shapeBondColorProperty,
-          lineWidth: 6,
+          lineWidth: SHAPE_VIEW_NODE_SETTINGS.RENDER_LINE_WIDTH,
           lineCap: "round",
         }),
       });
@@ -205,7 +206,7 @@ export class ShapeViewNode extends Node {
         z: tip.z,
         node: new Path(shape, {
           fill: LewisStructuresColors.electronColorProperty,
-          opacity: 0.6,
+          opacity: SHAPE_VIEW_NODE_SETTINGS.RENDER_OPACITY,
           rotation: along.magnitude > 1e-6 ? along.angle : 0,
           translation: viewTip,
         }),

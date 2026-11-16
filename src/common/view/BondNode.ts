@@ -1,3 +1,4 @@
+import { BOND_NODE_SETTINGS } from "../../LewisStructuresConstants.js";
 /**
  * BondNode.ts
  *
@@ -13,9 +14,9 @@ import { ATOM_RADIUS, BOND_LINE_SPACING, BOND_LINE_WIDTH } from "../../LewisStru
 import type { LewisBond } from "../model/LewisStructure.js";
 
 /** Width of the clickable strip around a bond, px. */
-const HIT_WIDTH = 14;
+const HIT_WIDTH: number = BOND_NODE_SETTINGS.HIT_WIDTH;
 /** Extra gap between a bond line and the disc it meets, px. */
-const END_GAP = 3;
+const END_GAP: number = BOND_NODE_SETTINGS.END_GAP;
 
 export class BondNode extends Node {
   public readonly bond: LewisBond;
@@ -27,9 +28,9 @@ export class BondNode extends Node {
     const hitLine = new Line(0, 0, 0, 0, { stroke: "transparent", lineWidth: HIT_WIDTH, lineCap: "round" });
     const selectionPath = new Path(null, {
       stroke: LewisStructuresColors.accentColorProperty,
-      lineWidth: HIT_WIDTH - 4,
+      lineWidth: HIT_WIDTH - BOND_NODE_SETTINGS.SELECTION_PATH_LINE_WIDTH_OFFSET,
       lineCap: "round",
-      opacity: 0.35,
+      opacity: BOND_NODE_SETTINGS.SELECTION_PATH_OPACITY,
       visible: false,
       pickable: false,
     });

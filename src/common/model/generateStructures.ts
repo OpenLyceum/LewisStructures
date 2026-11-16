@@ -1,3 +1,4 @@
+import { GENERATE_STRUCTURES_SETTINGS } from "../../LewisStructuresConstants.js";
 /**
  * generateStructures.ts
  *
@@ -52,10 +53,10 @@ export type StructureSet = {
   readonly truncated: boolean;
 };
 
-const MAX_VISITS = 200_000;
-const EPSILON = 1e-9;
+const MAX_VISITS: number = GENERATE_STRUCTURES_SETTINGS.MAX_VISITS;
+const EPSILON: number = GENERATE_STRUCTURES_SETTINGS.EPSILON;
 /** How far past the best Σ|FC| a structure may be and still be listed as a minor contributor. */
-const MINOR_WINDOW = 2;
+const MINOR_WINDOW: number = GENERATE_STRUCTURES_SETTINGS.MINOR_WINDOW;
 
 function compareNumbers(a: number, b: number): number {
   return Math.abs(a - b) < EPSILON ? 0 : a - b;

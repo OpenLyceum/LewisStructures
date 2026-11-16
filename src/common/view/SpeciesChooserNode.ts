@@ -1,3 +1,4 @@
+import { SPECIES_CHOOSER_NODE_SETTINGS } from "../../LewisStructuresConstants.js";
 /**
  * SpeciesChooserNode.ts
  *
@@ -20,8 +21,8 @@ import type { CategoryChoice } from "../model/SpeciesChoice.js";
 import { CONTROL_FONT, comboBox, label } from "./ControlFactory.js";
 import { categoryName, speciesDisplay, speciesName } from "./speciesLabels.js";
 
-const COMBO_WIDTH = 230;
-const FORMULA_FONT = new PhetFont({ size: 26, weight: "bold" });
+const COMBO_WIDTH: number = SPECIES_CHOOSER_NODE_SETTINGS.COMBO_WIDTH;
+const FORMULA_FONT = new PhetFont({ size: SPECIES_CHOOSER_NODE_SETTINGS.FORMULA_FONT_SIZE, weight: "bold" });
 
 export class SpeciesChooserNode extends HBox {
   private readonly disposeSpeciesChooserNode: () => void;
@@ -49,9 +50,9 @@ export class SpeciesChooserNode extends HBox {
     let speciesBox: ComboBox<Species> | null = null;
     let speciesBoxProperty: Property<Species> | null = null;
     const chargeSpinner = new HBox({
-      spacing: 6,
+      spacing: SPECIES_CHOOSER_NODE_SETTINGS.CHARGE_SPINNER_SPACING,
       children: [
-        label(strings.chargeStringProperty, 80),
+        label(strings.chargeStringProperty, SPECIES_CHOOSER_NODE_SETTINGS.CHARGE_LABEL_MAX_WIDTH),
         new NumberSpinner(chargeProperty, new Property(new Range(MIN_CHARGE, MAX_CHARGE)), {
           arrowsPosition: "leftRight",
           arrowButtonOptions: FLAT_RECTANGULAR_BUTTON_OPTIONS,
@@ -112,7 +113,7 @@ export class SpeciesChooserNode extends HBox {
     const formula = new RichText("", {
       font: FORMULA_FONT,
       fill: LewisStructuresColors.textColorProperty,
-      maxWidth: 260,
+      maxWidth: SPECIES_CHOOSER_NODE_SETTINGS.FORMULA_MAX_WIDTH,
     });
     const updateFormula = () => {
       const species = speciesProperty.value;
@@ -122,7 +123,11 @@ export class SpeciesChooserNode extends HBox {
     speciesProperty.link(updateFormula);
     strings.freeBuildTitleStringProperty.lazyLink(updateFormula);
 
-    super({ spacing: 14, align: "center", children: [categoryBox, speciesSlot, formula] });
+    super({
+      spacing: SPECIES_CHOOSER_NODE_SETTINGS.CONSTRUCTOR_SPACING,
+      align: "center",
+      children: [categoryBox, speciesSlot, formula],
+    });
 
     this.disposeSpeciesChooserNode = () => {
       categoryProperty.unlink(rebuild);

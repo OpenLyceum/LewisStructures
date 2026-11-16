@@ -1,3 +1,4 @@
+import { LEWIS_STRUCTURES_SCREEN_ICONS_SETTINGS } from "../LewisStructuresConstants.js";
 /**
  * LewisStructuresScreenIcons.ts
  *
@@ -22,7 +23,7 @@ import { StructureNode } from "./view/StructureNode.js";
 const W = 548;
 const H = 373;
 /** Margin left around the drawing inside the icon, px. */
-const ICON_MARGIN = 30;
+const ICON_MARGIN: number = LEWIS_STRUCTURES_SCREEN_ICONS_SETTINGS.ICON_MARGIN;
 
 function background(): Rectangle {
   return new Rectangle(0, 0, W, H, { fill: LewisStructuresColors.backgroundColorProperty });
@@ -72,7 +73,7 @@ export function createResonanceIcon(): ScreenIcon {
 export function createChallengeIcon(): ScreenIcon {
   const carbonDioxide = bestForms("carbonDioxide")[0] ?? getSpecies("carbonDioxide").skeleton;
   const question = new Text("?", {
-    font: new PhetFont({ size: 220, weight: "bold" }),
+    font: new PhetFont({ size: LEWIS_STRUCTURES_SCREEN_ICONS_SETTINGS.QUESTION_FONT_SIZE, weight: "bold" }),
     fill: LewisStructuresColors.accentColorProperty,
   });
   question.center = question.center.setXY(W * 0.82, H / 2);

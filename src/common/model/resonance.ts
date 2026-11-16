@@ -1,3 +1,4 @@
+import { RESONANCE_SETTINGS } from "../../LewisStructuresConstants.js";
 /**
  * resonance.ts
  *
@@ -130,7 +131,7 @@ export type GalleryForm = {
 };
 
 /** Most forms shown in the gallery. */
-const MAX_GALLERY_FORMS = 9;
+const MAX_GALLERY_FORMS: number = RESONANCE_SETTINGS.MAX_GALLERY_FORMS;
 
 /**
  * The forms to show for a species: every best form (equivalent forms are the point of resonance),

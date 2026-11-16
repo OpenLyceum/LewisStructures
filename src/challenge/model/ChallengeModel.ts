@@ -1,3 +1,4 @@
+import { CHALLENGE_MODEL_SETTINGS } from "../../LewisStructuresConstants.js";
 /**
  * ChallengeModel.ts
  *
@@ -25,11 +26,11 @@ import { CHALLENGE_LEVEL_COUNT } from "../../preferences/lewisStructuresQueryPar
 
 export const LEVEL_COUNT = CHALLENGE_LEVEL_COUNT;
 /** @internal Exported for unit tests; not part of the application API. */
-export const PROBLEMS_PER_ROUND = 5;
+export const PROBLEMS_PER_ROUND: number = CHALLENGE_MODEL_SETTINGS.PROBLEMS_PER_ROUND;
 /** @internal Exported for unit tests; not part of the application API. */
-export const POINTS_PER_PROBLEM = 4;
+export const POINTS_PER_PROBLEM: number = CHALLENGE_MODEL_SETTINGS.POINTS_PER_PROBLEM;
 export const PERFECT_SCORE = PROBLEMS_PER_ROUND * POINTS_PER_PROBLEM;
-export const NUMBER_OF_STARS = 3;
+export const NUMBER_OF_STARS: number = CHALLENGE_MODEL_SETTINGS.NUMBER_OF_STARS;
 
 /** Hints in order; the last one shows the answer. */
 export const HINTS = ["electrons", "central", "skeleton", "bonding", "answer"] as const;

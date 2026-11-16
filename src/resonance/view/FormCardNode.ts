@@ -1,3 +1,4 @@
+import { FORM_CARD_NODE_SETTINGS } from "../../LewisStructuresConstants.js";
 /**
  * FormCardNode.ts
  *
@@ -16,9 +17,9 @@ import LewisStructuresColors from "../../LewisStructuresColors.js";
 import { PANEL_CORNER_RADIUS, PIXELS_PER_BOND } from "../../LewisStructuresConstants.js";
 import { formDescription, rankLabel } from "./resonanceDescriptions.js";
 
-const NUMBER_FONT = new PhetFont({ size: 11, weight: "bold" });
-const RANK_FONT = new PhetFont(10);
-const LABEL_HEIGHT = 30;
+const NUMBER_FONT = new PhetFont({ size: FORM_CARD_NODE_SETTINGS.NUMBER_FONT_SIZE, weight: "bold" });
+const RANK_FONT = new PhetFont(FORM_CARD_NODE_SETTINGS.RANK_FONT_SIZE);
+const LABEL_HEIGHT: number = FORM_CARD_NODE_SETTINGS.LABEL_HEIGHT;
 
 export class FormCardNode extends Node {
   private readonly frame: Rectangle;
@@ -30,10 +31,13 @@ export class FormCardNode extends Node {
     const frame = new Rectangle(0, 0, width, height, PANEL_CORNER_RADIUS, PANEL_CORNER_RADIUS, {
       fill: LewisStructuresColors.boardColorProperty,
       stroke: LewisStructuresColors.boardBorderColorProperty,
-      lineWidth: 1.5,
+      lineWidth: FORM_CARD_NODE_SETTINGS.FRAME_LINE_WIDTH,
     });
     const structure = new StructureNode(form.form.data, { pixelsPerBond: PIXELS_PER_BOND });
-    const room = { width: width - 10, height: height - LABEL_HEIGHT - 6 };
+    const room = {
+      width: width - FORM_CARD_NODE_SETTINGS.ROOM_WIDTH_OFFSET,
+      height: height - LABEL_HEIGHT - FORM_CARD_NODE_SETTINGS.ROOM_HEIGHT_OFFSET,
+    };
     structure.setScaleMagnitude(Math.min(1, room.width / structure.width, room.height / structure.height));
     structure.centerX = width / 2;
     structure.centerY = (height - LABEL_HEIGHT) / 2 + 2;
@@ -42,16 +46,16 @@ export class FormCardNode extends Node {
     const title = new Text(numberProperty, {
       font: NUMBER_FONT,
       fill: LewisStructuresColors.textColorProperty,
-      maxWidth: width - 8,
-      left: 5,
-      bottom: height - 16,
+      maxWidth: width - FORM_CARD_NODE_SETTINGS.TITLE_MAX_WIDTH_OFFSET,
+      left: FORM_CARD_NODE_SETTINGS.TITLE_LEFT,
+      bottom: height - FORM_CARD_NODE_SETTINGS.TITLE_BOTTOM_OFFSET,
     });
     const rank = new RichText(rankLabel(form.rank), {
       font: RANK_FONT,
       fill: LewisStructuresColors.mutedTextColorProperty,
-      maxWidth: width - 8,
-      left: 5,
-      bottom: height - 4,
+      maxWidth: width - FORM_CARD_NODE_SETTINGS.RANK_MAX_WIDTH_OFFSET,
+      left: FORM_CARD_NODE_SETTINGS.RANK_LEFT,
+      bottom: height - FORM_CARD_NODE_SETTINGS.RANK_BOTTOM_OFFSET,
     });
 
     const accessibleNameProperty = new Property(
@@ -82,7 +86,7 @@ export class FormCardNode extends Node {
     this.frame.stroke = selected
       ? LewisStructuresColors.accentColorProperty
       : LewisStructuresColors.boardBorderColorProperty;
-    this.frame.lineWidth = selected ? 2.5 : 1.5;
+    this.frame.lineWidth = selected ? FORM_CARD_NODE_SETTINGS.SET_SELECTED_LINE_WIDTH : 1.5;
   }
 
   public override dispose(): void {

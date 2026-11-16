@@ -1,3 +1,4 @@
+import { ELECTRON_BUDGET_NODE_SETTINGS } from "../../LewisStructuresConstants.js";
 /**
  * ElectronBudgetNode.ts
  *
@@ -23,9 +24,9 @@ import { CONTROL_FONT, HEADING_FONT } from "./ControlFactory.js";
 import { signedCharge } from "./formatValues.js";
 
 /** Pairs per row in the tray, and the most rows drawn. */
-const TRAY_COLUMNS = 12;
-const TRAY_MAX_ROWS = 3;
-const TRAY_PITCH = 14;
+const TRAY_COLUMNS: number = ELECTRON_BUDGET_NODE_SETTINGS.TRAY_COLUMNS;
+const TRAY_MAX_ROWS: number = ELECTRON_BUDGET_NODE_SETTINGS.TRAY_MAX_ROWS;
+const TRAY_PITCH: number = ELECTRON_BUDGET_NODE_SETTINGS.TRAY_PITCH;
 
 export class ElectronBudgetNode extends VBox {
   private readonly disposeElectronBudgetNode: () => void;
@@ -109,7 +110,7 @@ export class ElectronBudgetNode extends VBox {
 
     super({
       align: "left",
-      spacing: 4,
+      spacing: ELECTRON_BUDGET_NODE_SETTINGS.CONSTRUCTOR_SPACING,
       children: [
         new RichText(strings.titleStringProperty, {
           font: HEADING_FONT,

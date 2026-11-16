@@ -1,3 +1,4 @@
+import { SELECTION_BAR_NODE_SETTINGS } from "../../LewisStructuresConstants.js";
 /**
  * SelectionBarNode.ts
  *
@@ -37,14 +38,14 @@ export class SelectionBarNode extends Node {
     });
 
     // ── Atom ────────────────────────────────────────────────────────────────
-    const atomSummary = label("", 230);
+    const atomSummary = label("", SELECTION_BAR_NODE_SETTINGS.ATOM_SUMMARY_MAX_WIDTH);
     const lonePairCount = new Text("0", { font: CONTROL_FONT, fill: LewisStructuresColors.textColorProperty });
     const smallButton = (text: string, listener: () => void, accessibleName: typeof strings.lonePairsStringProperty) =>
       new RectangularPushButton({
         ...FLAT_PANEL_PUSH_BUTTON_OPTIONS,
         content: new Text(text, { font: SYMBOL_BUTTON_FONT, fill: LIGHT_SURFACE_TEXT_FILL }),
-        xMargin: 7,
-        yMargin: 2,
+        xMargin: SELECTION_BAR_NODE_SETTINGS.SMALL_BUTTON_X_MARGIN,
+        yMargin: SELECTION_BAR_NODE_SETTINGS.SMALL_BUTTON_Y_MARGIN,
         listener,
         accessibleName,
       });
@@ -72,18 +73,27 @@ export class SelectionBarNode extends Node {
         structure.toggleUnpaired(atom);
       }
     });
-    const unpairedCheckbox = checkbox(unpairedProperty, strings.unpairedStringProperty, 140);
+    const unpairedCheckbox = checkbox(
+      unpairedProperty,
+      strings.unpairedStringProperty,
+      SELECTION_BAR_NODE_SETTINGS.UNPAIRED_CHECKBOX_MAX_WIDTH,
+    );
     const deleteAtomButton = pushButton(
       strings.deleteStringProperty,
       withAtom((atom) => structure.removeAtom(atom)),
     );
     const atomBar = new HBox({
-      spacing: 10,
+      spacing: SELECTION_BAR_NODE_SETTINGS.ATOM_BAR_SPACING,
       children: [
         atomSummary,
         new HBox({
-          spacing: 5,
-          children: [label(strings.lonePairsStringProperty, 90), removePairButton, lonePairCount, addPairButton],
+          spacing: SELECTION_BAR_NODE_SETTINGS.ATOM_BAR_ITEM_2_SPACING,
+          children: [
+            label(strings.lonePairsStringProperty, SELECTION_BAR_NODE_SETTINGS.LONE_PAIRS_LABEL_MAX_WIDTH),
+            removePairButton,
+            lonePairCount,
+            addPairButton,
+          ],
         }),
         unpairedCheckbox,
         deleteAtomButton,
@@ -91,7 +101,7 @@ export class SelectionBarNode extends Node {
     });
 
     // ── Bond ────────────────────────────────────────────────────────────────
-    const bondTitle = label("", 120);
+    const bondTitle = label("", SELECTION_BAR_NODE_SETTINGS.BOND_TITLE_MAX_WIDTH);
     const orderProperty = new NumberProperty(1);
     orderProperty.lazyLink((order) => {
       const bond = drawing.selectedBondProperty.value;
@@ -107,7 +117,7 @@ export class SelectionBarNode extends Node {
         { value: 3, label: strings.tripleStringProperty },
       ],
       strings.bondOrderStringProperty,
-      90,
+      SELECTION_BAR_NODE_SETTINGS.ORDER_GROUP_MAX_WIDTH,
       "horizontal",
     );
     const deleteBondButton = pushButton(strings.deleteStringProperty, () => {
@@ -116,7 +126,10 @@ export class SelectionBarNode extends Node {
         structure.setBondOrder(bond.atomA, bond.atomB, 0);
       }
     });
-    const bondBar = new HBox({ spacing: 14, children: [bondTitle, orderGroup, deleteBondButton] });
+    const bondBar = new HBox({
+      spacing: SELECTION_BAR_NODE_SETTINGS.BOND_BAR_SPACING,
+      children: [bondTitle, orderGroup, deleteBondButton],
+    });
 
     this.children = [noneText, atomBar, bondBar];
 

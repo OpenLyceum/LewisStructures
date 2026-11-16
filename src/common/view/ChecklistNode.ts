@@ -1,3 +1,4 @@
+import { CHECKLIST_NODE_SETTINGS } from "../../LewisStructuresConstants.js";
 /**
  * ChecklistNode.ts
  *
@@ -116,7 +117,7 @@ export class ChecklistNode extends VBox {
       const labelText = new RichText(labelProperty, {
         font: CONTROL_FONT,
         fill: LewisStructuresColors.textColorProperty,
-        maxWidth: width - 20,
+        maxWidth: width - CHECKLIST_NODE_SETTINGS.LABEL_TEXT_MAX_WIDTH_OFFSET,
       });
       const update = (analysis: StructureAnalysis) => {
         const done = hasAtoms(analysis) && isDone(analysis);
@@ -125,7 +126,7 @@ export class ChecklistNode extends VBox {
       };
       analysisProperty.link(update);
       return {
-        node: new HBox({ spacing: 6, children: [mark, labelText] }),
+        node: new HBox({ spacing: CHECKLIST_NODE_SETTINGS.ITEM_SPACING, children: [mark, labelText] }),
         dispose: () => analysisProperty.unlink(update),
       };
     };
@@ -159,7 +160,7 @@ export class ChecklistNode extends VBox {
 
     super({
       align: "left",
-      spacing: 4,
+      spacing: CHECKLIST_NODE_SETTINGS.CONSTRUCTOR_SPACING,
       children: [
         new Text(strings.titleStringProperty, {
           font: HEADING_FONT,

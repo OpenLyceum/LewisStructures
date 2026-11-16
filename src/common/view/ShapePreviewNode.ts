@@ -1,3 +1,4 @@
+import { SHAPE_PREVIEW_NODE_SETTINGS } from "../../LewisStructuresConstants.js";
 /**
  * ShapePreviewNode.ts
  *
@@ -20,7 +21,7 @@ import { atomLabels } from "./boardDescriptions.js";
 import { HEADING_FONT, SMALL_FONT } from "./ControlFactory.js";
 import { ShapeViewNode } from "./ShapeViewNode.js";
 
-const VIEW_SIZE = 150;
+const VIEW_SIZE: number = SHAPE_PREVIEW_NODE_SETTINGS.VIEW_SIZE;
 
 function geometryName(geometry: string): string {
   const geometries = StringManager.getInstance().getShapeStrings().geometries as unknown as Record<
@@ -103,10 +104,15 @@ export class ShapePreviewNode extends LewisStructuresPanel {
     super(
       new VBox({
         align: "left",
-        spacing: 6,
+        spacing: SHAPE_PREVIEW_NODE_SETTINGS.CONSTRUCTOR_SPACING,
         children: [title, view, text],
       }),
-      { xMargin: 12, yMargin: 10, minWidth: width + 24, align: "left" },
+      {
+        xMargin: SHAPE_PREVIEW_NODE_SETTINGS.CONSTRUCTOR_X_MARGIN,
+        yMargin: SHAPE_PREVIEW_NODE_SETTINGS.CONSTRUCTOR_Y_MARGIN,
+        minWidth: width + SHAPE_PREVIEW_NODE_SETTINGS.CONSTRUCTOR_MIN_WIDTH_OFFSET,
+        align: "left",
+      },
     );
     this.view = view;
     this.text = text;

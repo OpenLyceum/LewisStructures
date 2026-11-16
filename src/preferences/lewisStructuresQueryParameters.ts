@@ -1,3 +1,4 @@
+import { LEWIS_STRUCTURES_QUERY_PARAMETERS_SETTINGS } from "../LewisStructuresConstants.js";
 /**
  * lewisStructuresQueryParameters.ts
  *
@@ -16,7 +17,7 @@ import { getGameLevelsSchema } from "scenerystack/vegas";
 import LewisStructuresNamespace from "../LewisStructuresNamespace.js";
 
 /** Levels on the Challenge screen (kept here so the query parameters do not import a screen). */
-export const CHALLENGE_LEVEL_COUNT = 3;
+export const CHALLENGE_LEVEL_COUNT: number = LEWIS_STRUCTURES_QUERY_PARAMETERS_SETTINGS.CHALLENGE_LEVEL_COUNT;
 
 const lewisStructuresQueryParameters = QueryStringMachine.getAll({
   /**

@@ -1,3 +1,4 @@
+import { STRUCTURE_NODE_SETTINGS } from "../../LewisStructuresConstants.js";
 /**
  * StructureNode.ts
  *
@@ -27,9 +28,9 @@ import { AtomNode } from "./AtomNode.js";
 import { BondNode } from "./BondNode.js";
 import { fractionText } from "./formatValues.js";
 
-const LABEL_FONT = new PhetFont({ size: 12, weight: "bold" });
-const INDEX_FONT = new PhetFont({ size: 10, weight: "bold" });
-const END_GAP = 3;
+const LABEL_FONT = new PhetFont({ size: STRUCTURE_NODE_SETTINGS.LABEL_FONT_SIZE, weight: "bold" });
+const INDEX_FONT = new PhetFont({ size: STRUCTURE_NODE_SETTINGS.INDEX_FONT_SIZE, weight: "bold" });
+const END_GAP: number = STRUCTURE_NODE_SETTINGS.END_GAP;
 
 export type StructureNodeOptions = {
   readonly pixelsPerBond: number;
@@ -113,8 +114,8 @@ export class StructureNode extends Node {
           new Text(`${number}`, {
             font: INDEX_FONT,
             fill: LewisStructuresColors.mutedTextColorProperty,
-            left: (this.viewPositions[i] as Vector2).x + ATOM_RADIUS * 0.55,
-            top: (this.viewPositions[i] as Vector2).y + ATOM_RADIUS * 0.25,
+            left: (this.viewPositions[i] as Vector2).x + ATOM_RADIUS * STRUCTURE_NODE_SETTINGS.CONSTRUCTOR_LEFT_FACTOR,
+            top: (this.viewPositions[i] as Vector2).y + ATOM_RADIUS * STRUCTURE_NODE_SETTINGS.CONSTRUCTOR_TOP_FACTOR,
           }),
         );
       }
@@ -221,7 +222,7 @@ function hybridBond(a: Vector2, b: Vector2, order: number): Node {
       new Path(dashed, {
         stroke: LewisStructuresColors.atomSymbolColorProperty,
         lineWidth: BOND_LINE_WIDTH,
-        lineDash: [4, 3],
+        lineDash: [STRUCTURE_NODE_SETTINGS.HYBRID_BOND_LINE_DASH_DASH, 3],
       }),
     ],
   });

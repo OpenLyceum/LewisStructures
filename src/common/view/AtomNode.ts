@@ -1,3 +1,4 @@
+import { ATOM_NODE_SETTINGS } from "../../LewisStructuresConstants.js";
 /**
  * AtomNode.ts
  *
@@ -28,11 +29,11 @@ import { electronAngles } from "../model/layoutStructure.js";
 import { OctetStatus } from "../model/OctetStatus.js";
 import { badgeCharge } from "./formatValues.js";
 
-const SYMBOL_FONT = new PhetFont({ size: 21, weight: "bold" });
-const BADGE_FONT = new PhetFont({ size: 11, weight: "bold" });
+const SYMBOL_FONT = new PhetFont({ size: ATOM_NODE_SETTINGS.SYMBOL_FONT_SIZE, weight: "bold" });
+const BADGE_FONT = new PhetFont({ size: ATOM_NODE_SETTINGS.BADGE_FONT_SIZE, weight: "bold" });
 const RING_DASH = [4, 3];
 /** How far out the formal-charge badge sits, px. */
-const BADGE_DISTANCE = 26;
+const BADGE_DISTANCE: number = ATOM_NODE_SETTINGS.BADGE_DISTANCE;
 /** The badge sits on a diagonal, upper right first, clear of the textbook electron positions. */
 const DIAGONALS = [45, 135, 315, 225].map((degrees) => (degrees * Math.PI) / 180);
 
@@ -66,7 +67,11 @@ export class AtomNode extends Node {
   public constructor(atom: LewisAtom) {
     // Always pickable (a transparent fill still hits), so hovering over it can reveal it.
     const bondHandleNode = new Circle(BOND_HANDLE_RADIUS, { fill: "transparent", cursor: "crosshair" });
-    const octetRing = new Circle(OCTET_RING_RADIUS, { lineWidth: 1.5, opacity: 0.75, pickable: false });
+    const octetRing = new Circle(OCTET_RING_RADIUS, {
+      lineWidth: ATOM_NODE_SETTINGS.OCTET_RING_LINE_WIDTH,
+      opacity: ATOM_NODE_SETTINGS.OCTET_RING_OPACITY,
+      pickable: false,
+    });
     const disc = new Circle(ATOM_RADIUS, {
       fill: LewisStructuresColors.atomDiscColorProperty,
       stroke: LewisStructuresColors.boardBorderColorProperty,
@@ -80,15 +85,15 @@ export class AtomNode extends Node {
     const coreNode = new Node({ children: [disc, symbol], cursor: "pointer" });
     const selectionRing = new Circle(ATOM_RADIUS + 4, {
       stroke: LewisStructuresColors.accentColorProperty,
-      lineWidth: 2,
+      lineWidth: ATOM_NODE_SETTINGS.SELECTION_RING_LINE_WIDTH,
       lineDash: RING_DASH,
       visible: false,
       pickable: false,
     });
     const partnerRing = new Circle(ATOM_RADIUS + 8, {
       stroke: LewisStructuresColors.accentColorProperty,
-      lineWidth: 2,
-      lineDash: [2, 3],
+      lineWidth: ATOM_NODE_SETTINGS.PARTNER_RING_LINE_WIDTH,
+      lineDash: [2, ATOM_NODE_SETTINGS.PARTNER_RING_LINE_DASH_DASH],
       visible: false,
       pickable: false,
     });
