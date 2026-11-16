@@ -17,7 +17,7 @@ import LewisStructuresColors from "../LewisStructuresColors.js";
 import LewisStructuresNamespace from "../LewisStructuresNamespace.js";
 import type { LewisStructuresPreferencesModel } from "./LewisStructuresPreferencesModel.js";
 
-const FONT = new PhetFont(LEWIS_STRUCTURES_PREFERENCES_NODE_SETTINGS.FONT_FONT_SIZE);
+const FONT = new PhetFont(LEWIS_STRUCTURES_PREFERENCES_NODE_SETTINGS.FONT_SIZE);
 const NOTE_WIDTH: number = LEWIS_STRUCTURES_PREFERENCES_NODE_SETTINGS.NOTE_WIDTH;
 
 export class LewisStructuresPreferencesNode extends VBox {

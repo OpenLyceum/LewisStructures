@@ -477,8 +477,8 @@ export const STRUCTURE_NODE_SETTINGS = {
 export const LEWIS_STRUCTURES_PREFERENCES_NODE_SETTINGS = {
   ITEM_2_SPACING: 6, // px
 
-  /** Font font size (px). */
-  FONT_FONT_SIZE: 14,
+  /** Font size (px). */
+  FONT_SIZE: 14,
   /** Note width (px). */
   NOTE_WIDTH: 520,
   /** Header font size (px). */
