@@ -73,7 +73,7 @@ decisions: [`doc/implementation-notes.md`](doc/implementation-notes.md).
 
 ## Compliance carve-outs
 
-None.
+- `memory-leak:LewisBond` — no dispose() of its own; inventory window matches LewisStructure.dispose in the same file.
 
 ## Testing
 

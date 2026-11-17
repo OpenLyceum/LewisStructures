@@ -11,18 +11,23 @@
 
 import { Property } from "scenerystack/axon";
 import { Vector2 } from "scenerystack/dot";
+import { Node } from "scenerystack/scenery";
 import { boardBounds, DrawingModel } from "../src/common/model/DrawingModel.js";
 import { generateStructures } from "../src/common/model/generateStructures.js";
-import { LewisStructure } from "../src/common/model/LewisStructure.js";
+import { LewisAtom, LewisStructure } from "../src/common/model/LewisStructure.js";
 import { OctetPolicy } from "../src/common/model/OctetPolicy.js";
 import { resonanceGallery } from "../src/common/model/resonance.js";
-import { getSpecies } from "../src/common/model/SpeciesCatalog.js";
+import { getSpecies, type Species } from "../src/common/model/SpeciesCatalog.js";
+import type { CategoryChoice } from "../src/common/model/SpeciesChoice.js";
 import type { StructureData } from "../src/common/model/StructureData.js";
+import { BoardKeyboardController } from "../src/common/view/BoardKeyboardController.js";
 import { ChecklistNode } from "../src/common/view/ChecklistNode.js";
 import { ElectronBudgetNode } from "../src/common/view/ElectronBudgetNode.js";
 import { LewisCanvasNode } from "../src/common/view/LewisCanvasNode.js";
 import { SelectionBarNode } from "../src/common/view/SelectionBarNode.js";
 import { ShapePreviewNode } from "../src/common/view/ShapePreviewNode.js";
+import { ShapeViewNode } from "../src/common/view/ShapeViewNode.js";
+import { SpeciesChooserNode } from "../src/common/view/SpeciesChooserNode.js";
 import { StructureNode } from "../src/common/view/StructureNode.js";
 import { FormCardNode } from "../src/resonance/view/FormCardNode.js";
 import { describeDisposalLeaks } from "./helpers/memoryLeak.js";
@@ -52,6 +57,14 @@ function withDrawing<T extends { dispose(): void }>(build: (drawing: DrawingMode
   };
 }
 
+const sharedDrawing = drawingWithNitrate();
+const targetProperty = new Property<StructureData | null>(null);
+const categoryProperty = new Property<CategoryChoice>("simple");
+const speciesProperty = new Property<Species | null>(getSpecies("nitrate"));
+const chargeProperty = new Property(0);
+const listParent = new Node();
+const speaker = new Node();
+
 describeDisposalLeaks([
   {
     name: "LewisStructure",
@@ -61,6 +74,7 @@ describeDisposalLeaks([
       return structure;
     },
   },
+  { name: "LewisAtom", create: () => new LewisAtom(1, "O", Vector2.ZERO) },
   { name: "DrawingModel", create: drawingWithNitrate },
   {
     name: "LewisCanvasNode",
@@ -95,6 +109,17 @@ describeDisposalLeaks([
       node.update(nitrate());
       return node;
     },
+  },
+  { name: "ShapeViewNode", create: () => new ShapeViewNode(260) },
+  {
+    name: "BoardKeyboardController",
+    create: () => new BoardKeyboardController(sharedDrawing, speaker, targetProperty),
+    keepAlive: () => [sharedDrawing, speaker, targetProperty],
+  },
+  {
+    name: "SpeciesChooserNode",
+    create: () => new SpeciesChooserNode(categoryProperty, speciesProperty, chargeProperty, listParent),
+    keepAlive: () => [categoryProperty, speciesProperty, chargeProperty, listParent],
   },
   {
     name: "FormCardNode",
