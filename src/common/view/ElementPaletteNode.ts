@@ -79,6 +79,8 @@ export class ElementTileNode extends Node {
     const drawing = canvas.drawing;
     let startGlobal = Vector2.ZERO;
     let created: LewisAtom | null = null;
+    // Pointer-only: dragging a tile onto the board. The keyboard path is Enter or Space on the
+    // focused tile (the click listener below), which adds the atom near the cursor.
     this.addInputListener(
       new DragListener({
         start: (event) => {

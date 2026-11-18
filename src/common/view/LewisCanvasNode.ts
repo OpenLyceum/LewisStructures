@@ -230,6 +230,8 @@ export class LewisCanvasNode extends Node {
     let offset = Vector2.ZERO;
     let moved = false;
     const pointerModel = (event: SceneryEvent) => this.globalToModel(event.pointer.point);
+    // Pointer-only: move and bond drags. BoardKeyboardController covers both from the keyboard (G
+    // moves the selected atom, B bonds), and the keyboard help documents those keys.
     return new DragListener({
       start: (event) => {
         startGlobal = event.pointer.point.copy();
