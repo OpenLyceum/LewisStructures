@@ -71,10 +71,6 @@ decisions: [`doc/implementation-notes.md`](doc/implementation-notes.md).
 - All three screen summaries have a live current-details paragraph.
 - `tests/browser/keyboard.spec.ts` drives every screen by keyboard only.
 
-## Compliance carve-outs
-
-- `memory-leak:LewisBond` — no dispose() of its own; inventory window matches LewisStructure.dispose in the same file.
-
 ## Testing
 
 | Path | Purpose |
