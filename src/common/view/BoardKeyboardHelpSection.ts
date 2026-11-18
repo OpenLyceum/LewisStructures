@@ -1,8 +1,8 @@
 /**
  * BoardKeyboardHelpSection.ts
  *
- * Keyboard-help sections for the drawing board and the element palette, shared by every screen's
- * help dialog. Rows come from LewisStructuresHotkeyData, the same keys the board listens for.
+ * Keyboard-help sections for the drawing board, the element palette and the 3D shape model, shared
+ * by the screens' help dialogs. Rows come from LewisStructuresHotkeyData, the same keys the board listens for.
  */
 
 import type { TReadOnlyProperty } from "scenerystack/axon";
@@ -46,5 +46,13 @@ export function createPaletteKeyboardHelpSection(): KeyboardHelpSection {
   const keyboardHelp = StringManager.getInstance().getKeyboardHelpStrings();
   return new KeyboardHelpSection(keyboardHelp.paletteSectionStringProperty, [
     KeyboardHelpSectionRow.fromHotkeyData(LewisStructuresHotkeyData.ADD_ELEMENT),
+  ]);
+}
+
+/** The 3D shape model's arrow-key rotation (Build and Challenge, which show ShapePreviewNode). */
+export function createShapeKeyboardHelpSection(): KeyboardHelpSection {
+  const keyboardHelp = StringManager.getInstance().getKeyboardHelpStrings();
+  return new KeyboardHelpSection(keyboardHelp.shapeSectionStringProperty, [
+    KeyboardHelpSectionRow.fromHotkeyData(LewisStructuresHotkeyData.ROTATE_MODEL),
   ]);
 }

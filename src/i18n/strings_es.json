@@ -284,7 +284,9 @@
     "deleteAtom": "Eliminar el átomo",
     "undo": "Deshacer",
     "redo": "Rehacer",
-    "addElement": "Añadir el átomo"
+    "addElement": "Añadir el átomo",
+    "shapeSection": "Modelo 3D de la forma",
+    "rotateModel": "Girar el modelo"
   },
   "resonance": {
     "species": "Molécula o ion",

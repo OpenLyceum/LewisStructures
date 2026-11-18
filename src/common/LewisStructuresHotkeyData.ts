@@ -1,7 +1,7 @@
 /**
  * LewisStructuresHotkeyData.ts
  *
- * Keys of the drawing board and the element palette. The board's KeyboardListener uses these keys,
+ * Keys of the drawing board, the element palette and the 3D shape model. Their KeyboardListeners use these keys,
  * and the keyboard-help dialogs label them with the sim's own wording. Only letters that the help
  * dialog has key icons for are used (hence D, "dot", for the unpaired electron). UNDO and REDO use
  * Ctrl, which has no icon, so their help rows are drawn by BoardKeyboardHelpSection.
@@ -73,6 +73,12 @@ const LewisStructuresHotkeyData = {
     keys: ["ctrl+y", "ctrl+shift+z"],
     repoName: REPO_NAME,
     keyboardHelpDialogLabelStringProperty: keyboardHelp.redoStringProperty,
+  }),
+  // The 3D shape model (ShapeViewNode) turns with the arrows while it has focus.
+  ROTATE_MODEL: new HotkeyData({
+    keys: ["arrowLeft", "arrowRight", "arrowUp", "arrowDown"],
+    repoName: REPO_NAME,
+    keyboardHelpDialogLabelStringProperty: keyboardHelp.rotateModelStringProperty,
   }),
   ADD_ELEMENT: new HotkeyData({
     keys: ["enter", "space"],

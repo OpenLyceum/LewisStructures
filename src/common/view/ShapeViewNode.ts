@@ -15,6 +15,7 @@ import { DragListener, KeyboardListener, Line, Node, Path, RadialGradient, Recta
 import { StringManager } from "../../i18n/StringManager.js";
 import LewisStructuresColors from "../../LewisStructuresColors.js";
 import { PANEL_CORNER_RADIUS } from "../../LewisStructuresConstants.js";
+import LewisStructuresHotkeyData from "../LewisStructuresHotkeyData.js";
 import { type ElementSymbol, getElement } from "../model/ElementData.js";
 import type { StructureData } from "../model/StructureData.js";
 import { idealDirections, type Vec3, type VseprCenter } from "../model/vsepr.js";
@@ -89,8 +90,9 @@ export class ShapeViewNode extends Node {
         },
       }),
     );
+    // Same keys the keyboard-help dialog renders (createShapeKeyboardHelpSection).
     const keyboardListener = new KeyboardListener({
-      keys: ["arrowLeft", "arrowRight", "arrowUp", "arrowDown"],
+      keyStringProperties: LewisStructuresHotkeyData.ROTATE_MODEL.keyStringProperties,
       fire: (_event, key) => {
         const steps: Record<string, [number, number]> = {
           arrowLeft: [-KEY_STEP, 0],

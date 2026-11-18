@@ -2,7 +2,7 @@
  * BuildKeyboardHelpContent.ts
  *
  * Keyboard-help dialog for the Build screen: the drawing board's keys on the left; the element
- * palette, menus, checkboxes and buttons on the right.
+ * palette, the 3D shape model, menus, checkboxes and buttons on the right.
  */
 
 import {
@@ -13,6 +13,7 @@ import {
 import {
   createBoardKeyboardHelpSection,
   createPaletteKeyboardHelpSection,
+  createShapeKeyboardHelpSection,
 } from "../../common/view/BoardKeyboardHelpSection.js";
 
 export class BuildKeyboardHelpContent extends TwoColumnKeyboardHelpContent {
@@ -21,6 +22,7 @@ export class BuildKeyboardHelpContent extends TwoColumnKeyboardHelpContent {
       [createBoardKeyboardHelpSection()],
       [
         createPaletteKeyboardHelpSection(),
+        createShapeKeyboardHelpSection(),
         new ComboBoxKeyboardHelpSection(),
         new BasicActionsKeyboardHelpSection({ withCheckboxContent: true }),
       ],
