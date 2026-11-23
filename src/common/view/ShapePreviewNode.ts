@@ -23,11 +23,8 @@ import { ShapeViewNode } from "./ShapeViewNode.js";
 
 const VIEW_SIZE: number = SHAPE_PREVIEW_NODE_SETTINGS.VIEW_SIZE;
 
-function geometryName(geometry: string): string {
-  const geometries = StringManager.getInstance().getShapeStrings().geometries as unknown as Record<
-    string,
-    { value: string } | undefined
-  >;
+function geometryName(geometry: VseprCenter["molecularGeometry"] | VseprCenter["electronGeometry"]): string {
+  const geometries = StringManager.getInstance().getShapeStrings().geometries;
   return geometries[`${geometry}StringProperty`]?.value ?? geometry;
 }
 
