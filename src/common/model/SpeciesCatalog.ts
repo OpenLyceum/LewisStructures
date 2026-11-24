@@ -8,6 +8,7 @@
  * structures. Display names are localised under `species.<id>` in the string files.
  */
 
+import { roundSymmetric } from "scenerystack/dot";
 import type { ElementSymbol } from "./ElementData.js";
 import type { StructureData } from "./StructureData.js";
 
@@ -123,7 +124,7 @@ function bent(left: ElementSymbol, center: ElementSymbol, right: ElementSymbol, 
 }
 
 function round(value: number): number {
-  return Math.round(value * 1000) / 1000;
+  return roundSymmetric(value * 1000) / 1000;
 }
 
 function benzene(): StructureData {

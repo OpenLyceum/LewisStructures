@@ -84,3 +84,7 @@ decisions: [`doc/implementation-notes.md`](doc/implementation-notes.md).
 | `tests/memory-leak.test.ts` | Disposal of nodes created and removed at runtime |
 | `tests/browser/keyboard.spec.ts` | Keyboard-only Playwright passes (`npx playwright test tests/browser`) |
 | `tests/fuzz/fuzz.spec.ts` | Template-owned pointer + keyboard fuzz |
+
+## Compliance carve-outs
+
+None.
