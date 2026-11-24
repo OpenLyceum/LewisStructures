@@ -54,6 +54,18 @@ const LewisStructuresColors = {
     projector: "#f5f5f5",
   }),
 
+  /** End-of-round panel fill (the vegas LevelCompletedNode colour, kept in both profiles). */
+  roundCompletedFillColorProperty: new ProfileColorProperty(LewisStructuresNamespace, "roundCompletedFill", {
+    default: "rgb( 180, 205, 255 )",
+    projector: "rgb( 180, 205, 255 )",
+  }),
+
+  /** End-of-round panel border. */
+  roundCompletedStrokeColorProperty: new ProfileColorProperty(LewisStructuresNamespace, "roundCompletedStroke", {
+    default: "black",
+    projector: "black",
+  }),
+
   /**
    * Border/stroke color for control panels and dialogs.
    * Teal-navy in default mode; medium gray in projector mode.

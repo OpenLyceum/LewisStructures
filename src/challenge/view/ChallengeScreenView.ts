@@ -6,7 +6,7 @@ import { CHALLENGE_SCREEN_VIEW_SETTINGS } from "../../LewisStructuresConstants.j
  * bar (level, problem number, score, Start Over). Each problem names a species to draw from scratch
  * with the palette and board; Hint reveals the next hint, Check grades the drawing, Next moves on.
  * The electron count stays hidden until the first hint, since counting is part of the task. A
- * LevelCompletedNode shows the score at the end of the round.
+ * RoundCompletedPanel shows the score at the end of the round.
  *
  *   ┌ status bar ─────────────────────────────────────────────┐
  *   │ task                                       ┌ hints ─────┐
@@ -23,7 +23,6 @@ import { ScreenView, type ScreenViewOptions } from "scenerystack/sim";
 import { Tandem } from "scenerystack/tandem";
 import {
   FiniteStatusBar,
-  LevelCompletedNode,
   LevelSelectionButtonGroup,
   type LevelSelectionButtonGroupItem,
   ScoreDisplayStars,
@@ -62,6 +61,7 @@ import lewisStructuresQueryParameters from "../../preferences/lewisStructuresQue
 import { type ChallengeModel, HINTS, LEVEL_COUNT, NUMBER_OF_STARS, PERFECT_SCORE } from "../model/ChallengeModel.js";
 import { ChallengeScreenSummaryContent } from "./ChallengeScreenSummaryContent.js";
 import { hintText } from "./challengeHints.js";
+import { RoundCompletedPanel } from "./RoundCompletedPanel.js";
 
 const STATUS_BAR_HEIGHT: number = CHALLENGE_SCREEN_VIEW_SETTINGS.STATUS_BAR_HEIGHT;
 const TASK_TOP = STATUS_BAR_HEIGHT + 8;
@@ -77,8 +77,6 @@ const LEVEL_ICON_SIZE: number = CHALLENGE_SCREEN_VIEW_SETTINGS.LEVEL_ICON_SIZE;
 const LEVEL_ICON_SPECIES = ["water", "carbonDioxide", "sulfurHexafluoride"];
 
 export class ChallengeScreenView extends ScreenView {
-  private levelCompletedNode: LevelCompletedNode | null = null;
-
   public constructor(model: ChallengeModel, preferences: LewisStructuresPreferencesModel, options?: ScreenViewOptions) {
     super({ screenSummaryContent: new ChallengeScreenSummaryContent(model), ...options });
 
@@ -390,31 +388,6 @@ export class ChallengeScreenView extends ScreenView {
       resetAllButton.visible = level === null;
     });
 
-    model.roundCompleteProperty.link((complete) => {
-      this.levelCompletedNode?.dispose();
-      this.levelCompletedNode = null;
-      if (complete) {
-        this.levelCompletedNode = new LevelCompletedNode(
-          model.levelNumberProperty.value,
-          model.scoreProperty.value,
-          PERFECT_SCORE,
-          NUMBER_OF_STARS,
-          false,
-          0,
-          0,
-          false,
-          () => model.leaveLevel(),
-          {
-            cornerRadius: PANEL_CORNER_RADIUS,
-            buttonFont: new PhetFont(CHALLENGE_SCREEN_VIEW_SETTINGS.LEVEL_COMPLETED_NODE_FONT_SIZE),
-            center: this.layoutBounds.center,
-            contentMaxWidth: 400,
-          },
-        );
-        this.addChild(this.levelCompletedNode);
-      }
-    });
-
     this.addChild(
       new Node({
         pdomOrder: [
@@ -433,6 +406,29 @@ export class ChallengeScreenView extends ScreenView {
         ],
       }),
     );
+
+    // One end-of-round panel, shown when the round is complete. Rebuilding vegas'
+    // LevelCompletedNode each round leaked every panel (see RoundCompletedPanel).
+    const roundCompletedPanel = new RoundCompletedPanel(
+      model.levelNumberProperty,
+      model.scoreProperty,
+      PERFECT_SCORE,
+      NUMBER_OF_STARS,
+      () => model.leaveLevel(),
+      {
+        cornerRadius: PANEL_CORNER_RADIUS,
+        buttonFont: new PhetFont(CHALLENGE_SCREEN_VIEW_SETTINGS.LEVEL_COMPLETED_NODE_FONT_SIZE),
+        contentMaxWidth: 400,
+        visible: false,
+      },
+    );
+    roundCompletedPanel.localBoundsProperty.link(() => {
+      roundCompletedPanel.center = this.layoutBounds.center;
+    });
+    model.roundCompleteProperty.link((complete) => {
+      roundCompletedPanel.visible = complete;
+    });
+    this.addChild(roundCompletedPanel);
   }
 }
 

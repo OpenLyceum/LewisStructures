@@ -9,9 +9,15 @@
  * tests below using forceGC().
  */
 
-import { Property } from "scenerystack/axon";
+import { NumberProperty, Property } from "scenerystack/axon";
 import { Vector2 } from "scenerystack/dot";
 import { Node } from "scenerystack/scenery";
+import { Tandem } from "scenerystack/tandem";
+import { VegasStrings } from "scenerystack/vegas";
+import { describe, it } from "vitest";
+import { ChallengeModel } from "../src/challenge/model/ChallengeModel.js";
+import { ChallengeScreenView } from "../src/challenge/view/ChallengeScreenView.js";
+import { RoundCompletedPanel } from "../src/challenge/view/RoundCompletedPanel.js";
 import { boardBounds, DrawingModel } from "../src/common/model/DrawingModel.js";
 import { generateStructures } from "../src/common/model/generateStructures.js";
 import { LewisAtom, LewisStructure } from "../src/common/model/LewisStructure.js";
@@ -29,8 +35,9 @@ import { ShapePreviewNode } from "../src/common/view/ShapePreviewNode.js";
 import { ShapeViewNode } from "../src/common/view/ShapeViewNode.js";
 import { SpeciesChooserNode } from "../src/common/view/SpeciesChooserNode.js";
 import { StructureNode } from "../src/common/view/StructureNode.js";
+import { LewisStructuresPreferencesModel } from "../src/preferences/LewisStructuresPreferencesModel.js";
 import { FormCardNode } from "../src/resonance/view/FormCardNode.js";
-import { describeDisposalLeaks } from "./helpers/memoryLeak.js";
+import { describeDisposalLeaks, expectNoListenerGrowth } from "./helpers/memoryLeak.js";
 
 const nitrate = (): StructureData =>
   generateStructures(getSpecies("nitrate").skeleton, OctetPolicy.ACCEPT_BOTH).best[0]?.data ??
@@ -64,6 +71,8 @@ const speciesProperty = new Property<Species | null>(getSpecies("nitrate"));
 const chargeProperty = new Property(0);
 const listParent = new Node();
 const speaker = new Node();
+const levelNumberProperty = new NumberProperty(2);
+const scoreProperty = new NumberProperty(7);
 
 describeDisposalLeaks([
   {
@@ -131,4 +140,23 @@ describeDisposalLeaks([
       return new FormCardNode(form, 1, 136, 118, () => undefined);
     },
   },
+  {
+    name: "RoundCompletedPanel",
+    create: () => new RoundCompletedPanel(levelNumberProperty, scoreProperty, 10, 3, () => undefined),
+    keepAlive: () => [levelNumberProperty, scoreProperty],
+  },
 ]);
+
+describe("Challenge round end", () => {
+  // Regression: the view used to build a vegas LevelCompletedNode per completed round, whose
+  // undisposed "Level N" DerivedProperty kept each panel linked to the vegas level string.
+  it("does not link new listeners to the vegas strings each round", async () => {
+    const preferences = new LewisStructuresPreferencesModel(Tandem.OPT_OUT);
+    const model = new ChallengeModel(preferences.octetPolicyProperty);
+    new ChallengeScreenView(model, preferences, { tandem: Tandem.OPT_OUT });
+    await expectNoListenerGrowth([VegasStrings.label.level, VegasStrings.label.score.max, model.scoreProperty], () => {
+      model.roundCompleteProperty.value = true;
+      model.roundCompleteProperty.value = false;
+    });
+  });
+});
