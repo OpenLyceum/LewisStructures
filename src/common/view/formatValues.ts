@@ -5,7 +5,7 @@
  * superscripts ("2−"), and element-count lists ("2 O, 1 N").
  */
 
-import { toFixed } from "scenerystack/dot";
+import { roundSymmetric, toFixed } from "scenerystack/dot";
 import type { ElementSymbol } from "../model/ElementData.js";
 
 const MINUS = "−";
@@ -55,7 +55,7 @@ export function fractionText(value: number, signed = false): string {
   const sign = value < 0 ? MINUS : signed && value > 0 ? "+" : "";
   const magnitude = Math.abs(value);
   for (let denominator = 1; denominator <= 6; denominator++) {
-    const numerator = Math.round(magnitude * denominator);
+    const numerator = roundSymmetric(magnitude * denominator);
     if (Math.abs(numerator / denominator - magnitude) < 1e-6) {
       const whole = Math.floor(numerator / denominator);
       const rest = numerator - whole * denominator;

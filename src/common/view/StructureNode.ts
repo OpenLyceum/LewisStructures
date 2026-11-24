@@ -13,7 +13,7 @@ import { STRUCTURE_NODE_SETTINGS } from "../../LewisStructuresConstants.js";
  * `lonePairPoint` and `bondPoint` give view positions for the curved arrows drawn over it.
  */
 
-import { Vector2 } from "scenerystack/dot";
+import { roundSymmetric, Vector2 } from "scenerystack/dot";
 import { Shape } from "scenerystack/kite";
 import { Node, Path, Text } from "scenerystack/scenery";
 import { PhetFont } from "scenerystack/scenery-phet";
@@ -75,7 +75,7 @@ export class StructureNode extends Node {
       if (hybrid) {
         const order = hybrid.bondOrders[i] ?? bond.order;
         bondLayer.addChild(hybridBond(a, b, order));
-        if (Math.abs(order - Math.round(order)) > 1e-6) {
+        if (Math.abs(order - roundSymmetric(order)) > 1e-6) {
           const normal = b.minus(a).normalized().perpendicular;
           labelLayer.addChild(
             new Text(fractionText(order), {
